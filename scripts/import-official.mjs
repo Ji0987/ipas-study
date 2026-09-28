@@ -32,7 +32,8 @@ const normText = t => t.normalize('NFKC').replace(/[\s\p{P}\p{S}]/gu, '').toLowe
 // 與 migrate-legacy.mjs 相同的清理：中文字之間的換行／空白刪除，其餘換行改成空白
 const WIDE = '\\p{Script=Han}\\u3000-\\u303f\\uff00-\\uffef';
 const WIDE_GAP = new RegExp(`(?<=[${WIDE}])\\s+(?=[${WIDE}])`, 'gu');
-const tidy = t => t.replace(WIDE_GAP, '').replace(/([A-Za-z])-\s+([a-z])/g, '$1-$2').replace(/\s+/g, ' ').trim();
+// CJK 相容表意文字（外觀相同、碼位不同，如 U+F98E「年」）轉回一般漢字
+const tidy = t => t.replace(/[\uF900-\uFAFF]/g, c => c.normalize('NFKC')).replace(WIDE_GAP, '').replace(/([A-Za-z])-\s+([a-z])/g, '$1-$2').replace(/\s+/g, ' ').trim();
 const tidyOpt = t => tidy(t).replace(/[；;]$/, '');
 const bigrams = t => { const s = new Set(); for (let i = 0; i < t.length - 1; i++) s.add(t.slice(i, i + 2)); return s; };
 const jaccard = (a, b) => { let n = 0; for (const g of a) if (b.has(g)) n++; return n / (a.size + b.size - n || 1); };

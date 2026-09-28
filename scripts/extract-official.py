@@ -14,6 +14,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 from collections import Counter
 
 import pymupdf
@@ -51,6 +52,8 @@ HEADER = [re.compile(p) for p in [r"公告試題", r"^第.科[:：]", r"^考試�
                                   r"能力鑑定.*試題\s*$", r"疑義題釋覆", r"^科目\s*\d?\s*[:：]", r"^單選題\s*\d+\s*題"]]
 # 左側欄的題號行；舊版試卷會把答案字母、題號與題幹第一行放在同一行
 # 部分兩位數題號在 PDF 中遺失句點（「10 下列…」），因此句點可省略，改以題號連續性過濾誤判
+CJK_COMPAT = re.compile("[豈-﫿]")
+INLINE_HEADER = re.compile(r"\d+\s*年度第\s*\d+\s*次\s*物聯網應用工程師能力鑑定\s*初級試題")
 LEFT_MARK = re.compile(r"^(?:([A-DＡ-Ｄ])\s+)?(\d{1,2})(?:[.．]\s*|\s+|$)(.*)$")
 GROUP = re.compile(r"請(?:根據|依據|依照).{0,8}?(上述|下方|以下|此)?.{0,8}?回答第\s*(\d+)\s*[~～至\-－]\s*(\d+)\s*題")
 OPT_SPLIT = re.compile(r"(?=[(（][A-D][)）])")
@@ -91,7 +94,10 @@ def extract(path):
             if b["type"] != 0:
                 continue
             for ln in b["lines"]:
-                text = "".join(s["text"] for s in ln["spans"]).strip()
+                # CJK 相容表意文字（外觀與一般漢字相同、碼位不同，如「年」U+F98E）轉回一般漢字；
+                # 部分試卷的頁首與內容在同一行，再刪掉行內的頁首字串
+                text = CJK_COMPAT.sub(lambda m: unicodedata.normalize("NFKC", m.group()), "".join(s["text"] for s in ln["spans"]))
+                text = INLINE_HEADER.sub("", text).strip()
                 if not text or any(h.search(text) for h in HEADER):
                     continue
                 if ln["bbox"][1] > page.rect.height - 45:  # 頁尾頁碼

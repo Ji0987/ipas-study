@@ -1,0 +1,131 @@
+{
+  "id": "aiot",
+  "name": "AIoT 應用工程師",
+  "idPrefix": "aiot",
+  "site": {
+    "title": "iPAS｜AIoT 應用工程師初級筆記",
+    "mobTitle": "iPAS AIoT 應用工程師筆記",
+    "logo": "iPAS AIoT 工程師",
+    "logoSub": "初級四考科 · 學科筆記＋歷屆試題",
+    "eyebrow": "官方評鑑內容整理",
+    "heroTitle": "iPAS AIoT 應用工程師",
+    "chapnote": "📖 章節依 115 年簡章的<b>評鑑主題</b>編排，每個主題對應一項評鑑內容。考科一依官方學習指引整理；考科二沒有官方教材，依評鑑內容與舊版「物聯網應用工程師（初級）」歷屆試題的考點整理。",
+    "defaultOpen": ["ai-basic", "sys-arch"]
+  },
+  "cheatsheet": {
+    "title": "📌 考試速查表",
+    "sub": "通訊協定 × 感測介面 × 易混淆區分 · 考科一、二通用"
+  },
+  "levels": [
+    {
+      "id": "basic",
+      "name": "初級",
+      "badge": "🟢 初級",
+      "heroTitleEm": "初級四考科完整筆記",
+      "heroSub": "考科一、二為學科（單選題），考科三、四為術科（實作）。點擊考科卡片切換，按 ✓ 標記已讀追蹤進度。",
+      "tagClass": "lv-b",
+      "accent": { "fg": "var(--teal)", "bg": "var(--teald)", "border": "rgba(6,214,160,.3)" },
+      "exam": {
+        "questions": 50,
+        "minutes": 75,
+        "pass": 70,
+        "rule": "考科一搭配考科二、三或四，分別取得物聯網類、機器聯網類、感知系統類證書：同時報考者平均達 70 分且每科不低於 60 分；非同時報考者每科皆須達 70 分。"
+      },
+      "subjects": [
+        {
+          "id": "s1",
+          "label": "考科一",
+          "name": "AIoT 基礎概論",
+          "cardClass": "cB1",
+          "cardTitle": "考科一 · 學科",
+          "tags": ["AI 基礎", "通訊協定", "工業標準", "感測器"],
+          "secLabel": { "text": "🟢 學科 · 考科一（共同科目）", "cls": "sl-b" },
+          "topics": [
+            { "id": "ai-basic", "title": "AI 基礎概念", "badge": { "text": "AI", "cls": "bbp" }, "nav": "AI 基礎概念" },
+            { "id": "aiot-cases", "title": "AIoT 應用案例", "badge": { "text": "案例", "cls": "bbp" }, "nav": "AIoT 應用案例" },
+            { "id": "iot-arch", "title": "物聯網架構與功能", "badge": { "text": "架構", "cls": "bbl" }, "nav": "物聯網架構與功能" },
+            { "id": "iot-protocol", "title": "常見通訊協定與網路層技術", "badge": { "text": "通訊", "cls": "bbl" }, "nav": "通訊協定與網路層技術" },
+            { "id": "ind-std", "title": "工業通訊標準與資訊模型", "badge": { "text": "工業", "cls": "bbl" }, "nav": "工業通訊標準與資訊模型" },
+            { "id": "middleware", "title": "中介軟體與平台", "badge": { "text": "平台", "cls": "bbl" }, "nav": "中介軟體與平台" },
+            { "id": "iot-sec", "title": "資安與隱私基本概念", "badge": { "text": "資安", "cls": "bbc" }, "nav": "資安與隱私基本概念" },
+            { "id": "sensor-basic", "title": "感測技術基礎", "badge": { "text": "感測", "cls": "bbt" }, "nav": "感測技術基礎" },
+            { "id": "sensor-signal", "title": "感測訊號與通訊基礎", "badge": { "text": "訊號", "cls": "bbt" }, "nav": "感測訊號與通訊基礎" }
+          ],
+          "chapters": [
+            { "num": "第三章", "cls": "cn3", "title": "AI 基礎知識與應用", "topics": ["ai-basic", "aiot-cases"] },
+            { "num": "第四章", "cls": "cn1", "title": "AIoT 基礎與架構", "topics": ["iot-arch", "iot-protocol", "ind-std", "middleware", "iot-sec"] },
+            { "num": "第五章", "cls": "cn2", "title": "感測器原理與應用", "topics": ["sensor-basic", "sensor-signal"] }
+          ],
+          "navGroups": [
+            { "title": "第三章｜AI 基礎知識與應用", "topics": ["ai-basic", "aiot-cases"] },
+            { "title": "第四章｜AIoT 基礎與架構", "topics": ["iot-arch", "iot-protocol", "ind-std", "middleware", "iot-sec"] },
+            { "title": "第五章｜感測器原理與應用", "topics": ["sensor-basic", "sensor-signal"] }
+          ]
+        },
+        {
+          "id": "s2",
+          "label": "考科二",
+          "name": "物聯網系統與應用",
+          "cardClass": "cB2",
+          "cardTitle": "考科二 · 學科",
+          "tags": ["系統架構", "故障排除", "硬體介面", "雲端平台"],
+          "secLabel": { "text": "🟡 學科 · 考科二（物聯網類）", "cls": "sl-g" },
+          "topics": [
+            { "id": "sys-arch", "title": "系統元件與架構", "badge": { "text": "架構", "cls": "bbg" }, "nav": "系統元件與架構" },
+            { "id": "troubleshoot", "title": "簡易系統故障問題判斷與排除", "badge": { "text": "排錯", "cls": "bbg" }, "nav": "故障判斷與排除" },
+            { "id": "sys-sec", "title": "物聯網資訊安全", "badge": { "text": "資安", "cls": "bbc" }, "nav": "物聯網資訊安全" },
+            { "id": "hw-design", "title": "物聯網硬體設計基礎", "badge": { "text": "硬體", "cls": "bbt" }, "nav": "物聯網硬體設計基礎" },
+            { "id": "cloud-data", "title": "雲端環境數據收集與平台設計", "badge": { "text": "雲端", "cls": "bbl" }, "nav": "雲端數據收集與平台" },
+            { "id": "smart-mfg", "title": "智慧製造流程優化與成本控制", "badge": { "text": "製造", "cls": "bbp" }, "nav": "智慧製造與成本控制" }
+          ],
+          "chapters": [
+            { "num": "評鑑主題 1", "cls": "cn-g", "title": "軟硬體整合規劃", "topics": ["sys-arch", "troubleshoot", "sys-sec"] },
+            { "num": "評鑑主題 2", "cls": "cn-g", "title": "軟硬體設計", "topics": ["hw-design", "cloud-data", "smart-mfg"] }
+          ],
+          "navGroups": [
+            { "title": "1｜軟硬體整合規劃", "topics": ["sys-arch", "troubleshoot", "sys-sec"] },
+            { "title": "2｜軟硬體設計", "topics": ["hw-design", "cloud-data", "smart-mfg"] }
+          ]
+        },
+        {
+          "id": "s3",
+          "label": "考科三",
+          "name": "機器聯網基礎應用實作",
+          "practical": true,
+          "cardClass": "c1",
+          "cardTitle": "考科三 · 術科",
+          "tags": ["機聯網架構", "OPC UA", "資料收集", "可視化"],
+          "secLabel": { "text": "🔵 術科 · 考科三（機器聯網類）", "cls": "sl-i" },
+          "topics": [
+            { "id": "m2m-practice", "title": "智慧聯網基礎應用實作（評鑑內容與準備方向）", "badge": { "text": "術科", "cls": "bbl" }, "nav": "評鑑內容與準備方向" }
+          ],
+          "chapters": [
+            { "num": "評鑑主題 1", "cls": "cn1", "title": "智慧聯網基礎應用實作", "topics": ["m2m-practice"] }
+          ],
+          "navGroups": [
+            { "title": "1｜智慧聯網基礎應用實作", "topics": ["m2m-practice"] }
+          ]
+        },
+        {
+          "id": "s4",
+          "label": "考科四",
+          "name": "感測器信號調節實務應用",
+          "practical": true,
+          "cardClass": "c3",
+          "cardTitle": "考科四 · 術科",
+          "tags": ["轉換電路", "濾波", "放大", "ADC"],
+          "secLabel": { "text": "🟣 術科 · 考科四（感知系統類）", "cls": "sl-p" },
+          "topics": [
+            { "id": "signal-practice", "title": "感測器信號調節實作（評鑑內容與準備方向）", "badge": { "text": "術科", "cls": "bbp" }, "nav": "評鑑內容與準備方向" }
+          ],
+          "chapters": [
+            { "num": "評鑑主題 1", "cls": "cn3", "title": "感測器信號調節實作", "topics": ["signal-practice"] }
+          ],
+          "navGroups": [
+            { "title": "1｜感測器信號調節實作", "topics": ["signal-practice"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

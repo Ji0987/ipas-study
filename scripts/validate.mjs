@@ -7,7 +7,7 @@ import Ajv from 'ajv/dist/2020.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const NEAR_DUP = 0.85;   // 題幹＋選項 bigram Jaccard 相似度達此值視為近似重複（警告）
-const LEGACY_JUNK = /答\s*案\s*題\s*目|第\s*\d+\s*頁\s*[,，]\s*共|公告試題/;
+const LEGACY_JUNK = /答\s*案\s*題\s*目|第\s*\d+\s*頁\s*[,，]\s*共|公告試題|能力鑑定.{0,4}試題/;
 
 const ajv = new Ajv({ allErrors: true });
 const schema = name => ajv.compile(JSON.parse(fs.readFileSync(path.join(ROOT, 'schema', `${name}.schema.json`), 'utf8')));
@@ -68,14 +68,16 @@ function validateCert(certDir) {
       if (q.ref && refs.has(q.ref)) errors.push(`${rel(file)} ${q.id} 出處重複：${q.ref}（亦見於 ${refs.get(q.ref)}）`);
       if (q.ref) refs.set(q.ref, q.id);
       if (LEGACY_JUNK.test(q.q + q.opts.join('') + q.exp)) warnings.push(`${rel(file)} ${q.id} 含試卷頁首雜訊`);
-      quizItems.push({ file, q, key: norm(q.q), grams: bigramSet(norm(q.q + q.opts.join(''))) });
+      if (/[\uF900-\uFAFF]/.test(q.q + q.opts.join('') + q.exp + (q.ctx || ''))) warnings.push(`${rel(file)} ${q.id} 含 CJK 相容表意文字（應轉為一般漢字）`);
+      // 完全重複：題幹與選項都相同（「關於 MQTT，下列敘述何者不正確？」這類通用題幹，選項不同就是不同題）
+      quizItems.push({ file, q, key: norm(q.q + '|' + [...q.opts].sort().join('|')), grams: bigramSet(norm(q.q + q.opts.join(''))) });
     }
   }
 
   // 重複與近似重複
   for (let i = 0; i < quizItems.length; i++) for (let j = i + 1; j < quizItems.length; j++) {
     const a = quizItems[i], b = quizItems[j];
-    if (a.key === b.key) errors.push(`題幹完全相同：${a.q.id}、${b.q.id}`);
+    if (a.key === b.key) errors.push(`題目完全相同：${a.q.id}、${b.q.id}`);
     else {
       const s = jaccard(a.grams, b.grams);
       if (s >= NEAR_DUP) warnings.push(`近似重複（${s.toFixed(2)}）：${a.q.id}、${b.q.id}`);
