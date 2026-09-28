@@ -22,7 +22,7 @@
     <h4>模型從訓練到部署</h4>
     <div class="tl">
       <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">1</div><div class="tlh">資料預處理與信號調節</div><div class="tls">濾波、去雜訊、異常值處理、正規化、取樣率對齊</div></div></div>
-      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">2</div><div class="tlh">模型訓練</div><div class="tls">在雲端或 GPU 工作站；切分訓練／驗證／測試集，處理類別不平衡</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">2</div><div class="tlh">模型訓練</div><div class="tls">在雲端或 GPU 工作站；切分訓練集（學權重）／驗證集（調超參數）／測試集（最後評估泛化能力），處理類別不平衡</div></div></div>
       <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">3</div><div class="tlh">模型壓縮</div><div class="tls"><strong>量化</strong>（FP32 → INT8，模型變小、省記憶體，精度略降）、<strong>剪枝</strong></div></div></div>
       <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">4</div><div class="tlh">推論與系統整合</div><div class="tls">部署到邊緣裝置或閘道器，結果回饋 HMI、MES、SCADA</div></div></div>
       <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">5</div><div class="tlh">上線監測與版本管理</div><div class="tls">監測資料分布漂移與效能，保留模型版本與推論紀錄</div></div></div>

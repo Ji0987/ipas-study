@@ -1,6 +1,17 @@
 
     <p>智慧製造不只是自動化，而是結合<strong>自動化設備、物聯網、大數據、雲端運算與 AI</strong>，讓設備能收集數據、分析並自主應變，進而優化流程、降低成本。只做到生產自動化、沒有數據分析，不能稱為智慧製造。</p>
     <div class="cal cinf"><span>📖</span><div class="calbody">工業通訊協定細節見 <a class="xref" href="#ind-std" onclick="event.preventDefault();gotoNote('ind-std')">工業通訊標準與資訊模型</a>；預測性維護與智慧工廠案例見 <a class="xref" href="#aiot-cases" onclick="event.preventDefault();gotoNote('aiot-cases')">AIoT 應用案例</a>。</div></div>
+    <h4>工業 4.0 與系統分層</h4>
+    <p>工業 1.0 蒸汽機、2.0 電力與大量生產、3.0 電子與自動化、<strong>4.0 虛實整合系統（CPS）</strong>：設備聯網、資料分析與 AI 讓生產系統自主感知與調整。核心是 <strong>IT（資訊技術：ERP、MES、雲端）與 OT（營運技術：PLC、SCADA、現場設備）融合</strong>，打破設備的資訊孤島。</p>
+    <div class="tw"><table><thead><tr><th>層級</th><th>系統</th><th>功能</th></tr></thead><tbody>
+      <tr><td>企業層</td><td><strong>ERP</strong></td><td>財務、採購、訂單等企業資源</td></tr>
+      <tr><td>製造執行層</td><td><strong>MES</strong></td><td>工單派工、在製品追蹤、品質紀錄、生產進度</td></tr>
+      <tr><td>監控層</td><td><strong>SCADA</strong>、HMI</td><td>監控與資料擷取、人機介面</td></tr>
+      <tr><td>控制層</td><td><strong>PLC</strong></td><td>即時控制馬達、閥門等設備</td></tr>
+      <tr><td>現場層</td><td>感測器、致動器</td><td>量測與執行</td></tr>
+    </tbody></table></div>
+    <div class="fm"><div class="fml">整體設備效率 OEE</div>OEE = 可用率 × 性能效率 × 良率<br>例：0.9 × 0.8 × 0.95 ≈ 68.4%<button class="cpbtn" onclick="copyFm(this,'OEE = 可用率 × 性能效率 × 良率')">複製</button></div>
+    <p>可用率反映停機損失、性能效率反映速度損失、良率反映品質損失；物聯網自動收集設備狀態與產量，可即時計算 OEE 找出改善方向。</p>
     <h4>智慧工廠的物聯網技術</h4>
     <ul>
       <li><strong>自動感測</strong>：感測器偵測環境、設備、機台、產線狀態並上傳平台；在製品追蹤以 RFID、條碼與機台感測器自動記錄，而不是人工輸入。</li>
@@ -25,6 +36,9 @@
       <tr><td>在製品與物料追蹤</td><td>透明化工時與進度，整合人、機、料、單</td></tr>
       <tr><td>能耗監測</td><td>以電流感測掌握負載與耗電，節能減碳</td></tr>
       <tr><td>數位孿生</td><td>在虛擬環境模擬調整參數，驗證後再套用實體產線</td></tr>
+      <tr><td>製程履歷與追溯</td><td>以 RFID／條碼與機台資料記錄每個工件的工站、參數、原料批號，出問題時縮小召回範圍</td></tr>
+      <tr><td>彈性生產</td><td>AMR（自主移動機器人）搬運、快速換線，實現<strong>大規模客製化</strong></td></tr>
+      <tr><td>5G 企業專網</td><td>URLLC 低延遲高可靠，支援 AGV／AMR 與機械手臂即時協作</td></tr>
     </tbody></table></div>
     <h4>導入效益與風險評估</h4>
     <ul>
