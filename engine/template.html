@@ -51,6 +51,7 @@
     <button class="sfb b2" onclick="openQuiz();closeSidebar()">📝 測驗</button>
     <button class="sfb b4" onclick="openBank();closeSidebar()">📚 題庫</button>
     <button class="sfb b5" onclick="openCheat();closeSidebar()">📌 速查</button>
+    <button class="sfb b8" onclick="openExamSetup();closeSidebar()" title="模擬考">🎯</button>
     <button class="sfb b7" onclick="openDash();closeSidebar()" title="弱點分析">📊</button>
     <button class="sfb b6" onclick="openBackup();closeSidebar()" title="進度備份">💾</button>
     <button class="sfb b3" onclick="openKeys()">⌨️</button>
@@ -68,7 +69,8 @@
   <div class="modeguide">
     <span class="mg-item"><b>📝 測驗</b>隨機抽題模擬考</span>
     <span class="mg-item"><b>📚 題庫</b>逐題精讀複習</span>
-    <span class="mg-hint">側欄底部或按 Q／B 開啟</span>
+    <span class="mg-item"><b>🎯 模擬考</b>依簡章限時整份作答</span>
+    <span class="mg-hint">側欄底部或按 Q／B／E 開啟</span>
   </div>
 {{subjectCards}}
 </div>
@@ -155,12 +157,37 @@
       <kbd>⌘K</kbd><div class="kdesc">開啟指令面板</div>
       <kbd>Q</kbd><div class="kdesc">開啟知識測驗</div>
       <kbd>W</kbd><div class="kdesc">練習錯題</div>
+      <kbd>E</kbd><div class="kdesc">開始模擬考（考試中 A～D 作答、← → 換題）</div>
       <kbd>B</kbd><div class="kdesc">開啟題庫瀏覽</div>
       <kbd>D</kbd><div class="kdesc">開啟弱點分析</div>
       <kbd>C</kbd><div class="kdesc">開啟考試速查表</div>
       <kbd>{{subjectKeys}}</kbd><div class="kdesc">切換科目（依等級）</div>
       <kbd>Esc</kbd><div class="kdesc">關閉彈窗</div>
     </div>
+  </div>
+</div>
+
+<!-- 模擬考：選擇科目 -->
+<div class="overlay" id="exam-setup-overlay">
+  <div class="bankmodal">
+    <button class="mclose" aria-label="關閉" onclick="closeModal('exam-setup-overlay')" style="top:14px;right:14px;z-index:5">×</button>
+    <div class="bk-hd">
+      <div class="bk-title">🎯 模擬考 <span class="lvtag" id="exs-level-tag"></span></div>
+      <div class="bk-sub">題數、時間與及格分數依官方簡章規定，題目從歷屆公告試題隨機抽出</div>
+      <div class="bk-tabs">
+{{examTabs}}
+      </div>
+    </div>
+    <div class="bk-list" id="exs-body"></div>
+  </div>
+</div>
+
+<!-- 模擬考：作答與成績 -->
+<div class="overlay" id="exam-overlay">
+  <div class="bankmodal">
+    <button class="mclose" aria-label="關閉" onclick="examClose()" style="top:14px;right:14px;z-index:5">×</button>
+    <div class="bk-hd" id="ex-hd"></div>
+    <div class="bk-list" id="ex-body"></div>
   </div>
 </div>
 
@@ -184,7 +211,7 @@
   <div class="keysmodal" onclick="event.stopPropagation()">
     <button class="mclose" aria-label="關閉" onclick="closeModal('backup-overlay')">×</button>
     <div class="keys-title">💾 進度備份</div>
-    <p class="backup-desc">把已讀主題、題庫書籤與作答紀錄（錯題本）存成檔案，可在其他裝置或瀏覽器匯入。匯入會取代目前的進度。</p>
+    <p class="backup-desc">把已讀主題、題庫書籤、作答紀錄（錯題本）與模擬考成績存成檔案，可在其他裝置或瀏覽器匯入。匯入會取代目前的進度。</p>
     <div class="rbtns">
       <button class="rbtn p" onclick="exportProgress()">匯出進度</button>
       <button class="rbtn s" onclick="document.getElementById('backup-file').click()">匯入進度</button>

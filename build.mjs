@@ -90,6 +90,7 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
     cheatsheet: read(`${dir}/cheatsheet.html`),
     bankTabs: render.bankTabs(config),
     dashTabs: render.dashTabs(config),
+    examTabs: render.examTabs(config),
     subjectKeys: render.subjectKeys(config),
     // 內嵌於 <script> 的 JSON 不可出現 </script
     data: JSON.stringify({ config, quizFiles }).replace(/</g, '\\u003c'),

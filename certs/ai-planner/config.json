@@ -33,6 +33,12 @@
         "bg": "var(--teald)",
         "border": "rgba(6,214,160,.3)"
       },
+      "exam": {
+        "questions": 50,
+        "minutes": 75,
+        "pass": 70,
+        "rule": "兩科同時報考者，平均達 70 分且每科不低於 60 分即取得證書；非同時報考者，每科皆須達 70 分。"
+      },
       "subjects": [
         {
           "id": "bs1",
@@ -342,6 +348,12 @@
         "fg": "var(--blue)",
         "bg": "var(--blued)",
         "border": "rgba(79,155,255,.3)"
+      },
+      "exam": {
+        "questions": 50,
+        "minutes": 90,
+        "pass": 70,
+        "rule": "科目一與科目二均達 70 分取得「數據分析」證書；科目一與科目三均達 70 分取得「機器學習」證書。"
       },
       "subjects": [
         {

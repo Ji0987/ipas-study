@@ -8,6 +8,7 @@ import * as bank from './bank.js';
 import { openCmd, closeCmd, initCmd } from './cmd.js';
 import { openBackup, exportProgress, importProgress } from './backup.js';
 import { openDash, dashSetLevel } from './dash.js';
+import * as exam from './exam.js';
 
 Object.assign(window, {
   toggleSidebar: ui.toggleSidebar, closeSidebar: ui.closeSidebar, closeModal: ui.closeModal,
@@ -21,18 +22,25 @@ Object.assign(window, {
   openCmd, closeCmd,
   openBackup, exportProgress, importProgress,
   openDash, dashSetLevel,
+  openExamSetup: exam.openExamSetup, examSetLevel: exam.examSetLevel, startExam: exam.startExam,
+  examPick: exam.examPick, examGo: exam.examGo, examMove: exam.examMove, examFlag: exam.examFlag,
+  examSubmit: exam.examSubmit, examClose: exam.examClose, examReview: exam.examReview,
+  examRetry: exam.examRetry, examOther: exam.examOther, examNote: exam.examNote,
 });
 
 /* ═══ KEYBOARD ═══ */
 document.addEventListener('keydown', e => {
   const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+  // 考試視窗開啟時只處理考試操作，避免數字鍵等全域快捷鍵切換頁面
+  if (exam.examKey(e)) { e.preventDefault(); return; }
   if (e.key === 'Escape') {
-    ['qz-overlay', 'keys-overlay', 'bk-overlay', 'cheat-overlay', 'backup-overlay', 'dash-overlay'].forEach(ui.closeModal); closeCmd(); ui.closeSidebar(); return;
+    ['qz-overlay', 'keys-overlay', 'bk-overlay', 'cheat-overlay', 'backup-overlay', 'dash-overlay', 'exam-setup-overlay'].forEach(ui.closeModal); closeCmd(); ui.closeSidebar(); return;
   }
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openCmd(); return; }
   if (inInput) return;
   if (e.key === 'q' || e.key === 'Q') { e.preventDefault(); quiz.openQuiz(); }
   if (e.key === 'w' || e.key === 'W') { e.preventDefault(); quiz.openQuiz('wrong'); }
+  if (e.key === 'e' || e.key === 'E') { e.preventDefault(); exam.openExamSetup(); }
   if (e.key === 'b' || e.key === 'B') { e.preventDefault(); bank.openBank(); }
   if (e.key === 'c' || e.key === 'C') { e.preventDefault(); ui.openCheat(); }
   if (e.key === 'd' || e.key === 'D') { e.preventDefault(); openDash(); }

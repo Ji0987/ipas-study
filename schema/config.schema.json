@@ -55,6 +55,17 @@
             "required": ["fg", "bg", "border"],
             "properties": { "fg": { "type": "string" }, "bg": { "type": "string" }, "border": { "type": "string" } }
           },
+          "exam": {
+            "type": "object",
+            "description": "模擬考規格（依簡章）",
+            "required": ["questions", "minutes", "pass"],
+            "properties": {
+              "questions": { "type": "integer", "minimum": 1, "description": "每科題數" },
+              "minutes": { "type": "integer", "minimum": 1, "description": "每科作答時間" },
+              "pass": { "type": "integer", "minimum": 0, "maximum": 100, "description": "及格分數（滿分 100）" },
+              "rule": { "type": "string", "description": "取得證書的規則說明" }
+            }
+          },
           "subjects": {
             "type": "array",
             "minItems": 1,

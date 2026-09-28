@@ -72,6 +72,7 @@ function modalLevelTabs(config, idPrefix, fn) {
 }
 export const bankTabs = config => modalLevelTabs(config, 'bk-lv', 'bankSetLevel');
 export const dashTabs = config => modalLevelTabs(config, 'dash-lv', 'dashSetLevel');
+export const examTabs = config => modalLevelTabs(config, 'exs-lv', 'examSetLevel');
 
 /** 網站首頁的證照卡片 */
 export function certCards(configs) {
