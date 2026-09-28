@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# 舊版 HTML 保持與原檔逐位元組相同
+legacy/** -text

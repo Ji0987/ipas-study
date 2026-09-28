@@ -1,0 +1,358 @@
+{
+  "id": "ai-planner",
+  "name": "AI 應用規劃師",
+  "idPrefix": "aip",
+  "levels": [
+    {
+      "id": "basic",
+      "name": "初級",
+      "subjects": [
+        {
+          "id": "bs1",
+          "label": "初級科目一",
+          "name": "人工智慧基礎概論",
+          "topics": [
+            {
+              "id": "b-ai-def",
+              "title": "AI 定義、功能分類與技術底層架構",
+              "badge": {
+                "text": "AI 概念",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "b-ai-gov",
+              "title": "AI 治理概念（AI Governance）",
+              "badge": {
+                "text": "治理",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "b-data-type",
+              "title": "資料類型與蒐集方式",
+              "badge": {
+                "text": "資料",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "b-data-clean",
+              "title": "資料清洗、轉換與整理",
+              "badge": {
+                "text": "資料",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "b-data-priv",
+              "title": "資料隱私、安全與倫理",
+              "badge": {
+                "text": "隱私",
+                "cls": "bbc"
+              }
+            },
+            {
+              "id": "b-ml-basic",
+              "title": "機器學習原理與三大學習類型",
+              "badge": {
+                "text": "ML",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "b-ml-models",
+              "title": "常見機器學習模型",
+              "badge": {
+                "text": "ML 模型",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "b-disc-gen",
+              "title": "鑑別式 AI vs 生成式 AI（高頻考點）",
+              "badge": {
+                "text": "核心",
+                "cls": "bbc"
+              }
+            }
+          ]
+        },
+        {
+          "id": "bs2",
+          "label": "初級科目二",
+          "name": "生成式 AI 應用與規劃",
+          "topics": [
+            {
+              "id": "b-nocode",
+              "title": "No Code / Low Code 概念與生成式AI整合",
+              "badge": {
+                "text": "NoCode",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "b-nocode-eval",
+              "title": "No Code / Low Code 平台評估 6 大因素",
+              "badge": {
+                "text": "評估",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "b-genai-tech",
+              "title": "生成式 AI 技術架構與特點",
+              "badge": {
+                "text": "技術",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "b-genai-tools",
+              "title": "常見生成式 AI 工具與提示工程",
+              "badge": {
+                "text": "工具",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "b-genai-industry",
+              "title": "各行業生成式 AI 應用場景",
+              "badge": {
+                "text": "應用",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "b-genai-eval",
+              "title": "生成式 AI 導入評估與規劃",
+              "badge": {
+                "text": "導入",
+                "cls": "bbg"
+              }
+            },
+            {
+              "id": "b-genai-risk",
+              "title": "生成式 AI 風險管理",
+              "badge": {
+                "text": "風險",
+                "cls": "bbc"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inter",
+      "name": "中級",
+      "subjects": [
+        {
+          "id": "s1",
+          "label": "科目一",
+          "name": "人工智慧技術應用規劃",
+          "topics": [
+            {
+              "id": "nlp",
+              "title": "3.1 自然語言處理（NLP）",
+              "badge": {
+                "text": "NLP",
+                "cls": "bbl"
+              }
+            },
+            {
+              "id": "cv",
+              "title": "3.2 電腦視覺（Computer Vision）",
+              "badge": {
+                "text": "CV",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "genai",
+              "title": "3.3 生成式 AI（Generative AI）",
+              "badge": {
+                "text": "GenAI",
+                "cls": "bbc"
+              }
+            },
+            {
+              "id": "multimodal",
+              "title": "3.4 多模態 AI",
+              "badge": {
+                "text": "Multi",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "ai-eval",
+              "title": "4.1 AI 導入評估",
+              "badge": {
+                "text": "評估",
+                "cls": "bbg"
+              }
+            },
+            {
+              "id": "ai-plan",
+              "title": "4.2 AI 導入規劃",
+              "badge": {
+                "text": "規劃",
+                "cls": "bbg"
+              }
+            },
+            {
+              "id": "ai-risk",
+              "title": "4.3 AI 風險管理",
+              "badge": {
+                "text": "風險",
+                "cls": "bbc"
+              }
+            },
+            {
+              "id": "deploy",
+              "title": "5.1–5.2 數據準備、模型選擇與系統部署",
+              "badge": {
+                "text": "部署",
+                "cls": "bbt"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "label": "科目二",
+          "name": "大數據處理分析與應用",
+          "topics": [
+            {
+              "id": "stat-desc",
+              "title": "3.1 敘述性統計",
+              "badge": {
+                "text": "統計",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "stat-dist",
+              "title": "3.2 機率分佈",
+              "badge": {
+                "text": "統計",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "stat-hypo",
+              "title": "3.3 假設檢定",
+              "badge": {
+                "text": "統計",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "bigdata5v",
+              "title": "4.1 數據收集、資料來源與大數據 5V 特性",
+              "badge": {
+                "text": "核心",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "bigdata-store",
+              "title": "4.2 數據儲存與管理",
+              "badge": {
+                "text": "儲存",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "bigdata-tools",
+              "title": "4.3 大數據處理技術與工具",
+              "badge": {
+                "text": "工具",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "analysis",
+              "title": "5.1–5.3 大數據分析方法與視覺化",
+              "badge": {
+                "text": "分析",
+                "cls": "bbt"
+              }
+            },
+            {
+              "id": "bd-ai",
+              "title": "6.1–6.4 AI 應用與隱私合規",
+              "badge": {
+                "text": "合規",
+                "cls": "bbc"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s3",
+          "label": "科目三",
+          "name": "機器學習技術與應用",
+          "topics": [
+            {
+              "id": "ml-math",
+              "title": "3.1 基礎數學工具",
+              "badge": {
+                "text": "數學",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "ml-types",
+              "title": "4.1 機器學習三大學習類型",
+              "badge": {
+                "text": "ML 基礎",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "ml-algo",
+              "title": "4.2 常見機器學習演算法",
+              "badge": {
+                "text": "演算法",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "dl",
+              "title": "4.3 深度學習原理與框架",
+              "badge": {
+                "text": "DL",
+                "cls": "bbc"
+              }
+            },
+            {
+              "id": "feature-eng",
+              "title": "5.1 數據準備與特徵工程",
+              "badge": {
+                "text": "特徵工程",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "model-eval",
+              "title": "5.2–5.4 模型評估、驗證與調校",
+              "badge": {
+                "text": "調校",
+                "cls": "bbp"
+              }
+            },
+            {
+              "id": "ml-gov",
+              "title": "6.1–6.2 隱私、安全與演算法公平性",
+              "badge": {
+                "text": "治理",
+                "cls": "bbc"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

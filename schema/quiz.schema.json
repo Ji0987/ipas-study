@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "quiz.schema.json",
+  "title": "題庫（每個科目一個檔案）",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "topic", "src", "q", "opts", "ans", "exp"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z]+-q-\\d{4,}$", "description": "穩定唯一 ID，作答紀錄靠它對應" },
+      "topic": { "type": "string", "minLength": 1, "description": "對應 config.json 中的主題 id" },
+      "src": { "enum": ["official", "guide", "self"], "description": "官方公告試題／學習指引改編／自編" },
+      "q": { "type": "string", "minLength": 1, "description": "題幹，可含 HTML" },
+      "opts": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "string", "minLength": 1 } },
+      "ans": { "type": "integer", "minimum": 0, "maximum": 3, "description": "正確選項索引（0 起算）" },
+      "exp": { "type": "string", "minLength": 1, "description": "詳解" },
+      "img": { "type": "string", "pattern": "^data:image/", "description": "題目附圖（data URI）" },
+      "imgAlt": { "type": "string" },
+      "code": { "type": "string", "description": "題目附帶的程式碼" },
+      "codeOpts": { "type": "boolean", "description": "選項為程式碼，以等寬字型顯示並跳脫 HTML" }
+    }
+  }
+}

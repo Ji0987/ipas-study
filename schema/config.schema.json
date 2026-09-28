@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config.schema.json",
+  "title": "證照設定：級別 → 科目 → 主題",
+  "type": "object",
+  "required": ["id", "name", "idPrefix", "levels"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "證照 id，也用於 localStorage key 與輸出路徑" },
+    "name": { "type": "string", "minLength": 1 },
+    "idPrefix": { "type": "string", "pattern": "^[a-z]+$", "description": "題目 id 的前綴" },
+    "levels": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "subjects"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string", "minLength": 1 },
+          "subjects": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "label", "name", "topics"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+                "label": { "type": "string", "minLength": 1, "description": "如「科目一」" },
+                "name": { "type": "string", "minLength": 1 },
+                "topics": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "title"],
+                    "properties": {
+                      "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+                      "title": { "type": "string", "minLength": 1 },
+                      "badge": {
+                        "type": "object",
+                        "required": ["text", "cls"],
+                        "properties": {
+                          "text": { "type": "string", "minLength": 1 },
+                          "cls": { "type": "string", "description": "徽章樣式類別，如 bbt / bbp / bbc" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
