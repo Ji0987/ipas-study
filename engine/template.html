@@ -104,8 +104,10 @@
         <button class="bk-fb" id="bk-f-img" onclick="bankSetFilter('img')">🖼️ 圖片題</button>
         <button class="bk-fb" id="bk-f-code" onclick="bankSetFilter('code')">💻 程式碼題</button>
         <button class="bk-fb" id="bk-f-marked" onclick="bankSetFilter('marked')">⭐ 已標記</button>
+        <button class="bk-fb" id="bk-f-wrong" onclick="bankSetFilter('wrong')">❌ 錯題</button>
       </div>
       <div class="bk-count" id="bk-count"></div>
+      <button class="bk-practice" id="bk-practice" onclick="bankPracticeWrong()" hidden></button>
     </div>
     <div class="bk-list" id="bk-list"></div>
   </div>
@@ -135,6 +137,7 @@
       <div class="rmsg" id="r-msg"></div>
       <div class="rbtns">
         <button class="rbtn p" onclick="qzRestart()">再挑戰一次</button>
+        <button class="rbtn s" id="qz-wrong-btn" onclick="qzWrong()" hidden></button>
         <button class="rbtn s" onclick="closeModal('qz-overlay')">關閉</button>
       </div>
     </div>
@@ -149,6 +152,7 @@
     <div class="keys-grid">
       <kbd>⌘K</kbd><div class="kdesc">開啟指令面板</div>
       <kbd>Q</kbd><div class="kdesc">開啟知識測驗</div>
+      <kbd>W</kbd><div class="kdesc">練習錯題</div>
       <kbd>B</kbd><div class="kdesc">開啟題庫瀏覽</div>
       <kbd>C</kbd><div class="kdesc">開啟考試速查表</div>
       <kbd>{{subjectKeys}}</kbd><div class="kdesc">切換科目（依等級）</div>
@@ -162,7 +166,7 @@
   <div class="keysmodal" onclick="event.stopPropagation()">
     <button class="mclose" aria-label="關閉" onclick="closeModal('backup-overlay')">×</button>
     <div class="keys-title">💾 進度備份</div>
-    <p class="backup-desc">把已讀主題與題庫書籤存成檔案，可在其他裝置或瀏覽器匯入。匯入會取代目前的進度。</p>
+    <p class="backup-desc">把已讀主題、題庫書籤與作答紀錄（錯題本）存成檔案，可在其他裝置或瀏覽器匯入。匯入會取代目前的進度。</p>
     <div class="rbtns">
       <button class="rbtn p" onclick="exportProgress()">匯出進度</button>
       <button class="rbtn s" onclick="document.getElementById('backup-file').click()">匯入進度</button>

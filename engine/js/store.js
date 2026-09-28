@@ -3,7 +3,8 @@ import { config } from './data.js';
 
 const KEY = `ipas:${config.id}`;
 const VERSION = 1;
-const blank = () => ({ version: VERSION, read: [], bookmarks: [] });
+// answers：題目 id → 作答紀錄（見 answers.js），舊資料沒有此欄位時補空物件
+const blank = () => ({ version: VERSION, read: [], bookmarks: [], answers: {} });
 
 function load() {
   try {

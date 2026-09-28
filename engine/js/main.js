@@ -13,9 +13,9 @@ Object.assign(window, {
   openKeys: ui.openKeys, openCheat: ui.openCheat, copyFm: ui.copyFm,
   switchLevel: layout.switchLevel, switchSub: layout.switchSub, switchSubIndex: layout.switchSubIndex,
   toggleTP: layout.toggleTP, toggleAllTP: layout.toggleAllTP, markDone: layout.markDone,
-  openQuiz: quiz.openQuiz, answerQz: quiz.answerQz, qzNext: quiz.qzNext, qzRestart: quiz.qzRestart,
+  openQuiz: quiz.openQuiz, answerQz: quiz.answerQz, qzNext: quiz.qzNext, qzRestart: quiz.qzRestart, qzWrong: quiz.qzWrong,
   openBank: bank.openBank, bankSetLevel: bank.bankSetLevel, bankSetFilter: bank.bankSetFilter,
-  bankSearchFn: bank.bankSearchFn, bankMark: bank.bankMark,
+  bankSearchFn: bank.bankSearchFn, bankMark: bank.bankMark, bankPracticeWrong: bank.bankPracticeWrong,
   openCmd, closeCmd,
   openBackup, exportProgress, importProgress,
 });
@@ -29,6 +29,7 @@ document.addEventListener('keydown', e => {
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openCmd(); return; }
   if (inInput) return;
   if (e.key === 'q' || e.key === 'Q') { e.preventDefault(); quiz.openQuiz(); }
+  if (e.key === 'w' || e.key === 'W') { e.preventDefault(); quiz.openQuiz('wrong'); }
   if (e.key === 'b' || e.key === 'B') { e.preventDefault(); bank.openBank(); }
   if (e.key === 'c' || e.key === 'C') { e.preventDefault(); ui.openCheat(); }
   if (/^[1-9]$/.test(e.key)) layout.switchSubIndex(+e.key - 1);

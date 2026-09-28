@@ -8,7 +8,8 @@ import { openBackup } from './backup.js';
 const NUM_ICONS = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
 // 科目切換指令依目前級別產生
 const commands = () => [
-  { ico: '📝', label: '開啟知識測驗', kbd: 'Q', fn: openQuiz },
+  { ico: '📝', label: '開啟知識測驗', kbd: 'Q', fn: () => openQuiz() },
+  { ico: '❌', label: '練習錯題', kbd: 'W', fn: () => openQuiz('wrong') },
   ...currentLevel().subjects.map((s, i) => ({ ico: NUM_ICONS[i], label: `切換到${s.label}`, kbd: String(i + 1), fn: () => switchSub(s.id) })),
   { ico: '💾', label: '進度備份（匯出／匯入）', kbd: '', fn: openBackup },
   { ico: '⌨️', label: '查看鍵盤快捷鍵', kbd: '', fn: openKeys },

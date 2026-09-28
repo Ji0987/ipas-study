@@ -1,4 +1,4 @@
-// 進度備份：匯出／匯入已讀主題與題庫書籤（跨裝置、跨瀏覽器搬移用）
+// 進度備份：匯出／匯入已讀主題、題庫書籤與作答紀錄（跨裝置、跨瀏覽器搬移用）
 import { config, subjectOfTopic } from './data.js';
 import { state, save } from './store.js';
 import { showToast } from './ui.js';
@@ -8,7 +8,7 @@ const APP = 'ipas-study';
 export function openBackup() { document.getElementById('backup-overlay').classList.add('on'); }
 
 export function exportProgress() {
-  const data = { app: APP, cert: config.id, version: state.version, exportedAt: new Date().toISOString(), read: state.read, bookmarks: state.bookmarks };
+  const data = { app: APP, cert: config.id, version: state.version, exportedAt: new Date().toISOString(), read: state.read, bookmarks: state.bookmarks, answers: state.answers };
   const d = new Date(), ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
@@ -30,8 +30,15 @@ export async function importProgress(input) {
   const qid = new RegExp(`^${config.idPrefix}-q-\\d+$`);
   const read = [...new Set(data.read.filter(id => typeof id === 'string' && subjectOfTopic[id]))];
   const bookmarks = [...new Set(data.bookmarks.filter(id => typeof id === 'string' && qid.test(id)))];
-  if (!confirm(`匯入後會取代目前的進度：\n已讀主題 ${read.length} 個、題庫書籤 ${bookmarks.length} 題。\n確定要匯入嗎？`)) return;
-  state.read = read; state.bookmarks = bookmarks; save();
+  // 作答紀錄為較晚加入的欄位，舊的進度檔沒有時視為空
+  const answers = {};
+  for (const [id, r] of Object.entries(data.answers && typeof data.answers === 'object' ? data.answers : {})) {
+    if (!qid.test(id) || !r || !['right', 'wrong'].includes(r.last)) continue;
+    answers[id] = { right: Math.max(0, +r.right || 0), wrong: Math.max(0, +r.wrong || 0), last: r.last, at: +r.at || 0 };
+  }
+  const wrong = Object.values(answers).filter(r => r.last === 'wrong').length;
+  if (!confirm(`匯入後會取代目前的進度：\n已讀主題 ${read.length} 個、題庫書籤 ${bookmarks.length} 題、作答紀錄 ${Object.keys(answers).length} 題（錯題 ${wrong} 題）。\n確定要匯入嗎？`)) return;
+  state.read = read; state.bookmarks = bookmarks; state.answers = answers; save();
   showToast('進度已匯入，重新載入中…', '✅');
   setTimeout(() => location.reload(), 800);
 }

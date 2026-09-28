@@ -1,23 +1,30 @@
-// 知識測驗：從目前級別的題庫隨機抽 10 題
-import { loadQuiz } from './data.js';
+// 知識測驗：從目前級別的題庫（或錯題本）隨機抽 10 題
+import { levels, loadQuiz } from './data.js';
 import { currentLevel } from './layout.js';
+import { recordAnswer, wrongIn } from './answers.js';
 import { escHTML, fireConfetti, showToast } from './ui.js';
 
 let QUIZ = [];
 let qzIdx = 0, qzScore = 0, qzAns = false;
+let qzMode = 'all', qzLevel = null, qzBank = null;
 
-export async function openQuiz() {
-  const level = currentLevel();
-  let bank;
-  try { bank = await loadQuiz(); } catch (e) { showToast('題庫載入失敗，請透過網址開啟頁面', '⚠️'); return; }
-  const pool = bank[level.id];
+/** mode：'all' 全部題目、'wrong' 只練錯題；levelId 省略時用目前級別 */
+export async function openQuiz(mode = 'all', levelId) {
+  const level = levels.find(l => l.id === levelId) || currentLevel();
+  try { qzBank = await loadQuiz(); } catch (e) { showToast('題庫載入失敗，請透過網址開啟頁面', '⚠️'); return; }
+  const all = qzBank[level.id];
+  const pool = mode === 'wrong' ? wrongIn(all) : all;
+  if (!pool.length) { showToast(`${level.name}目前沒有錯題`, '🎉'); return; }
+  qzMode = mode; qzLevel = level;
   // random sample (Fisher-Yates) up to 10 questions per session
   const arr = [...pool];
   for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
   QUIZ = arr.slice(0, Math.min(10, arr.length));
   const tag = document.getElementById('qz-level-tag');
   tag.textContent = level.name; tag.className = 'lvtag ' + level.tagClass;
-  document.getElementById('qz-meta-text').textContent = `從 ${pool.length} 題歷屆題庫隨機抽出 ${QUIZ.length} 題`;
+  document.getElementById('qz-meta-text').textContent = mode === 'wrong'
+    ? `錯題練習：從 ${pool.length} 題錯題隨機抽出 ${QUIZ.length} 題，答對即移出錯題本`
+    : `從 ${pool.length} 題歷屆題庫隨機抽出 ${QUIZ.length} 題`;
   qzIdx = 0; qzScore = 0; qzAns = false;
   document.getElementById('qz-content').style.display = '';
   document.getElementById('qz-result').classList.remove('on');
@@ -48,6 +55,7 @@ export function answerQz(i) {
     else if (idx === i && i !== q.ans) o.classList.add('wrg');
   });
   if (i === q.ans) qzScore++;
+  recordAnswer(q.id, i === q.ans);
   const exp = document.getElementById('qz-exp'); exp.textContent = '💡 解析：' + q.exp; exp.classList.add('on');
   const nxt = document.getElementById('qz-nxt'); nxt.textContent = qzIdx < QUIZ.length - 1 ? '下一題 →' : '查看結果'; nxt.classList.add('on');
 }
@@ -63,7 +71,13 @@ function showResult() {
   if (pct >= .9) { m.className = 'rmsg great'; m.textContent = '🎉 優秀！核心知識已掌握，考試加油！'; fireConfetti(); }
   else if (pct >= .6) { m.className = 'rmsg ok'; m.textContent = '📚 不錯！建議再複習答錯的部分。'; }
   else { m.className = 'rmsg retry'; m.textContent = '💪 再多複習幾遍筆記後重新挑戰！'; }
+  const wrong = wrongIn(qzBank[qzLevel.id]).length;
+  const wb = document.getElementById('qz-wrong-btn');
+  wb.hidden = !wrong; wb.textContent = `❌ 練習錯題（${wrong}）`;
 }
 export function qzRestart() {
-  openQuiz();  // re-sample a fresh random set from the same level bank
+  openQuiz(qzMode, qzLevel.id);  // re-sample a fresh random set from the same level and mode
+}
+export function qzWrong() {
+  openQuiz('wrong', qzLevel.id);
 }

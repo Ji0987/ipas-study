@@ -2,7 +2,9 @@
 import { levels, loadQuiz } from './data.js';
 import { state, save } from './store.js';
 import { currentLevel } from './layout.js';
-import { escHTML, showToast } from './ui.js';
+import { isWrong } from './answers.js';
+import { openQuiz } from './quiz.js';
+import { escHTML, showToast, closeModal } from './ui.js';
 
 let quizBank = null;
 let bankLevel = levels[0].id, bankFilter = 'all', bankSearch = '';
@@ -20,6 +22,11 @@ export async function openBank() {
 export function bankSetLevel(lvl) { bankLevel = lvl; renderBank(); }
 export function bankSetFilter(f) { bankFilter = f; renderBank(); }
 export function bankSearchFn(v) { bankSearch = v.toLowerCase().trim(); renderBank(); }
+/** 從題庫的錯題篩選直接開始練習 */
+export function bankPracticeWrong() {
+  closeModal('bk-overlay');
+  openQuiz('wrong', bankLevel);
+}
 export function bankMark(id) {
   if (bankMarked.has(id)) bankMarked.delete(id); else bankMarked.add(id);
   state.bookmarks = [...bankMarked]; save();
@@ -30,21 +37,27 @@ function renderBank() {
   for (const l of levels) document.getElementById('bk-lv-' + l.id).classList.toggle('on', l === level);
   const lt = document.getElementById('bk-level-tag');
   lt.textContent = level.name; lt.className = 'lvtag ' + level.tagClass;
-  ['all', 'img', 'code', 'marked'].forEach(f => document.getElementById('bk-f-' + f).classList.toggle('on', bankFilter === f));
+  ['all', 'img', 'code', 'marked', 'wrong'].forEach(f => document.getElementById('bk-f-' + f).classList.toggle('on', bankFilter === f));
   const markedCount = pool.filter(q => bankMarked.has(q.id)).length;
+  const wrongCount = pool.filter(q => isWrong(q.id)).length;
   let items = pool.map((q, i) => ({ q, i }));
   if (bankFilter === 'img') items = items.filter(x => x.q.img);
   else if (bankFilter === 'code') items = items.filter(x => x.q.code || x.q.codeOpts);
   else if (bankFilter === 'marked') items = items.filter(x => bankMarked.has(x.q.id));
+  else if (bankFilter === 'wrong') items = items.filter(x => isWrong(x.q.id));
+  const practice = document.getElementById('bk-practice');
+  practice.hidden = !(bankFilter === 'wrong' && wrongCount);
+  practice.textContent = `📝 練習這 ${wrongCount} 題錯題`;
   if (bankSearch) {
     items = items.filter(x => x.q.q.toLowerCase().includes(bankSearch)
       || x.q.opts.some(o => o.toLowerCase().includes(bankSearch))
       || (x.q.exp || '').toLowerCase().includes(bankSearch));
   }
-  document.getElementById('bk-count').textContent = `顯示 ${items.length} / ${pool.length} 題` + (markedCount ? ` · ⭐ 已標記 ${markedCount}` : '');
+  document.getElementById('bk-count').textContent = `顯示 ${items.length} / ${pool.length} 題` + (markedCount ? ` · ⭐ 已標記 ${markedCount}` : '') + (wrongCount ? ` · ❌ 錯題 ${wrongCount}` : '');
   const html = items.map(({ q, i }) => {
-    const tag = q.img ? '<span class="bk-tag tag-img">🖼️ 圖片</span>'
-      : ((q.code || q.codeOpts) ? '<span class="bk-tag tag-code">💻 程式碼</span>' : '');
+    const tag = (q.img ? '<span class="bk-tag tag-img">🖼️ 圖片</span>'
+      : ((q.code || q.codeOpts) ? '<span class="bk-tag tag-code">💻 程式碼</span>' : ''))
+      + (isWrong(q.id) ? '<span class="bk-tag tag-wrong">❌ 錯題</span>' : '');
     let media = '';
     if (q.img) media = `<img class="qz-img" src="${q.img}" alt="${q.imgAlt || '題目附圖：請參閱圖中數據判讀'}">`;
     else if (q.code) media = `<pre class="qz-code">${escHTML(q.code)}</pre>`;
