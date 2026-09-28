@@ -52,7 +52,7 @@ function renderQz() {
   document.getElementById('qz-nxt').className = 'qz-nxt';
   const optCls = 'qz-o' + (q.codeOpts ? ' qz-o-code' : '');
   document.getElementById('qz-opts').innerHTML = ['A', 'B', 'C', 'D'].map((l, i) =>
-    `<div class="${optCls}" role="button" tabindex="0" aria-label="選項 ${l}" onclick="answerQz(${i})" id="qzo-${i}"><div class="qltr">${l}</div><span>${q.codeOpts ? escHTML(q.opts[i]) : q.opts[i]}${figsAt(q, l)}</span></div>`).join('');
+    `<div class="${optCls}" role="button" tabindex="0" aria-label="選項 ${l}" onclick="answerQz(${i})" id="qzo-${i}"><div class="qltr">${l}</div><span>${escHTML(q.opts[i])}${figsAt(q, l)}</span></div>`).join('');
 }
 export function answerQz(i) {
   if (qzAns) return; qzAns = true;

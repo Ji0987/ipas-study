@@ -28,7 +28,9 @@ function renderSetup() {
   const level = levels.find(l => l.id === setupLevel), spec = level.exam;
   for (const l of levels) $('exs-lv-' + l.id).classList.toggle('on', l === level);
   const tag = $('exs-level-tag'); tag.textContent = level.name; tag.className = 'lvtag ' + level.tagClass;
-  const cards = level.subjects.map(s => {
+  // 術科為實作考試，沒有題庫，不列入模擬考
+  const practical = level.subjects.filter(s => s.practical);
+  const cards = level.subjects.filter(s => !s.practical).map(s => {
     const pool = bank[level.id].filter(q => q.sub === s.id).length;
     const hist = state.exams.filter(r => r.subject === s.id);
     const last = hist.at(-1), best = hist.length ? Math.max(...hist.map(r => r.score)) : null;
@@ -45,6 +47,7 @@ function renderSetup() {
       <div>📋 每科 <b>${spec.questions}</b> 題單選題，限時 <b>${spec.minutes}</b> 分鐘，滿分 100 分，<b>${spec.pass}</b> 分及格。</div>
       ${spec.rule ? `<div>🎓 ${escHTML(spec.rule)}</div>` : ''}
       <div>⏱ 作答中可自由跳題、修改答案與標記待檢查，時間到會自動交卷；交卷後才顯示對錯，作答會記入錯題本。</div>
+      ${practical.length ? `<div>🛠 ${practical.map(s => escHTML(s.label)).join('、')}為術科實作考試，不提供模擬考。</div>` : ''}
     </div>${cards}`;
 }
 
@@ -158,12 +161,12 @@ function renderResult() {
     const media = (q.img ? `<img class="qz-img" src="${q.img}" alt="${q.imgAlt || '題目附圖'}">` : q.code ? `<pre class="qz-code">${escHTML(q.code)}</pre>` : '') + figsAt(q, 'stem');
     const opts = LETTERS.map((l, oi) => {
       const cls = oi === q.ans ? ' cor' : oi === pick ? ' wrg' : '';
-      const txt = (q.codeOpts ? escHTML(q.opts[oi]) : q.opts[oi]) + figsAt(q, l);
+      const txt = escHTML(q.opts[oi]) + figsAt(q, l);
       return `<div class="bk-o${cls}"><b>${l}</b><span${q.codeOpts ? ' class="mono"' : ''}>${txt}</span>${oi === q.ans ? '<span class="bk-ck">✓</span>' : oi === pick ? '<span class="bk-ck">✗</span>' : ''}</div>`;
     }).join('');
     return `<div class="bk-card"><div class="bk-head"><span class="bk-num">#${i + 1}</span>${verdict}${ex.flags.has(i) ? '<span class="bk-tag tag-code">🚩 已標記</span>' : ''}</div>
       ${ctxHTML(q)}<div class="bk-q">${escHTML(q.q)}</div>${media}<div class="bk-opts">${opts}</div>
-      <div class="bk-exp">💡 ${q.exp}<button class="note-link" onclick="examNote('${q.topic}')">📖 看筆記：${escHTML(topicById[q.topic].title)}</button></div></div>`;
+      <div class="bk-exp">💡 ${escHTML(q.exp)}<button class="note-link" onclick="examNote('${q.topic}')">📖 看筆記：${escHTML(topicById[q.topic].title)}</button></div></div>`;
   }).join('');
   $('ex-body').innerHTML = cards || '<div class="bk-empty">沒有符合條件的題目</div>';
   $('ex-body').scrollTop = 0;

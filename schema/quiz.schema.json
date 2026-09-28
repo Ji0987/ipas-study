@@ -11,7 +11,7 @@
       "id": { "type": "string", "pattern": "^[a-z]+-q-\\d{4,}$", "description": "穩定唯一 ID，作答紀錄靠它對應" },
       "topic": { "type": "string", "minLength": 1, "description": "對應 config.json 中的主題 id" },
       "src": { "enum": ["official", "guide", "self"], "description": "官方公告試題／學習指引改編／自編" },
-      "ref": { "type": "string", "pattern": "^\\d+-\\d+ [a-z0-9]+ \\d+$", "description": "出處：試卷代碼、科目、題號，如「115-1 s2 8」" },
+      "ref": { "type": "string", "pattern": "^(\\d+-\\d+ [a-z0-9]+ \\d+|指引 \\d+-\\d+ \\d+)$", "description": "出處：試卷代碼、科目、題號，如「115-1 s2 8」「113-2 iot2 5」；或學習指引的節與題號，如「指引 4-2 3」" },
       "ctx": { "type": "string", "minLength": 1, "description": "題組共用情境，顯示在題幹上方" },
       "figs": {
         "type": "array",

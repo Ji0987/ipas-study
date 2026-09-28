@@ -69,6 +69,7 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
 
   const first = config.levels[0];
   const slots = {
+    bodyClass: config.levels.length === 1 ? ' class="single-level"' : '',
     title: render.esc(config.site.title),
     stylesHref: `../${stylesPath}`,
     mobTitle: render.esc(config.site.mobTitle),

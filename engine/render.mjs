@@ -37,7 +37,7 @@ export function subjectCards(config) {
   return config.levels.map((l, i) => {
     const cards = l.subjects.map(s =>
       `    <div class="sc ${s.cardClass}" onclick="switchSub('${s.id}')"><div class="sc-n">${esc(s.cardTitle)}</div><div class="sc-t">${esc(s.name)}</div><div class="sc-tags">${s.tags.map(t => `<span class="stag">${esc(t)}</span>`).join('')}</div></div>`).join('\n');
-    return `  <div id="sc-${l.id}" class="sc-grid"${i === 0 ? '' : ' style="display:none"'}>\n${cards}\n  </div>`;
+    return `  <div id="sc-${l.id}" class="sc-grid${l.subjects.length === 4 ? ' n4' : ''}"${i === 0 ? '' : ' style="display:none"'}>\n${cards}\n  </div>`;
   }).join('\n');
 }
 

@@ -65,15 +65,15 @@ function renderBank() {
     else if (q.code) media = `<pre class="qz-code">${escHTML(q.code)}</pre>`;
     media += figsAt(q, 'stem');
     const opts = ['A', 'B', 'C', 'D'].map((l, oi) => {
-      const cor = oi === q.ans, txt = (q.codeOpts ? escHTML(q.opts[oi]) : q.opts[oi]) + figsAt(q, l);
+      const cor = oi === q.ans, txt = escHTML(q.opts[oi]) + figsAt(q, l);
       return `<div class="bk-o${cor ? ' cor' : ''}"><b>${l}</b><span${q.codeOpts ? ' class="mono"' : ''}>${txt}</span>${cor ? '<span class="bk-ck">✓</span>' : ''}</div>`;
     }).join('');
     const marked = bankMarked.has(q.id);
     return `<div class="bk-card">
       <div class="bk-head"><span class="bk-num">#${i + 1}</span>${tag}<button class="bk-mark${marked ? ' on' : ''}" onclick="bankMark('${q.id}')" title="標記待複習" aria-label="標記第 ${i + 1} 題待複習">⭐</button></div>
-      ${ctxHTML(q)}<div class="bk-q">${q.q}</div>${media}
+      ${ctxHTML(q)}<div class="bk-q">${escHTML(q.q)}</div>${media}
       <div class="bk-opts">${opts}</div>
-      <div class="bk-exp">💡 ${q.exp}<button class="note-link" onclick="gotoNote('${q.topic}')">📖 看筆記：${escHTML(topicById[q.topic].title)}</button></div>
+      <div class="bk-exp">💡 ${escHTML(q.exp)}<button class="note-link" onclick="gotoNote('${q.topic}')">📖 看筆記：${escHTML(topicById[q.topic].title)}</button></div>
     </div>`;
   }).join('');
   const list = document.getElementById('bk-list');

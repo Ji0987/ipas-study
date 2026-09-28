@@ -107,7 +107,7 @@ function renderDash() {
   </div>`;
 
   // 評鑑主題（章節）雷達圖：仿官方成績單，依題目所屬主題的章節統計
-  const chapters = level.subjects.flatMap(s => s.chapters.map((ch, i) => ({ key: `${s.id}:${i}`, title: ch.title, subject: s })));
+  const chapters = level.subjects.filter(s => !s.practical).flatMap(s => s.chapters.map((ch, i) => ({ key: `${s.id}:${i}`, title: ch.title, subject: s })));
   const chStats = chapters.map(ch => ({ ...ch, st: stats(pool.filter(q => chapterOfTopic[q.topic] === ch.key)) }));
   h += `<div class="ds-sec">評鑑主題答對率</div>${radar(chStats)}
     <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th>評鑑主題</th><th>答對率</th><th>作答</th></tr></thead><tbody>${chStats.map(c =>
