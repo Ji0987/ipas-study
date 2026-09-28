@@ -47,7 +47,7 @@ function validateCert(certDir) {
     }
   }
   for (const id of config.site.defaultOpen) if (!topics.has(id)) errors.push(`config.json site.defaultOpen 的主題不存在：${id}`);
-  const ids = new Map();
+  const ids = new Map(), refs = new Map();
   const quizItems = [];
   for (const f of listJSON(path.join(certDir, 'quiz'))) {
     const file = path.join(certDir, 'quiz', f), subject = path.basename(f, '.json');
@@ -64,6 +64,9 @@ function validateCert(certDir) {
       if (!t) errors.push(`${rel(file)} ${q.id} 的 topic 不存在：${q.topic}`);
       else if (t.level !== level) errors.push(`${rel(file)} ${q.id} 的 topic ${q.topic} 屬於 ${t.level}，不是 ${level}`);
       if (q.ans >= q.opts.length) errors.push(`${rel(file)} ${q.id} 的 ans 超出選項範圍`);
+      for (const f of q.figs || []) if (!fs.existsSync(path.join(certDir, f.src))) errors.push(`${rel(file)} ${q.id} 的附圖不存在：${f.src}`);
+      if (q.ref && refs.has(q.ref)) errors.push(`${rel(file)} ${q.id} 出處重複：${q.ref}（亦見於 ${refs.get(q.ref)}）`);
+      if (q.ref) refs.set(q.ref, q.id);
       if (LEGACY_JUNK.test(q.q + q.opts.join('') + q.exp)) warnings.push(`${rel(file)} ${q.id} 含試卷頁首雜訊`);
       quizItems.push({ file, q, key: norm(q.q), grams: bigramSet(norm(q.q + q.opts.join(''))) });
     }

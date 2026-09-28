@@ -5,6 +5,7 @@ import { currentLevel } from './layout.js';
 import { isWrong } from './answers.js';
 import { openQuiz } from './quiz.js';
 import { escHTML, showToast, closeModal } from './ui.js';
+import { figsAt, ctxHTML } from './figs.js';
 
 let quizBank = null;
 let bankLevel = levels[0].id, bankFilter = 'all', bankSearch = '';
@@ -41,7 +42,7 @@ function renderBank() {
   const markedCount = pool.filter(q => bankMarked.has(q.id)).length;
   const wrongCount = pool.filter(q => isWrong(q.id)).length;
   let items = pool.map((q, i) => ({ q, i }));
-  if (bankFilter === 'img') items = items.filter(x => x.q.img);
+  if (bankFilter === 'img') items = items.filter(x => x.q.img || x.q.figs);
   else if (bankFilter === 'code') items = items.filter(x => x.q.code || x.q.codeOpts);
   else if (bankFilter === 'marked') items = items.filter(x => bankMarked.has(x.q.id));
   else if (bankFilter === 'wrong') items = items.filter(x => isWrong(x.q.id));
@@ -50,25 +51,27 @@ function renderBank() {
   practice.textContent = `📝 練習這 ${wrongCount} 題錯題`;
   if (bankSearch) {
     items = items.filter(x => x.q.q.toLowerCase().includes(bankSearch)
+      || (x.q.ctx || '').toLowerCase().includes(bankSearch)
       || x.q.opts.some(o => o.toLowerCase().includes(bankSearch))
       || (x.q.exp || '').toLowerCase().includes(bankSearch));
   }
   document.getElementById('bk-count').textContent = `顯示 ${items.length} / ${pool.length} 題` + (markedCount ? ` · ⭐ 已標記 ${markedCount}` : '') + (wrongCount ? ` · ❌ 錯題 ${wrongCount}` : '');
   const html = items.map(({ q, i }) => {
-    const tag = (q.img ? '<span class="bk-tag tag-img">🖼️ 圖片</span>'
+    const tag = (q.img || q.figs ? '<span class="bk-tag tag-img">🖼️ 圖片</span>'
       : ((q.code || q.codeOpts) ? '<span class="bk-tag tag-code">💻 程式碼</span>' : ''))
       + (isWrong(q.id) ? '<span class="bk-tag tag-wrong">❌ 錯題</span>' : '');
     let media = '';
     if (q.img) media = `<img class="qz-img" src="${q.img}" alt="${q.imgAlt || '題目附圖：請參閱圖中數據判讀'}">`;
     else if (q.code) media = `<pre class="qz-code">${escHTML(q.code)}</pre>`;
+    media += figsAt(q, 'stem');
     const opts = ['A', 'B', 'C', 'D'].map((l, oi) => {
-      const cor = oi === q.ans, txt = q.codeOpts ? escHTML(q.opts[oi]) : q.opts[oi];
+      const cor = oi === q.ans, txt = (q.codeOpts ? escHTML(q.opts[oi]) : q.opts[oi]) + figsAt(q, l);
       return `<div class="bk-o${cor ? ' cor' : ''}"><b>${l}</b><span${q.codeOpts ? ' class="mono"' : ''}>${txt}</span>${cor ? '<span class="bk-ck">✓</span>' : ''}</div>`;
     }).join('');
     const marked = bankMarked.has(q.id);
     return `<div class="bk-card">
       <div class="bk-head"><span class="bk-num">#${i + 1}</span>${tag}<button class="bk-mark${marked ? ' on' : ''}" onclick="bankMark('${q.id}')" title="標記待複習" aria-label="標記第 ${i + 1} 題待複習">⭐</button></div>
-      <div class="bk-q">${q.q}</div>${media}
+      ${ctxHTML(q)}<div class="bk-q">${q.q}</div>${media}
       <div class="bk-opts">${opts}</div>
       <div class="bk-exp">💡 ${q.exp}<button class="note-link" onclick="gotoNote('${q.topic}')">📖 看筆記：${escHTML(topicById[q.topic].title)}</button></div>
     </div>`;

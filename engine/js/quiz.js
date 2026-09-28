@@ -3,6 +3,7 @@ import { levels, levelOfSubject, subjectOfTopic, topicById, loadQuiz } from './d
 import { currentLevel, jumpToTopic } from './layout.js';
 import { recordAnswer, wrongIn } from './answers.js';
 import { escHTML, fireConfetti, showToast, closeModal } from './ui.js';
+import { figsAt, ctxHTML } from './figs.js';
 
 let QUIZ = [];
 let qzIdx = 0, qzScore = 0, qzAns = false;
@@ -39,17 +40,19 @@ function renderQz() {
   const q = QUIZ[qzIdx]; qzAns = false;
   document.getElementById('qz-num').textContent = `第 ${qzIdx + 1} 題，共 ${QUIZ.length} 題`;
   document.getElementById('qz-pf').style.width = (qzIdx / QUIZ.length * 100) + '%';
+  document.getElementById('qz-ctx').innerHTML = ctxHTML(q);
   document.getElementById('qz-q').textContent = q.q;
   // media: image or code block beneath the stem
   const media = document.getElementById('qz-media');
   if (q.img) { media.innerHTML = `<img class="qz-img" src="${q.img}" alt="${q.imgAlt || '題目附圖：請參閱圖中數據判讀'}">`; }
   else if (q.code) { media.innerHTML = `<pre class="qz-code">${escHTML(q.code)}</pre>`; }
   else { media.innerHTML = ''; }
+  media.innerHTML += figsAt(q, 'stem');
   document.getElementById('qz-exp').className = 'qz-exp';
   document.getElementById('qz-nxt').className = 'qz-nxt';
   const optCls = 'qz-o' + (q.codeOpts ? ' qz-o-code' : '');
   document.getElementById('qz-opts').innerHTML = ['A', 'B', 'C', 'D'].map((l, i) =>
-    `<div class="${optCls}" role="button" tabindex="0" aria-label="選項 ${l}" onclick="answerQz(${i})" id="qzo-${i}"><div class="qltr">${l}</div><span>${q.codeOpts ? escHTML(q.opts[i]) : q.opts[i]}</span></div>`).join('');
+    `<div class="${optCls}" role="button" tabindex="0" aria-label="選項 ${l}" onclick="answerQz(${i})" id="qzo-${i}"><div class="qltr">${l}</div><span>${q.codeOpts ? escHTML(q.opts[i]) : q.opts[i]}${figsAt(q, l)}</span></div>`).join('');
 }
 export function answerQz(i) {
   if (qzAns) return; qzAns = true;

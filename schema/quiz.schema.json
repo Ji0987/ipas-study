@@ -11,6 +11,22 @@
       "id": { "type": "string", "pattern": "^[a-z]+-q-\\d{4,}$", "description": "穩定唯一 ID，作答紀錄靠它對應" },
       "topic": { "type": "string", "minLength": 1, "description": "對應 config.json 中的主題 id" },
       "src": { "enum": ["official", "guide", "self"], "description": "官方公告試題／學習指引改編／自編" },
+      "ref": { "type": "string", "pattern": "^\\d+-\\d+ [a-z0-9]+ \\d+$", "description": "出處：試卷代碼、科目、題號，如「115-1 s2 8」" },
+      "ctx": { "type": "string", "minLength": 1, "description": "題組共用情境，顯示在題幹上方" },
+      "figs": {
+        "type": "array",
+        "minItems": 1,
+        "description": "附圖；at 為顯示位置：ctx（題組情境）、stem（題幹）或選項字母",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["src", "at"],
+          "properties": {
+            "src": { "type": "string", "pattern": "^img/[\\w.-]+\\.(png|jpe?g|gif|webp)$" },
+            "at": { "enum": ["ctx", "stem", "A", "B", "C", "D"] }
+          }
+        }
+      },
       "q": { "type": "string", "minLength": 1, "description": "題幹，可含 HTML" },
       "opts": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "string", "minLength": 1 } },
       "ans": { "type": "integer", "minimum": 0, "maximum": 3, "description": "正確選項索引（0 起算）" },

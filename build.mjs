@@ -64,6 +64,9 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
     }
   }
 
+  // 題目附圖
+  if (fs.existsSync(path.join(ROOT, dir, 'img'))) fs.cpSync(path.join(ROOT, dir, 'img'), path.join(DIST, id, 'img'), { recursive: true });
+
   const first = config.levels[0];
   const slots = {
     title: render.esc(config.site.title),
