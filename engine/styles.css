@@ -573,3 +573,6 @@ kbd{display:inline-flex;align-items:center;justify-content:center;background:var
 .expand-all-btn{display:block;width:calc(100% - 32px);margin:0 16px 6px;padding:7px 10px;border-radius:var(--rsm,8px);background:var(--bg2,rgba(255,255,255,.04));border:1px solid var(--bdr,rgba(255,255,255,.1));color:var(--text2,#9aa);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
 .expand-all-btn:hover{color:var(--bright,#fff);border-color:var(--blue,#4f9bff)}
 @media(max-width:768px){.expand-all-btn{display:none}}
+/* 進度備份 */
+.sfb.b6{color:var(--gold)}
+.backup-desc{font-size:13px;color:var(--text2);line-height:1.7;margin:0 0 18px}

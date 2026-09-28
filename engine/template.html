@@ -51,6 +51,7 @@
     <button class="sfb b2" onclick="openQuiz();closeSidebar()">📝 測驗</button>
     <button class="sfb b4" onclick="openBank();closeSidebar()">📚 題庫</button>
     <button class="sfb b5" onclick="openCheat();closeSidebar()">📌 速查</button>
+    <button class="sfb b6" onclick="openBackup();closeSidebar()" title="進度備份">💾</button>
     <button class="sfb b3" onclick="openKeys()">⌨️</button>
   </div>
 </aside>
@@ -153,6 +154,20 @@
       <kbd>{{subjectKeys}}</kbd><div class="kdesc">切換科目（依等級）</div>
       <kbd>Esc</kbd><div class="kdesc">關閉彈窗</div>
     </div>
+  </div>
+</div>
+
+<!-- 進度備份 -->
+<div class="overlay" id="backup-overlay" onclick="closeModal('backup-overlay')">
+  <div class="keysmodal" onclick="event.stopPropagation()">
+    <button class="mclose" aria-label="關閉" onclick="closeModal('backup-overlay')">×</button>
+    <div class="keys-title">💾 進度備份</div>
+    <p class="backup-desc">把已讀主題與題庫書籤存成檔案，可在其他裝置或瀏覽器匯入。匯入會取代目前的進度。</p>
+    <div class="rbtns">
+      <button class="rbtn p" onclick="exportProgress()">匯出進度</button>
+      <button class="rbtn s" onclick="document.getElementById('backup-file').click()">匯入進度</button>
+    </div>
+    <input type="file" id="backup-file" accept="application/json,.json" hidden onchange="importProgress(this)">
   </div>
 </div>
 

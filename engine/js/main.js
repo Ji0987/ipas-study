@@ -6,6 +6,7 @@ import { buildIDX, initSearch } from './search.js';
 import * as quiz from './quiz.js';
 import * as bank from './bank.js';
 import { openCmd, closeCmd, initCmd } from './cmd.js';
+import { openBackup, exportProgress, importProgress } from './backup.js';
 
 Object.assign(window, {
   toggleSidebar: ui.toggleSidebar, closeSidebar: ui.closeSidebar, closeModal: ui.closeModal,
@@ -16,13 +17,14 @@ Object.assign(window, {
   openBank: bank.openBank, bankSetLevel: bank.bankSetLevel, bankSetFilter: bank.bankSetFilter,
   bankSearchFn: bank.bankSearchFn, bankMark: bank.bankMark,
   openCmd, closeCmd,
+  openBackup, exportProgress, importProgress,
 });
 
 /* ═══ KEYBOARD ═══ */
 document.addEventListener('keydown', e => {
   const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
   if (e.key === 'Escape') {
-    ['qz-overlay', 'keys-overlay', 'bk-overlay', 'cheat-overlay'].forEach(ui.closeModal); closeCmd(); ui.closeSidebar(); return;
+    ['qz-overlay', 'keys-overlay', 'bk-overlay', 'cheat-overlay', 'backup-overlay'].forEach(ui.closeModal); closeCmd(); ui.closeSidebar(); return;
   }
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openCmd(); return; }
   if (inInput) return;
