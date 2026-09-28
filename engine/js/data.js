@@ -8,10 +8,13 @@ export const subjectById = {};
 export const levelOfSubject = {};
 export const subjectOfTopic = {};
 export const topicById = {};
+/** 主題 → 所屬章節 key（科目 id:章節序號）；章節對應官方成績單的「評鑑主題」 */
+export const chapterOfTopic = {};
 for (const level of levels) for (const subject of level.subjects) {
   subjectById[subject.id] = subject;
   levelOfSubject[subject.id] = level;
   for (const t of subject.topics) { subjectOfTopic[t.id] = subject.id; topicById[t.id] = t; }
+  subject.chapters.forEach((ch, i) => { for (const id of ch.topics) chapterOfTopic[id] = `${subject.id}:${i}`; });
 }
 /** 各級別中科目最多的數量，決定進度環個數 */
 export const maxSubjects = Math.max(...levels.map(l => l.subjects.length));
