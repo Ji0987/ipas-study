@@ -7,6 +7,7 @@ import * as quiz from './quiz.js';
 import * as bank from './bank.js';
 import { openCmd, closeCmd, initCmd } from './cmd.js';
 import { openBackup, exportProgress, importProgress } from './backup.js';
+import { openDash, dashSetLevel } from './dash.js';
 
 Object.assign(window, {
   toggleSidebar: ui.toggleSidebar, closeSidebar: ui.closeSidebar, closeModal: ui.closeModal,
@@ -19,13 +20,14 @@ Object.assign(window, {
   bankSearchFn: bank.bankSearchFn, bankMark: bank.bankMark, bankPracticeWrong: bank.bankPracticeWrong,
   openCmd, closeCmd,
   openBackup, exportProgress, importProgress,
+  openDash, dashSetLevel,
 });
 
 /* ═══ KEYBOARD ═══ */
 document.addEventListener('keydown', e => {
   const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
   if (e.key === 'Escape') {
-    ['qz-overlay', 'keys-overlay', 'bk-overlay', 'cheat-overlay', 'backup-overlay'].forEach(ui.closeModal); closeCmd(); ui.closeSidebar(); return;
+    ['qz-overlay', 'keys-overlay', 'bk-overlay', 'cheat-overlay', 'backup-overlay', 'dash-overlay'].forEach(ui.closeModal); closeCmd(); ui.closeSidebar(); return;
   }
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openCmd(); return; }
   if (inInput) return;
@@ -33,6 +35,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'w' || e.key === 'W') { e.preventDefault(); quiz.openQuiz('wrong'); }
   if (e.key === 'b' || e.key === 'B') { e.preventDefault(); bank.openBank(); }
   if (e.key === 'c' || e.key === 'C') { e.preventDefault(); ui.openCheat(); }
+  if (e.key === 'd' || e.key === 'D') { e.preventDefault(); openDash(); }
   if (/^[1-9]$/.test(e.key)) layout.switchSubIndex(+e.key - 1);
 });
 

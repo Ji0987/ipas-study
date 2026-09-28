@@ -51,6 +51,7 @@
     <button class="sfb b2" onclick="openQuiz();closeSidebar()">📝 測驗</button>
     <button class="sfb b4" onclick="openBank();closeSidebar()">📚 題庫</button>
     <button class="sfb b5" onclick="openCheat();closeSidebar()">📌 速查</button>
+    <button class="sfb b7" onclick="openDash();closeSidebar()" title="弱點分析">📊</button>
     <button class="sfb b6" onclick="openBackup();closeSidebar()" title="進度備份">💾</button>
     <button class="sfb b3" onclick="openKeys()">⌨️</button>
   </div>
@@ -154,10 +155,26 @@
       <kbd>Q</kbd><div class="kdesc">開啟知識測驗</div>
       <kbd>W</kbd><div class="kdesc">練習錯題</div>
       <kbd>B</kbd><div class="kdesc">開啟題庫瀏覽</div>
+      <kbd>D</kbd><div class="kdesc">開啟弱點分析</div>
       <kbd>C</kbd><div class="kdesc">開啟考試速查表</div>
       <kbd>{{subjectKeys}}</kbd><div class="kdesc">切換科目（依等級）</div>
       <kbd>Esc</kbd><div class="kdesc">關閉彈窗</div>
     </div>
+  </div>
+</div>
+
+<!-- 弱點分析 -->
+<div class="overlay" id="dash-overlay">
+  <div class="bankmodal">
+    <button class="mclose" aria-label="關閉" onclick="closeModal('dash-overlay')" style="top:14px;right:14px;z-index:5">×</button>
+    <div class="bk-hd">
+      <div class="bk-title">📊 弱點分析 <span class="lvtag" id="dash-level-tag"></span></div>
+      <div class="bk-sub">依測驗作答紀錄統計；正確率＝答對次數 ÷ 作答次數，低於 60% 標示需加強</div>
+      <div class="bk-tabs">
+{{dashTabs}}
+      </div>
+    </div>
+    <div class="bk-list" id="dash-body"></div>
   </div>
 </div>
 
@@ -193,6 +210,9 @@
   </button>
   <button onclick="openBank()">
     <span class="mbi">📚</span><span class="mbl">題庫</span>
+  </button>
+  <button onclick="openDash()">
+    <span class="mbi">📊</span><span class="mbl">分析</span>
   </button>
   <button onclick="openCheat()">
     <span class="mbi">📌</span><span class="mbl">速查</span>

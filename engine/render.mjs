@@ -65,10 +65,13 @@ export function sections(config, notes, counts = {}) {
   }).join('\n\n');
 }
 
-export function bankTabs(config) {
+/** 彈窗內的級別分頁（題庫、弱點分析共用樣式） */
+function modalLevelTabs(config, idPrefix, fn) {
   return config.levels.map((l, i) =>
-    `        <button class="bk-tab${i === 0 ? ' on' : ''}" id="bk-lv-${l.id}" onclick="bankSetLevel('${l.id}')">${esc(l.name)}</button>`).join('\n');
+    `        <button class="bk-tab${i === 0 ? ' on' : ''}" id="${idPrefix}-${l.id}" onclick="${fn}('${l.id}')">${esc(l.name)}</button>`).join('\n');
 }
+export const bankTabs = config => modalLevelTabs(config, 'bk-lv', 'bankSetLevel');
+export const dashTabs = config => modalLevelTabs(config, 'dash-lv', 'dashSetLevel');
 
 /** 網站首頁的證照卡片 */
 export function certCards(configs) {

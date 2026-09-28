@@ -590,3 +590,29 @@ a.sc{display:block;color:inherit;text-decoration:none}
 .note-link{display:block;margin-top:8px;padding:0;background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--blue);font-family:var(--sans);text-align:left}
 .note-link:hover{text-decoration:underline}
 @media print{.tpq,.note-link{display:none}}
+/* 弱點分析 */
+.sfb.b7{color:var(--teal)}
+.ds-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.ds-stat{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--rsm);padding:12px 14px}
+.ds-num{font-size:22px;font-weight:700;color:var(--bright);line-height:1.2}
+.ds-num small{font-size:12px;font-weight:500;color:var(--text3)}
+.ds-lbl{font-size:11px;color:var(--text3);margin-top:3px}
+.ds-sec{font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--text3);margin:20px 0 6px;text-transform:uppercase}
+.ds-row{display:grid;grid-template-columns:minmax(0,1fr) 160px 44px;grid-template-areas:"name bar val" "meta meta meta";align-items:center;column-gap:12px;padding:10px 0;border-bottom:1px solid var(--bdr)}
+.ds-name{grid-area:name;font-size:13px;font-weight:600;color:var(--bright);display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.ds-name span{font-size:11px;font-weight:500;color:var(--text3)}
+.ds-name .ds-weak{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:10px;background:var(--corald);color:var(--coral)}
+.ds-bar{grid-area:bar;height:8px;border-radius:4px;background:var(--bg3);overflow:hidden}
+.ds-bar i{display:block;height:100%;border-radius:4px;background:var(--blue)}
+.ds-val{grid-area:val;font-size:13px;font-weight:600;color:var(--text);text-align:right;font-variant-numeric:tabular-nums}
+.ds-meta{grid-area:meta;font-size:11.5px;color:var(--text3);margin-top:4px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.ds-acts{margin-left:auto;display:flex;gap:6px}
+.ds-acts button{padding:3px 10px;border-radius:12px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--sans);background:var(--bg2);border:1px solid var(--bdr);color:var(--text2);transition:all .2s}
+.ds-acts button:hover{border-color:var(--blue);color:var(--blue);background:var(--blued)}
+.ds-empty{text-align:center;color:var(--text2);padding:50px 10px;font-size:13px;line-height:1.9}
+.ds-empty .rbtn{margin-top:16px}
+@media(max-width:560px){
+  .ds-stats{gap:6px}.ds-stat{padding:10px}.ds-num{font-size:18px}
+  .ds-row{grid-template-columns:minmax(0,1fr) 44px;grid-template-areas:"name name" "bar val" "meta meta"}
+  .ds-bar{margin-top:6px}
+}

@@ -27,7 +27,8 @@ export function loadQuiz() {
     const parts = await Promise.all(files.map(async s => {
       const res = await fetch(`quiz/${s}.json`);
       if (!res.ok) throw new Error(`quiz/${s}.json ${res.status}`);
-      return res.json();
+      // sub：題目所屬的科目檔（即出自哪一科的試卷），供統計使用；topic 可能跨科目
+      return (await res.json()).map(q => ({ ...q, sub: s }));
     }));
     return [l.id, parts.flat().sort((a, b) => a.id.localeCompare(b.id))];
   })).then(Object.fromEntries);
