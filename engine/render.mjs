@@ -41,7 +41,8 @@ export function subjectCards(config) {
   }).join('\n');
 }
 
-export function sections(config, notes) {
+/** counts：主題 id → 題數，有題目的主題在標頭顯示「練習本主題」按鈕 */
+export function sections(config, notes, counts = {}) {
   return subjectsOf(config).map((s, i) => {
     const byId = Object.fromEntries(s.topics.map(t => [t.id, t]));
     const parts = [`<div class="sec${i === 0 ? ' on' : ''}" id="sec-${s.id}">`];
@@ -52,8 +53,9 @@ export function sections(config, notes) {
       for (const id of c.topics) {
         const t = byId[id];
         const badge = t.badge ? `<span class="badge ${t.badge.cls}">${esc(t.badge.text)}</span>` : '';
+        const practice = counts[id] ? `<button class="tpq" onclick="practiceTopic(event,'${id}')" title="練習本主題（${counts[id]} 題）" aria-label="練習本主題，共 ${counts[id]} 題">📝 ${counts[id]}</button>` : '';
         parts.push(`<div class="tp" id="${id}">
-  <div class="tph" onclick="toggleTP('${id}')"><div class="tpt">${esc(t.title)}${badge}</div><div class="tpact"><button class="stdbtn" onclick="markDone(event,'${id}')">✓</button><span class="chev">▾</span></div></div>
+  <div class="tph" onclick="toggleTP('${id}')"><div class="tpt">${esc(t.title)}${badge}</div><div class="tpact">${practice}<button class="stdbtn" onclick="markDone(event,'${id}')">✓</button><span class="chev">▾</span></div></div>
   <div class="tpbody"><div class="tpin">${notes[id]}</div></div>
 </div>`);
       }

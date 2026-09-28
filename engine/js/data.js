@@ -7,10 +7,11 @@ export const levels = config.levels;
 export const subjectById = {};
 export const levelOfSubject = {};
 export const subjectOfTopic = {};
+export const topicById = {};
 for (const level of levels) for (const subject of level.subjects) {
   subjectById[subject.id] = subject;
   levelOfSubject[subject.id] = level;
-  for (const t of subject.topics) subjectOfTopic[t.id] = subject.id;
+  for (const t of subject.topics) { subjectOfTopic[t.id] = subject.id; topicById[t.id] = t; }
 }
 /** 各級別中科目最多的數量，決定進度環個數 */
 export const maxSubjects = Math.max(...levels.map(l => l.subjects.length));

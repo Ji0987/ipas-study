@@ -1,5 +1,5 @@
 // 題庫瀏覽：依級別列出全部題目，可篩選、搜尋、以題目 id 標記待複習
-import { levels, loadQuiz } from './data.js';
+import { levels, topicById, loadQuiz } from './data.js';
 import { state, save } from './store.js';
 import { currentLevel } from './layout.js';
 import { isWrong } from './answers.js';
@@ -70,7 +70,7 @@ function renderBank() {
       <div class="bk-head"><span class="bk-num">#${i + 1}</span>${tag}<button class="bk-mark${marked ? ' on' : ''}" onclick="bankMark('${q.id}')" title="標記待複習" aria-label="標記第 ${i + 1} 題待複習">⭐</button></div>
       <div class="bk-q">${q.q}</div>${media}
       <div class="bk-opts">${opts}</div>
-      <div class="bk-exp">💡 ${q.exp}</div>
+      <div class="bk-exp">💡 ${q.exp}<button class="note-link" onclick="gotoNote('${q.topic}')">📖 看筆記：${escHTML(topicById[q.topic].title)}</button></div>
     </div>`;
   }).join('');
   const list = document.getElementById('bk-list');

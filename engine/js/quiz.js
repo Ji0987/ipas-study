@@ -1,21 +1,25 @@
-// 知識測驗：從目前級別的題庫（或錯題本）隨機抽 10 題
-import { levels, loadQuiz } from './data.js';
-import { currentLevel } from './layout.js';
+// 知識測驗：從目前級別的題庫、錯題本或單一主題隨機抽 10 題
+import { levels, levelOfSubject, subjectOfTopic, topicById, loadQuiz } from './data.js';
+import { currentLevel, jumpToTopic } from './layout.js';
 import { recordAnswer, wrongIn } from './answers.js';
-import { escHTML, fireConfetti, showToast } from './ui.js';
+import { escHTML, fireConfetti, showToast, closeModal } from './ui.js';
 
 let QUIZ = [];
 let qzIdx = 0, qzScore = 0, qzAns = false;
-let qzMode = 'all', qzLevel = null, qzBank = null;
+let qzMode = 'all', qzLevel = null, qzBank = null, qzTopic = null;
 
-/** mode：'all' 全部題目、'wrong' 只練錯題；levelId 省略時用目前級別 */
-export async function openQuiz(mode = 'all', levelId) {
-  const level = levels.find(l => l.id === levelId) || currentLevel();
+/**
+ * mode：'all' 全部題目、'wrong' 只練錯題、'topic' 只練 topicId 主題；
+ * levelId 省略時用目前級別（主題模式一律用主題所屬級別）
+ */
+export async function openQuiz(mode = 'all', levelId, topicId) {
+  const level = mode === 'topic' ? levelOfSubject[subjectOfTopic[topicId]]
+    : levels.find(l => l.id === levelId) || currentLevel();
   try { qzBank = await loadQuiz(); } catch (e) { showToast('題庫載入失敗，請透過網址開啟頁面', '⚠️'); return; }
   const all = qzBank[level.id];
-  const pool = mode === 'wrong' ? wrongIn(all) : all;
-  if (!pool.length) { showToast(`${level.name}目前沒有錯題`, '🎉'); return; }
-  qzMode = mode; qzLevel = level;
+  const pool = mode === 'wrong' ? wrongIn(all) : mode === 'topic' ? all.filter(q => q.topic === topicId) : all;
+  if (!pool.length) { showToast(mode === 'topic' ? '這個主題沒有題目' : `${level.name}目前沒有錯題`, mode === 'topic' ? '📭' : '🎉'); return; }
+  qzMode = mode; qzLevel = level; qzTopic = topicId;
   // random sample (Fisher-Yates) up to 10 questions per session
   const arr = [...pool];
   for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
@@ -24,6 +28,7 @@ export async function openQuiz(mode = 'all', levelId) {
   tag.textContent = level.name; tag.className = 'lvtag ' + level.tagClass;
   document.getElementById('qz-meta-text').textContent = mode === 'wrong'
     ? `錯題練習：從 ${pool.length} 題錯題隨機抽出 ${QUIZ.length} 題，答對即移出錯題本`
+    : mode === 'topic' ? `主題練習「${topicById[topicId].title}」：從 ${pool.length} 題隨機抽出 ${QUIZ.length} 題`
     : `從 ${pool.length} 題歷屆題庫隨機抽出 ${QUIZ.length} 題`;
   qzIdx = 0; qzScore = 0; qzAns = false;
   document.getElementById('qz-content').style.display = '';
@@ -57,6 +62,7 @@ export function answerQz(i) {
   if (i === q.ans) qzScore++;
   recordAnswer(q.id, i === q.ans);
   const exp = document.getElementById('qz-exp'); exp.textContent = '💡 解析：' + q.exp; exp.classList.add('on');
+  exp.appendChild(noteLink(q.topic));
   const nxt = document.getElementById('qz-nxt'); nxt.textContent = qzIdx < QUIZ.length - 1 ? '下一題 →' : '查看結果'; nxt.classList.add('on');
 }
 export function qzNext() { qzIdx++; if (qzIdx >= QUIZ.length) showResult(); else renderQz(); }
@@ -76,7 +82,25 @@ function showResult() {
   wb.hidden = !wrong; wb.textContent = `❌ 練習錯題（${wrong}）`;
 }
 export function qzRestart() {
-  openQuiz(qzMode, qzLevel.id);  // re-sample a fresh random set from the same level and mode
+  openQuiz(qzMode, qzLevel.id, qzTopic);  // re-sample a fresh random set from the same level and mode
+}
+/** 主題標頭的「練習本主題」按鈕 */
+export function practiceTopic(e, topicId) {
+  e.stopPropagation();  // 不觸發主題收合
+  openQuiz('topic', null, topicId);
+}
+
+/** 詳解下方的「看筆記」連結：關閉彈窗並跳到主題段落 */
+export function noteLink(topicId) {
+  const b = document.createElement('button');
+  b.className = 'note-link';
+  b.textContent = `📖 看筆記：${topicById[topicId].title}`;
+  b.onclick = () => gotoNote(topicId);
+  return b;
+}
+export function gotoNote(topicId) {
+  ['qz-overlay', 'bk-overlay'].forEach(closeModal);
+  jumpToTopic(topicId);
 }
 export function qzWrong() {
   openQuiz('wrong', qzLevel.id);

@@ -50,6 +50,7 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
 
   // 題庫原樣複製（壓縮成一行）；頁面只需知道各級別有哪些科目檔
   const quizFiles = {};
+  const topicCounts = {};
   let questions = 0;
   for (const l of config.levels) {
     quizFiles[l.id] = [];
@@ -59,6 +60,7 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
       write(`${id}/quiz/${s.id}.json`, JSON.stringify(items));
       quizFiles[l.id].push(s.id);
       questions += items.length;
+      for (const q of items) topicCounts[q.topic] = (topicCounts[q.topic] || 0) + 1;
     }
   }
 
@@ -79,7 +81,7 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
     firstHeroSub: render.esc(first.heroSub),
     levelBadges: render.levelBadges(config),
     subjectCards: render.subjectCards(config),
-    sections: render.sections(config, notes),
+    sections: render.sections(config, notes, topicCounts),
     cheatTitle: render.esc(config.cheatsheet.title),
     cheatSub: render.esc(config.cheatsheet.sub),
     cheatsheet: read(`${dir}/cheatsheet.html`),

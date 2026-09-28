@@ -14,6 +14,7 @@ Object.assign(window, {
   switchLevel: layout.switchLevel, switchSub: layout.switchSub, switchSubIndex: layout.switchSubIndex,
   toggleTP: layout.toggleTP, toggleAllTP: layout.toggleAllTP, markDone: layout.markDone,
   openQuiz: quiz.openQuiz, answerQz: quiz.answerQz, qzNext: quiz.qzNext, qzRestart: quiz.qzRestart, qzWrong: quiz.qzWrong,
+  practiceTopic: quiz.practiceTopic, gotoNote: quiz.gotoNote,
   openBank: bank.openBank, bankSetLevel: bank.bankSetLevel, bankSetFilter: bank.bankSetFilter,
   bankSearchFn: bank.bankSearchFn, bankMark: bank.bankMark, bankPracticeWrong: bank.bankPracticeWrong,
   openCmd, closeCmd,
