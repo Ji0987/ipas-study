@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{title}}</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+{{styles}}
+</style></head><body>
+<div id="top-prog"></div>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<canvas id="cvs"></canvas>
+<div class="toast-wrap" id="tw"></div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂部">↑</button>
+<!-- Mobile overlay (behind sidebar) -->
+<div class="mob-overlay" id="mob-overlay" onclick="closeSidebar()"></div>
+
+<!-- Mobile topbar -->
+<div class="mob-topbar" id="mob-topbar">
+  <div class="mob-title">{{mobTitle}}</div>
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="選單">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div class="logo-row">{{logo}}<span class="lbadge" id="logo-level">{{firstLevelName}}</span></div>
+    <div class="lsub">{{logoSub}}</div>
+  </div>
+  <div class="level-tabs">
+{{levelTabs}}
+  </div>
+  <div class="rings" id="rings-wrap">
+{{rings}}
+  </div>
+  <div class="searchbox">
+    <div class="sinner">
+      <span class="sico">⌕</span>
+      <input class="sinput" id="si" aria-label="筆記搜尋" type="text" placeholder="搜尋關鍵字…" autocomplete="off">
+      <span class="skbd">⌘K</span>
+      <div class="sres" id="sres"></div>
+    </div>
+  </div>
+  <button class="expand-all-btn" id="expandAllBtnDesk" onclick="toggleAllTP()">⇕ 展開全部章節</button>
+  <div class="nav-area">
+{{nav}}
+  </div>
+  <div class="sbfoot">
+    <button class="sfb b2" onclick="openQuiz();closeSidebar()">📝 測驗</button>
+    <button class="sfb b4" onclick="openBank();closeSidebar()">📚 題庫</button>
+    <button class="sfb b5" onclick="openCheat();closeSidebar()">📌 速查</button>
+    <button class="sfb b3" onclick="openKeys()">⌨️</button>
+  </div>
+</aside>
+<main class="main" id="main-content">
+<div class="hero">
+  <div class="eyebrow">{{eyebrow}}</div>
+  <h1>{{heroTitle}}<br><em id="hero-title-em">{{firstHeroTitleEm}}</em></h1>
+  <p class="hero-sub" id="hero-sub-text">{{firstHeroSub}}</p>
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+{{levelBadges}}
+    <span style="font-size:12px;color:var(--text3);align-self:center">← 點擊切換課程等級</span>
+  </div>
+  <div class="modeguide">
+    <span class="mg-item"><b>📝 測驗</b>隨機抽題模擬考</span>
+    <span class="mg-item"><b>📚 題庫</b>逐題精讀複習</span>
+    <span class="mg-hint">側欄底部或按 Q／B 開啟</span>
+  </div>
+{{subjectCards}}
+</div>
+
+{{sections}}
+
+</main></div>
+
+<!-- 考試速查表（全域工具）-->
+<div class="overlay" id="cheat-overlay">
+  <div class="cheatmodal">
+    <button class="mclose" aria-label="關閉" onclick="closeModal('cheat-overlay')" style="top:14px;right:14px;z-index:5">×</button>
+    <div class="cheat-hd">
+      <div class="cheat-title">{{cheatTitle}}</div>
+      <div class="cheat-sub">{{cheatSub}}</div>
+    </div>
+    <div class="cheat-body">{{cheatsheet}}</div>
+  </div>
+</div>
+
+<!-- 題庫瀏覽 -->
+<div class="overlay" id="bk-overlay">
+  <div class="bankmodal">
+    <button class="mclose" aria-label="關閉" onclick="closeModal('bk-overlay')" style="top:14px;right:14px;z-index:5">×</button>
+    <div class="bk-hd">
+      <div class="bk-title">📚 題庫瀏覽 <span class="lvtag" id="bk-level-tag"></span></div>
+      <div class="bk-sub">瀏覽全部歷屆試題，直接查看正確答案與解析</div>
+      <div class="bk-tabs">
+{{bankTabs}}
+      </div>
+      <input class="bk-search" id="bk-search" aria-label="題庫搜尋" placeholder="🔍 搜尋題目、選項或解析關鍵字…" oninput="bankSearchFn(this.value)">
+      <div class="bk-filters">
+        <button class="bk-fb on" id="bk-f-all" onclick="bankSetFilter('all')">全部</button>
+        <button class="bk-fb" id="bk-f-img" onclick="bankSetFilter('img')">🖼️ 圖片題</button>
+        <button class="bk-fb" id="bk-f-code" onclick="bankSetFilter('code')">💻 程式碼題</button>
+        <button class="bk-fb" id="bk-f-marked" onclick="bankSetFilter('marked')">⭐ 已標記</button>
+      </div>
+      <div class="bk-count" id="bk-count"></div>
+    </div>
+    <div class="bk-list" id="bk-list"></div>
+  </div>
+</div>
+
+<!-- 測驗 -->
+<div class="overlay" id="qz-overlay">
+  <div class="quizmodal">
+    <button class="mclose" aria-label="關閉" onclick="closeModal('qz-overlay')">×</button>
+    <div id="qz-content">
+      <div class="qz-hd">
+        <div class="qz-title">📝 知識測驗 <span class="lvtag" id="qz-level-tag"></span></div>
+        <div class="qz-meta" id="qz-meta-text">從歷屆題庫隨機抽題</div>
+        <div class="qz-pb"><div class="qz-pf" id="qz-pf" style="width:0%"></div></div>
+      </div>
+      <div class="qz-num" id="qz-num">第 1 題，共 10 題</div>
+      <div class="qz-q" id="qz-q"></div>
+      <div class="qz-media" id="qz-media"></div>
+      <div class="qz-opts" id="qz-opts"></div>
+      <div class="qz-exp" id="qz-exp"></div>
+      <button class="qz-nxt" id="qz-nxt" onclick="qzNext()">下一題 →</button>
+    </div>
+    <div class="qz-result" id="qz-result">
+      <svg class="rring" viewBox="0 0 100 100"><circle fill="none" stroke="var(--bg3)" stroke-width="6" cx="50" cy="50" r="42"/><circle fill="none" stroke="var(--teal)" stroke-width="6" cx="50" cy="50" r="42" stroke-dasharray="264" id="rring-fill" stroke-dashoffset="264" stroke-linecap="round" transform="rotate(-90 50 50)" style="transition:stroke-dashoffset 1.2s ease"/></svg>
+      <div class="rscore" id="r-score">0/10</div>
+      <div class="rlabel">答對題數</div>
+      <div class="rmsg" id="r-msg"></div>
+      <div class="rbtns">
+        <button class="rbtn p" onclick="qzRestart()">再挑戰一次</button>
+        <button class="rbtn s" onclick="closeModal('qz-overlay')">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 快捷鍵 -->
+<div class="overlay" id="keys-overlay" onclick="closeModal('keys-overlay')">
+  <div class="keysmodal" onclick="event.stopPropagation()">
+    <button class="mclose" aria-label="關閉" onclick="closeModal('keys-overlay')">×</button>
+    <div class="keys-title">⌨️ 鍵盤快捷鍵</div>
+    <div class="keys-grid">
+      <kbd>⌘K</kbd><div class="kdesc">開啟指令面板</div>
+      <kbd>Q</kbd><div class="kdesc">開啟知識測驗</div>
+      <kbd>B</kbd><div class="kdesc">開啟題庫瀏覽</div>
+      <kbd>C</kbd><div class="kdesc">開啟考試速查表</div>
+      <kbd>{{subjectKeys}}</kbd><div class="kdesc">切換科目（依等級）</div>
+      <kbd>Esc</kbd><div class="kdesc">關閉彈窗</div>
+    </div>
+  </div>
+</div>
+
+<!-- CMD Palette -->
+<div class="cmdwrap" id="cmd-wrap" onclick="closeCmd()">
+  <div class="cmdbox" onclick="event.stopPropagation()">
+    <div class="cmdinp-row"><span class="cmdico">⌕</span><input class="cmdinp" id="cmd-inp" type="text" placeholder="輸入指令或搜尋主題…" autocomplete="off"><span class="cmdesc">ESC</span></div>
+    <div class="cmdres" id="cmd-res"></div>
+  </div>
+</div>
+
+<!-- 底部導覽列（手機版） -->
+<nav class="mob-bottom" id="mob-bottom">
+  <button id="expandAllBtn" onclick="toggleAllTP()">
+    <span class="mbi">⇕</span><span class="mbl">展開</span>
+  </button>
+  <button onclick="openQuiz()">
+    <span class="mbi">📝</span><span class="mbl">測驗</span>
+  </button>
+  <button onclick="openBank()">
+    <span class="mbi">📚</span><span class="mbl">題庫</span>
+  </button>
+  <button onclick="openCheat()">
+    <span class="mbi">📌</span><span class="mbl">速查</span>
+  </button>
+</nav>
+<script type="application/json" id="ipas-data">{{data}}</script>
+<script>
+{{script}}
+</script></body></html>

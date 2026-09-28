@@ -1,0 +1,18 @@
+
+    <div class="pills"><span class="pill pbl">POC：概念驗證</span><span class="pill ptl">Pilot：有限規模試驗</span><span class="pill ppl">MLOps：ML 運維整合</span></div>
+    <h4>部署環境選擇</h4>
+    <div class="tw"><table><thead><tr><th>環境</th><th>特點</th><th>適用</th></tr></thead><tbody>
+      <tr><td><strong>雲端</strong></td><td>彈性擴展、按用量計費</td><td>流量波動大、快速迭代</td></tr>
+      <tr><td><strong>地端（On-prem）</strong></td><td>資料不外流、自主控制</td><td>高敏感資料、法遵要求</td></tr>
+      <tr><td><strong>邊緣（Edge）</strong></td><td>低延遲、離線可用</td><td>IoT、即時推論；受裝置運算限制</td></tr>
+    </tbody></table></div>
+    <h4>漸進式發布策略</h4>
+    <div class="tw"><table><thead><tr><th>策略</th><th>說明</th></tr></thead><tbody>
+      <tr><td><strong>藍綠部署</strong></td><td>新舊環境並存，一次切換、可秒回滾</td></tr>
+      <tr><td><strong>金絲雀（Canary）</strong></td><td>先導入少量流量觀察，再逐步擴大</td></tr>
+      <tr><td><strong>A/B 測試</strong></td><td>新舊模型同時上線比較成效</td></tr>
+    </tbody></table></div>
+    <h4>MLOps 與監控</h4>
+    <div class="pills"><span class="pill">CI/CD：持續整合與部署</span><span class="pill pgl">Model Registry：模型版本管理</span><span class="pill pcl">漂移偵測：資料/概念漂移</span><span class="pill ptl">容器化：Docker / Kubernetes 編排</span></div>
+    <div class="cal cinf"><span>💡</span><div class="calbody">上線後須持續監控<strong>效能指標、輸入分佈漂移</strong>，並建立<strong>模型再訓練</strong>與回滾機制，確保系統穩定性與可用性。</div></div>
+  

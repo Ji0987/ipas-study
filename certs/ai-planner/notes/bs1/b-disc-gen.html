@@ -1,0 +1,31 @@
+
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">鑑別式 AI（Discriminative AI）</h5><ul>
+        <li>學習 <strong>P(y|x)</strong>：條件概率</li>
+        <li>找到類別間的「分類邊界」</li>
+        <li>目標：<strong>分類、預測、識別</strong></li>
+        <li>代表：SVM、邏輯迴歸、神經網路、決策樹</li>
+        <li>優勢：標記數據充足時準確性高</li>
+      </ul></div>
+      <div class="cmpc"><h5 style="color:var(--coral)">生成式 AI（Generative AI）</h5><ul>
+        <li>學習 <strong>P(x,y) 或 P(x)</strong>：聯合/邊際分佈</li>
+        <li>模擬真實資料分佈，創造新樣本</li>
+        <li>目標：<strong>生成新內容</strong></li>
+        <li>代表：GAN、VAE、Diffusion、GPT</li>
+        <li>優勢：創新內容生成能力強</li>
+      </ul></div>
+    </div>
+    <h4>生成式 AI 主要技術</h4>
+    <div class="tw"><table><thead><tr><th>技術</th><th>原理</th><th>應用</th></tr></thead><tbody>
+      <tr><td><strong>GAN（生成對抗網路）</strong></td><td>生成器 vs 鑑別器相互博弈</td><td>高品質圖像生成、風格轉換</td></tr>
+      <tr><td><strong>VAE（變分自編碼器）</strong></td><td>編碼→潛在空間→解碼，機率生成</td><td>穩定生成、數據擴增</td></tr>
+      <tr><td><strong>Diffusion Model（擴散模型）</strong></td><td>從雜訊逐步還原清晰數據</td><td>Stable Diffusion、DALL-E 3</td></tr>
+      <tr><td><strong>Transformer / LLM</strong></td><td>Self-Attention，大規模預訓練</td><td>GPT 系列、BERT、文字生成</td></tr>
+    </tbody></table></div>
+    <h4>鑑別式 + 生成式整合應用</h4>
+    <ul>
+      <li><strong>醫療</strong>：生成式 AI 增補稀缺醫學影像 → 鑑別式 AI 進行診斷分類</li>
+      <li><strong>金融</strong>：生成式 AI 生成市場情境 → 鑑別式 AI 進行風險評估</li>
+    </ul>
+    <div class="cal ctip"><span>💡</span><div class="calbody">關鍵差異：生成式 AI 的同一輸入可產生<strong>不同輸出</strong>（固有變異性）；鑑別式 AI 輸出確定性更高</div></div>
+  

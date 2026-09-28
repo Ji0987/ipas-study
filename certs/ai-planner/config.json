@@ -2,15 +2,54 @@
   "id": "ai-planner",
   "name": "AI 應用規劃師",
   "idPrefix": "aip",
+  "site": {
+    "title": "iPAS｜AI 應用規劃師完整筆記",
+    "mobTitle": "iPAS AI 應用規劃師筆記",
+    "logo": "iPAS 應用規劃師",
+    "logoSub": "初級＋中級 · 官方學習指引完整整理",
+    "eyebrow": "官方學習指引整理",
+    "heroTitle": "iPAS AI 應用規劃師",
+    "chapnote": "📖 iPAS 學習指引每科第一、二章為「考試科目與評鑑內容」「考科內容」（考試說明），本筆記自<b>第三章實質知識內容</b>起收錄，故章節由 3 開始。",
+    "defaultOpen": [
+      "b-ai-def",
+      "b-ml-basic",
+      "b-disc-gen"
+    ]
+  },
+  "cheatsheet": {
+    "title": "📌 考試速查表",
+    "sub": "場景速查 × 易混淆區分 × 關鍵公式 · 跨初級／中級通用"
+  },
   "levels": [
     {
       "id": "basic",
       "name": "初級",
+      "badge": "🟢 初級",
+      "heroTitleEm": "初級兩科完整筆記",
+      "heroSub": "涵蓋初級科目一、二全部重點章節。點擊科目卡片切換，按 ✓ 標記已讀追蹤進度。",
+      "tagClass": "lv-b",
+      "accent": {
+        "fg": "var(--teal)",
+        "bg": "var(--teald)",
+        "border": "rgba(6,214,160,.3)"
+      },
       "subjects": [
         {
           "id": "bs1",
-          "label": "初級科目一",
+          "label": "科目一",
           "name": "人工智慧基礎概論",
+          "cardClass": "cB1",
+          "cardTitle": "初級科目一",
+          "tags": [
+            "AI概念",
+            "資料處理",
+            "機器學習",
+            "鑑別/生成式AI"
+          ],
+          "secLabel": {
+            "text": "🟢 初級 · 科目一",
+            "cls": "sl-b"
+          },
           "topics": [
             {
               "id": "b-ai-def",
@@ -18,7 +57,8 @@
               "badge": {
                 "text": "AI 概念",
                 "cls": "bbt"
-              }
+              },
+              "nav": "AI 定義、分類與架構"
             },
             {
               "id": "b-ai-gov",
@@ -26,7 +66,8 @@
               "badge": {
                 "text": "治理",
                 "cls": "bbt"
-              }
+              },
+              "nav": "AI 治理概念"
             },
             {
               "id": "b-data-type",
@@ -34,7 +75,8 @@
               "badge": {
                 "text": "資料",
                 "cls": "bbt"
-              }
+              },
+              "nav": "資料類型與蒐集"
             },
             {
               "id": "b-data-clean",
@@ -42,7 +84,8 @@
               "badge": {
                 "text": "資料",
                 "cls": "bbt"
-              }
+              },
+              "nav": "資料清洗與轉換"
             },
             {
               "id": "b-data-priv",
@@ -50,7 +93,8 @@
               "badge": {
                 "text": "隱私",
                 "cls": "bbc"
-              }
+              },
+              "nav": "資料隱私與安全"
             },
             {
               "id": "b-ml-basic",
@@ -58,7 +102,8 @@
               "badge": {
                 "text": "ML",
                 "cls": "bbp"
-              }
+              },
+              "nav": "ML 原理與三大類型"
             },
             {
               "id": "b-ml-models",
@@ -66,7 +111,8 @@
               "badge": {
                 "text": "ML 模型",
                 "cls": "bbp"
-              }
+              },
+              "nav": "常見 ML 模型"
             },
             {
               "id": "b-disc-gen",
@@ -74,14 +120,95 @@
               "badge": {
                 "text": "核心",
                 "cls": "bbc"
-              }
+              },
+              "nav": "鑑別式 AI vs 生成式 AI"
+            }
+          ],
+          "chapters": [
+            {
+              "num": "3.1",
+              "cls": "cn2",
+              "title": "人工智慧概念",
+              "topics": [
+                "b-ai-def",
+                "b-ai-gov"
+              ]
+            },
+            {
+              "num": "3.2",
+              "cls": "cn2",
+              "title": "資料處理與分析概念",
+              "topics": [
+                "b-data-type",
+                "b-data-clean",
+                "b-data-priv"
+              ]
+            },
+            {
+              "num": "3.3",
+              "cls": "cn2",
+              "title": "機器學習概念",
+              "topics": [
+                "b-ml-basic",
+                "b-ml-models"
+              ]
+            },
+            {
+              "num": "3.4",
+              "cls": "cn2",
+              "title": "鑑別式 AI 與生成式 AI 概念",
+              "topics": [
+                "b-disc-gen"
+              ]
+            }
+          ],
+          "navGroups": [
+            {
+              "title": "3.1 人工智慧概念",
+              "topics": [
+                "b-ai-def",
+                "b-ai-gov"
+              ]
+            },
+            {
+              "title": "3.2 資料處理與分析",
+              "topics": [
+                "b-data-type",
+                "b-data-clean",
+                "b-data-priv"
+              ]
+            },
+            {
+              "title": "3.3 機器學習概念",
+              "topics": [
+                "b-ml-basic",
+                "b-ml-models"
+              ]
+            },
+            {
+              "title": "3.4 鑑別式 vs 生成式",
+              "topics": [
+                "b-disc-gen"
+              ]
             }
           ]
         },
         {
           "id": "bs2",
-          "label": "初級科目二",
+          "label": "科目二",
           "name": "生成式 AI 應用與規劃",
+          "cardClass": "cB2",
+          "cardTitle": "初級科目二",
+          "tags": [
+            "No/Low Code",
+            "生成式AI工具",
+            "提示工程",
+            "導入規劃"
+          ],
+          "secLabel": {
+            "text": "🟢 初級 · 科目二",
+            "cls": "sl-g"
+          },
           "topics": [
             {
               "id": "b-nocode",
@@ -89,7 +216,8 @@
               "badge": {
                 "text": "NoCode",
                 "cls": "bbp"
-              }
+              },
+              "nav": "No Code / Low Code 概念"
             },
             {
               "id": "b-nocode-eval",
@@ -97,7 +225,8 @@
               "badge": {
                 "text": "評估",
                 "cls": "bbp"
-              }
+              },
+              "nav": "平台評估 6 大因素"
             },
             {
               "id": "b-genai-tech",
@@ -105,7 +234,8 @@
               "badge": {
                 "text": "技術",
                 "cls": "bbt"
-              }
+              },
+              "nav": "生成式 AI 技術架構"
             },
             {
               "id": "b-genai-tools",
@@ -113,7 +243,8 @@
               "badge": {
                 "text": "工具",
                 "cls": "bbt"
-              }
+              },
+              "nav": "常見工具與提示工程"
             },
             {
               "id": "b-genai-industry",
@@ -121,7 +252,8 @@
               "badge": {
                 "text": "應用",
                 "cls": "bbt"
-              }
+              },
+              "nav": "各行業應用場景"
             },
             {
               "id": "b-genai-eval",
@@ -129,7 +261,8 @@
               "badge": {
                 "text": "導入",
                 "cls": "bbg"
-              }
+              },
+              "nav": "導入評估與規劃"
             },
             {
               "id": "b-genai-risk",
@@ -137,7 +270,62 @@
               "badge": {
                 "text": "風險",
                 "cls": "bbc"
-              }
+              },
+              "nav": "風險管理"
+            }
+          ],
+          "chapters": [
+            {
+              "num": "3.1",
+              "cls": "cn-g",
+              "title": "No Code / Low Code 概念",
+              "topics": [
+                "b-nocode",
+                "b-nocode-eval"
+              ]
+            },
+            {
+              "num": "3.2",
+              "cls": "cn-g",
+              "title": "生成式 AI 應用領域與工具使用",
+              "topics": [
+                "b-genai-tech",
+                "b-genai-tools",
+                "b-genai-industry"
+              ]
+            },
+            {
+              "num": "3.3",
+              "cls": "cn-g",
+              "title": "生成式 AI 導入評估規劃",
+              "topics": [
+                "b-genai-eval",
+                "b-genai-risk"
+              ]
+            }
+          ],
+          "navGroups": [
+            {
+              "title": "3.1 No Code / Low Code",
+              "topics": [
+                "b-nocode",
+                "b-nocode-eval"
+              ]
+            },
+            {
+              "title": "3.2 生成式 AI 應用領域",
+              "topics": [
+                "b-genai-tech",
+                "b-genai-tools",
+                "b-genai-industry"
+              ]
+            },
+            {
+              "title": "3.3 生成式 AI 導入規劃",
+              "topics": [
+                "b-genai-eval",
+                "b-genai-risk"
+              ]
             }
           ]
         }
@@ -146,11 +334,28 @@
     {
       "id": "inter",
       "name": "中級",
+      "badge": "🔵 中級",
+      "heroTitleEm": "中級三科完整筆記",
+      "heroSub": "涵蓋中級科目一、二、三全部重點章節。點擊科目卡片切換，按 ✓ 標記已讀追蹤進度。",
+      "tagClass": "lv-i",
+      "accent": {
+        "fg": "var(--blue)",
+        "bg": "var(--blued)",
+        "border": "rgba(79,155,255,.3)"
+      },
       "subjects": [
         {
           "id": "s1",
           "label": "科目一",
           "name": "人工智慧技術應用規劃",
+          "cardClass": "c1",
+          "cardTitle": "科目一",
+          "tags": [
+            "NLP",
+            "電腦視覺",
+            "生成式AI",
+            "AI導入"
+          ],
           "topics": [
             {
               "id": "nlp",
@@ -158,7 +363,8 @@
               "badge": {
                 "text": "NLP",
                 "cls": "bbl"
-              }
+              },
+              "nav": "3.1 自然語言處理 NLP"
             },
             {
               "id": "cv",
@@ -166,7 +372,8 @@
               "badge": {
                 "text": "CV",
                 "cls": "bbt"
-              }
+              },
+              "nav": "3.2 電腦視覺 CV"
             },
             {
               "id": "genai",
@@ -174,7 +381,8 @@
               "badge": {
                 "text": "GenAI",
                 "cls": "bbc"
-              }
+              },
+              "nav": "3.3 生成式 AI"
             },
             {
               "id": "multimodal",
@@ -182,7 +390,8 @@
               "badge": {
                 "text": "Multi",
                 "cls": "bbp"
-              }
+              },
+              "nav": "3.4 多模態 AI"
             },
             {
               "id": "ai-eval",
@@ -190,7 +399,8 @@
               "badge": {
                 "text": "評估",
                 "cls": "bbg"
-              }
+              },
+              "nav": "4.1 AI 導入評估"
             },
             {
               "id": "ai-plan",
@@ -198,7 +408,8 @@
               "badge": {
                 "text": "規劃",
                 "cls": "bbg"
-              }
+              },
+              "nav": "4.2 AI 導入規劃"
             },
             {
               "id": "ai-risk",
@@ -206,7 +417,8 @@
               "badge": {
                 "text": "風險",
                 "cls": "bbc"
-              }
+              },
+              "nav": "4.3 AI 風險管理"
             },
             {
               "id": "deploy",
@@ -214,7 +426,64 @@
               "badge": {
                 "text": "部署",
                 "cls": "bbt"
-              }
+              },
+              "nav": "5.1–5.2 系統部署"
+            }
+          ],
+          "chapters": [
+            {
+              "num": "第三章",
+              "cls": "cn1",
+              "title": "AI 相關技術應用",
+              "topics": [
+                "nlp",
+                "cv",
+                "genai",
+                "multimodal"
+              ]
+            },
+            {
+              "num": "第四章",
+              "cls": "cn1",
+              "title": "AI 導入評估規劃",
+              "topics": [
+                "ai-eval",
+                "ai-plan",
+                "ai-risk"
+              ]
+            },
+            {
+              "num": "第五章",
+              "cls": "cn1",
+              "title": "AI 技術應用與系統部署",
+              "topics": [
+                "deploy"
+              ]
+            }
+          ],
+          "navGroups": [
+            {
+              "title": "第三章｜AI 技術應用",
+              "topics": [
+                "nlp",
+                "cv",
+                "genai",
+                "multimodal"
+              ]
+            },
+            {
+              "title": "第四章｜AI 導入",
+              "topics": [
+                "ai-eval",
+                "ai-plan",
+                "ai-risk"
+              ]
+            },
+            {
+              "title": "第五章｜部署",
+              "topics": [
+                "deploy"
+              ]
             }
           ]
         },
@@ -222,6 +491,14 @@
           "id": "s2",
           "label": "科目二",
           "name": "大數據處理分析與應用",
+          "cardClass": "c2",
+          "cardTitle": "科目二",
+          "tags": [
+            "統計基礎",
+            "大數據5V",
+            "Spark",
+            "隱私法規"
+          ],
           "topics": [
             {
               "id": "stat-desc",
@@ -229,7 +506,8 @@
               "badge": {
                 "text": "統計",
                 "cls": "bbt"
-              }
+              },
+              "nav": "3.1 敘述性統計"
             },
             {
               "id": "stat-dist",
@@ -237,7 +515,8 @@
               "badge": {
                 "text": "統計",
                 "cls": "bbt"
-              }
+              },
+              "nav": "3.2 機率分佈"
             },
             {
               "id": "stat-hypo",
@@ -245,7 +524,8 @@
               "badge": {
                 "text": "統計",
                 "cls": "bbt"
-              }
+              },
+              "nav": "3.3 假設檢定"
             },
             {
               "id": "bigdata5v",
@@ -253,7 +533,8 @@
               "badge": {
                 "text": "核心",
                 "cls": "bbt"
-              }
+              },
+              "nav": "4.1 數據收集與來源"
             },
             {
               "id": "bigdata-store",
@@ -261,7 +542,8 @@
               "badge": {
                 "text": "儲存",
                 "cls": "bbt"
-              }
+              },
+              "nav": "4.2 儲存管理"
             },
             {
               "id": "bigdata-tools",
@@ -269,7 +551,8 @@
               "badge": {
                 "text": "工具",
                 "cls": "bbt"
-              }
+              },
+              "nav": "4.3 處理工具"
             },
             {
               "id": "analysis",
@@ -277,7 +560,8 @@
               "badge": {
                 "text": "分析",
                 "cls": "bbt"
-              }
+              },
+              "nav": "5.1–5.3 分析視覺化"
             },
             {
               "id": "bd-ai",
@@ -285,7 +569,64 @@
               "badge": {
                 "text": "合規",
                 "cls": "bbc"
-              }
+              },
+              "nav": "6.1–6.4 AI 應用合規"
+            }
+          ],
+          "chapters": [
+            {
+              "num": "第三章",
+              "cls": "cn2",
+              "title": "機率統計基礎",
+              "topics": [
+                "stat-desc",
+                "stat-dist",
+                "stat-hypo"
+              ]
+            },
+            {
+              "num": "第四章",
+              "cls": "cn2",
+              "title": "大數據處理技術",
+              "topics": [
+                "bigdata5v",
+                "bigdata-store",
+                "bigdata-tools"
+              ]
+            },
+            {
+              "num": "第五＆六章",
+              "cls": "cn2",
+              "title": "分析方法 · AI 應用 · 合規",
+              "topics": [
+                "analysis",
+                "bd-ai"
+              ]
+            }
+          ],
+          "navGroups": [
+            {
+              "title": "第三章｜機率統計",
+              "topics": [
+                "stat-desc",
+                "stat-dist",
+                "stat-hypo"
+              ]
+            },
+            {
+              "title": "第四章｜大數據",
+              "topics": [
+                "bigdata5v",
+                "bigdata-store",
+                "bigdata-tools"
+              ]
+            },
+            {
+              "title": "第五＆六章",
+              "topics": [
+                "analysis",
+                "bd-ai"
+              ]
             }
           ]
         },
@@ -293,6 +634,14 @@
           "id": "s3",
           "label": "科目三",
           "name": "機器學習技術與應用",
+          "cardClass": "c3",
+          "cardTitle": "科目三",
+          "tags": [
+            "ML演算法",
+            "深度學習",
+            "建模調校",
+            "ML治理"
+          ],
           "topics": [
             {
               "id": "ml-math",
@@ -300,7 +649,8 @@
               "badge": {
                 "text": "數學",
                 "cls": "bbp"
-              }
+              },
+              "nav": "3.1 基礎數學工具"
             },
             {
               "id": "ml-types",
@@ -308,7 +658,8 @@
               "badge": {
                 "text": "ML 基礎",
                 "cls": "bbp"
-              }
+              },
+              "nav": "4.1 機器學習原理"
             },
             {
               "id": "ml-algo",
@@ -316,7 +667,8 @@
               "badge": {
                 "text": "演算法",
                 "cls": "bbp"
-              }
+              },
+              "nav": "4.2 常見 ML 演算法"
             },
             {
               "id": "dl",
@@ -324,7 +676,8 @@
               "badge": {
                 "text": "DL",
                 "cls": "bbc"
-              }
+              },
+              "nav": "4.3 深度學習"
             },
             {
               "id": "feature-eng",
@@ -332,7 +685,8 @@
               "badge": {
                 "text": "特徵工程",
                 "cls": "bbp"
-              }
+              },
+              "nav": "5.1 特徵工程"
             },
             {
               "id": "model-eval",
@@ -340,7 +694,8 @@
               "badge": {
                 "text": "調校",
                 "cls": "bbp"
-              }
+              },
+              "nav": "5.2–5.4 評估調校"
             },
             {
               "id": "ml-gov",
@@ -348,7 +703,69 @@
               "badge": {
                 "text": "治理",
                 "cls": "bbc"
-              }
+              },
+              "nav": "6.1–6.2 ML 治理"
+            }
+          ],
+          "chapters": [
+            {
+              "num": "第三章",
+              "cls": "cn3",
+              "title": "機器學習基礎數學",
+              "topics": [
+                "ml-math"
+              ]
+            },
+            {
+              "num": "第四章",
+              "cls": "cn3",
+              "title": "機器學習與深度學習",
+              "topics": [
+                "ml-types",
+                "ml-algo",
+                "dl"
+              ]
+            },
+            {
+              "num": "第五章",
+              "cls": "cn3",
+              "title": "機器學習建模與調校",
+              "topics": [
+                "feature-eng",
+                "model-eval"
+              ]
+            },
+            {
+              "num": "第六章",
+              "cls": "cn3",
+              "title": "機器學習治理",
+              "topics": [
+                "ml-gov"
+              ]
+            }
+          ],
+          "navGroups": [
+            {
+              "title": "第三章｜數學基礎",
+              "topics": [
+                "ml-math"
+              ]
+            },
+            {
+              "title": "第四章｜ML & DL",
+              "topics": [
+                "ml-types",
+                "ml-algo",
+                "dl"
+              ]
+            },
+            {
+              "title": "第五＆六章",
+              "topics": [
+                "feature-eng",
+                "model-eval",
+                "ml-gov"
+              ]
             }
           ]
         }

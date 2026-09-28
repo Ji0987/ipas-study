@@ -1,0 +1,17 @@
+
+    <h4>資料清洗（Data Cleaning）四大問題</h4>
+    <div class="tw"><table><thead><tr><th>問題類型</th><th>說明</th><th>處理方式</th></tr></thead><tbody>
+      <tr><td><strong>遺缺值</strong>（Missing Value）</td><td>某些欄位沒有記錄有效數據</td><td>填補（均值/中位數/眾數/插補法）或刪除記錄</td></tr>
+      <tr><td><strong>重複值</strong>（Duplicate）</td><td>相同內容的記錄重複出現</td><td>識別重複項→保留一份→刪除其他</td></tr>
+      <tr><td><strong>錯誤值</strong>（Error/Invalid）</td><td>值不符合合理範圍或明顯錯誤</td><td>檢測並修正（如年齡=-5、Taiwan→Taiwwn）</td></tr>
+      <tr><td><strong>離群值</strong>（Outlier）</td><td>遠離大多數數據點的異常值</td><td>根據業務需求決定：保留、修正或刪除</td></tr>
+    </tbody></table></div>
+    <h4>資料轉換（Data Transformation）</h4>
+    <div class="tw"><table><thead><tr><th>技術</th><th>說明</th></tr></thead><tbody>
+      <tr><td><strong>格式轉換</strong></td><td>CSV → JSON、PDF → 文字等格式互換</td></tr>
+      <tr><td><strong>類型轉換</strong></td><td>字串 → 數值，類別 → 數字編碼</td></tr>
+      <tr><td><strong>正規化/標準化</strong></td><td>縮放到 [0,1] 或標準差 1，消除單位影響</td></tr>
+      <tr><td><strong>資料離散化</strong></td><td>連續型數據轉為離散類別（年齡分「青年/中年/老年」）</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">資料前處理品質直接影響模型準確性：<strong>Garbage In, Garbage Out</strong>（垃圾進，垃圾出）</div></div>
+  

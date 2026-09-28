@@ -75,19 +75,90 @@ for (const [k, t] of tps.entries()) {
 }
 const topicById = Object.fromEntries(tps.map(t => [t.id, t]));
 
+// ── 版面資訊：科目卡、側欄導覽、區塊章節、筆記片段 ──────────
+// 以 <div 深度計數找出元素的結尾（筆記內只有 div 會巢狀影響結構）
+function divEnd(src, start) {
+  const re = /<div\b|<\/div>/g;
+  re.lastIndex = start;
+  let depth = 0, m;
+  while ((m = re.exec(src))) {
+    depth += m[0] === '</div>' ? -1 : 1;
+    if (depth === 0) return m.index + m[0].length;
+  }
+  throw new Error('div 未閉合');
+}
+const cards = {};
+for (const m of body.matchAll(/<div class="sc (\w+)" onclick="switchSub\('(\w+)'\)"><div class="sc-n">([^<]*)<\/div><div class="sc-t">([^<]*)<\/div><div class="sc-tags">(.*?)<\/div><\/div>/g)) {
+  cards[m[2]] = { cardClass: m[1], cardTitle: m[3], tags: [...m[5].matchAll(/<span class="stag">([^<]*)<\/span>/g)].map(x => x[1]) };
+}
+const navLabel = {}, navGroups = {};
+for (const g of body.matchAll(/<div class="navg[^"]*" id="ng-(\w+)">/g)) {
+  const chunk = body.slice(g.index, divEnd(body, g.index));
+  navGroups[g[1]] = [];
+  for (const m of chunk.matchAll(/<div class="navch">([^<]*)<\/div>|<a class="nl" data-id="([^"]+)"[^>]*><span class="ndot"><\/span>(.*?)<span class="nchk">/g)) {
+    if (m[1] !== undefined) navGroups[g[1]].push({ title: m[1].replace(/&amp;/g, '&'), topics: [] });
+    else { navGroups[g[1]].at(-1).topics.push(m[2]); navLabel[m[2]] = m[3]; }
+  }
+}
+const sections = {};
+const notes = {};
+for (const s of secs) {
+  const secHtml = body.slice(s.at, divEnd(body, s.at));
+  // 初級區塊的標籤列在 .sec 內第一行
+  const label = secHtml.match(/<span class="sec-label (\S+)">([^<]*)<\/span>/);
+  const chapters = [];
+  for (const m of secHtml.matchAll(/<div class="chap"><span class="cnum (\S+)">([^<]*)<\/span><span class="ctit">([^<]*)<\/span><\/div>|<div class="tp" id="([^"]+)">/g)) {
+    if (m[4] === undefined) { chapters.push({ num: m[2], cls: m[1], title: m[3], topics: [] }); continue; }
+    chapters.at(-1).topics.push(m[4]);
+    const tpStart = s.at + m.index;
+    const tpHtml = body.slice(tpStart, divEnd(body, tpStart));
+    const inStart = tpHtml.indexOf('<div class="tpin">');
+    notes[m[4]] = tpHtml.slice(inStart + '<div class="tpin">'.length, divEnd(tpHtml, inStart) - '</div>'.length);
+  }
+  sections[s.id] = { secLabel: label && { text: label[2], cls: label[1] }, chapters };
+}
+const chapnote = body.match(/<div class="chapnote">(.*?)<\/div>/)[1];
+const cheatStart = body.indexOf('<div class="cheat-body">');
+const cheatsheet = body.slice(cheatStart + '<div class="cheat-body">'.length, divEnd(body, cheatStart) - '</div>'.length);
+const pick = re => body.match(re)[1];
+const initOpen = js.match(/\[([^\]]*)\]\.forEach\(id=>\{\s*const tp=document\.getElementById\(id\);if\(tp\)tp\.classList\.add\('open'\)/)[1];
+
 // ── config.json ────────────────────────────────────────────
+// 各級別的標題文字與配色原本寫在舊版 JS（syncLevelUI）的三元運算中，照抄於此
+const LEVEL_UI = {
+  basic: { heroTitleEm: '初級兩科完整筆記', heroSub: '涵蓋初級科目一、二全部重點章節。點擊科目卡片切換，按 ✓ 標記已讀追蹤進度。', tagClass: 'lv-b', accent: { fg: 'var(--teal)', bg: 'var(--teald)', border: 'rgba(6,214,160,.3)' } },
+  inter: { heroTitleEm: '中級三科完整筆記', heroSub: '涵蓋中級科目一、二、三全部重點章節。點擊科目卡片切換，按 ✓ 標記已讀追蹤進度。', tagClass: 'lv-i', accent: { fg: 'var(--blue)', bg: 'var(--blued)', border: 'rgba(79,155,255,.3)' } },
+};
+const SUBJECT_LABELS = ['科目一', '科目二', '科目三', '科目四'];
 const config = {
   id: 'ai-planner',
   name: 'AI 應用規劃師',
   idPrefix: PREFIX,
+  site: {
+    title: pick(/<title>([^<]*)<\/title>/),
+    mobTitle: pick(/<div class="mob-title">([^<]*)<\/div>/),
+    logo: pick(/<div class="logo-row">([^<]*)</),
+    logoSub: pick(/<div class="lsub">([^<]*)<\/div>/),
+    eyebrow: pick(/<div class="eyebrow">([^<]*)<\/div>/),
+    heroTitle: pick(/<h1>([^<]*)<br>/),
+    chapnote,
+    defaultOpen: [...initOpen.matchAll(/'([^']+)'/g)].map(m => m[1]),
+  },
+  cheatsheet: { title: pick(/<div class="cheat-title">([^<]*)<\/div>/), sub: pick(/<div class="cheat-sub">([^<]*)<\/div>/) },
   levels: ['basic', 'inter'].map(level => ({
     id: level,
     name: LEVEL_NAMES[level],
-    subjects: secs.filter(s => tps.some(t => t.subject === s.id && t.level === level)).map(s => ({
+    badge: pick(new RegExp(`id="hero-lb-${level}"[^>]*>([^<]*)<`)),
+    ...LEVEL_UI[level],
+    subjects: secs.filter(s => tps.some(t => t.subject === s.id && t.level === level)).map((s, i) => ({
       id: s.id,
-      label: subjectNames[s.id].label,
+      label: SUBJECT_LABELS[i],
       name: subjectNames[s.id].name,
-      topics: tps.filter(t => t.subject === s.id).map(t => ({ id: t.id, title: t.title, ...(t.badge && { badge: t.badge }) })),
+      ...cards[s.id],
+      ...(sections[s.id].secLabel && { secLabel: sections[s.id].secLabel }),
+      topics: tps.filter(t => t.subject === s.id).map(t => ({ id: t.id, title: t.title, ...(t.badge && { badge: t.badge }), nav: navLabel[t.id] })),
+      chapters: sections[s.id].chapters,
+      navGroups: navGroups[s.id],
     })),
   })),
 };
@@ -241,6 +312,12 @@ const writeRecords = (file, items) => {
   fs.writeFileSync(file, '[\n' + items.map(o => '  ' + JSON.stringify(o)).join(',\n') + '\n]\n');
 };
 writeJSON(path.join(CERT, 'config.json'), config);
+for (const t of tps) {
+  const file = path.join(CERT, 'notes', t.subject, `${t.id}.html`);
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, notes[t.id]);
+}
+fs.writeFileSync(path.join(CERT, 'cheatsheet.html'), cheatsheet);
 for (const s of order) if (quizBySubject[s]) writeRecords(path.join(CERT, 'quiz', `${s}.json`), quizBySubject[s]);
 
 // ── 審閱報告 ─────────────────────────────────────────────────

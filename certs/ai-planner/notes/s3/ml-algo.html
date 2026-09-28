@@ -1,0 +1,26 @@
+
+    <h4>正則化迴歸（高頻考點）</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">Lasso（L1）</h5><ul><li>+ <strong>λΣ|βⱼ|</strong></li><li>係數可歸零</li><li>→ <strong>特徵選擇</strong></li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--teal)">Ridge（L2）</h5><ul><li>+ <strong>λΣβⱼ²</strong></li><li>係數縮小不歸零</li><li>→ <strong>防多重共線性</strong></li></ul></div>
+    </div>
+    <div class="fm"><div class="fml">正則化對照</div>Lasso (L1): Loss + λΣ|βⱼ|  ← 特徵選擇<br>Ridge (L2): Loss + λΣβⱼ²   ← 防多重共線性<button class="cpbtn" onclick="copyFm(this,'Lasso: Loss+λΣ|βj|  Ridge: Loss+λΣβj²')">複製</button></div>
+    <h4>分類演算法</h4>
+    <div class="tw"><table><thead><tr><th>演算法</th><th>特點</th><th>適用</th></tr></thead><tbody>
+      <tr><td><strong>邏輯迴歸</strong></td><td>Sigmoid 輸出機率</td><td>二元分類</td></tr>
+      <tr><td><strong>決策樹</strong></td><td>條件規則，易過擬合</td><td>規則清晰的分類</td></tr>
+      <tr><td><strong>隨機森林</strong></td><td>多棵決策樹 Bagging</td><td>高維穩健預測</td></tr>
+      <tr><td><strong>SVM</strong></td><td>最大邊界超平面</td><td>高維小樣本</td></tr>
+      <tr><td><strong>KNN</strong></td><td>K 個鄰居投票</td><td>小資料集</td></tr>
+    </tbody></table></div>
+    <h4>集成學習（常考）</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">Bagging（並行）</h5><ul><li>多模型同時訓練</li><li>代表：<strong>隨機森林</strong></li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--coral)">Boosting（序列）</h5><ul><li>序列修正前次錯誤</li><li>代表：<strong>XGBoost</strong></li></ul></div>
+    </div>
+    <h4>聚類</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--gold)">K-means</h5><ul><li>需預設 K 值</li><li>適合球形群集</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--teal)">DBSCAN</h5><ul><li>無需預設 K</li><li>可偵測異常值</li></ul></div>
+    </div>
+  

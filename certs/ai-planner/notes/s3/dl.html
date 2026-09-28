@@ -1,0 +1,17 @@
+
+    <div class="fm"><div class="fml">人工神經元</div>Z = Σwᵢxᵢ + b  →  Output = A(Z)<button class="cpbtn" onclick="copyFm(this,'Z = Σwᵢxᵢ + b,  Output = A(Z)')">複製</button></div>
+    <h4>激活函數（★ ReLU 最常用）</h4>
+    <div class="tw"><table><thead><tr><th>函數</th><th>輸出</th><th>特點</th></tr></thead><tbody>
+      <tr><td><strong>Sigmoid</strong></td><td>(0,1)</td><td>機率輸出；梯度消失</td></tr>
+      <tr><td><strong>Tanh</strong></td><td>(-1,1)</td><td>零中心；梯度消失</td></tr>
+      <tr><td><strong>ReLU ★</strong></td><td>[0,∞)</td><td><strong>最常用</strong>；解決梯度消失</td></tr>
+      <tr><td><strong>Softmax</strong></td><td>總和=1</td><td>多類別輸出層</td></tr>
+    </tbody></table></div>
+    <h4>常見架構</h4>
+    <div class="tw"><table><thead><tr><th>架構</th><th>特點</th><th>代表</th></tr></thead><tbody>
+      <tr><td><strong>CNN</strong></td><td>卷積層學習空間特徵</td><td>ResNet</td></tr>
+      <tr><td><strong>LSTM</strong></td><td>門控機制解決梯度消失</td><td>時序預測</td></tr>
+      <tr><td><strong>Transformer</strong></td><td>Self-Attention，可平行</td><td>BERT、GPT</td></tr>
+    </tbody></table></div>
+    <div class="pills"><span class="pill pbl">TensorFlow（Google）</span><span class="pill ptl">PyTorch（Meta）</span><span class="pill">Keras：TF 高階 API</span></div>
+  

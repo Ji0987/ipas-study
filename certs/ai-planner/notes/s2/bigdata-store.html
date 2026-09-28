@@ -1,0 +1,10 @@
+
+    <div class="tw"><table><thead><tr><th>方式</th><th>特性</th><th>適用</th></tr></thead><tbody>
+      <tr><td><strong>RDBMS</strong></td><td>結構化、ACID、SQL</td><td>交易系統（OLTP）</td></tr>
+      <tr><td><strong>NoSQL</strong></td><td>彈性綱要、高擴展（鍵值/文件/欄式/圖）</td><td>非結構化、巨量、高併發</td></tr>
+      <tr><td><strong>資料湖（Lake）</strong></td><td>原始多格式、Schema-on-read</td><td>大數據/ML 原始素材</td></tr>
+      <tr><td><strong>資料倉儲（Warehouse）</strong></td><td>已清理整合、Schema-on-write</td><td>商業分析（OLAP）</td></tr>
+    </tbody></table></div>
+    <div class="pills"><span class="pill pbl">OLTP：即時交易、寫入頻繁</span><span class="pill ptl">OLAP：複雜查詢、分析彙總</span><span class="pill">Lakehouse：湖+倉混合架構</span></div>
+    <div class="cal cinf"><span>💡</span><div class="calbody"><strong>CAP 定理</strong>：分散式系統在一致性（C）、可用性（A）、分區容忍（P）三者中，最多只能同時滿足兩項——NoSQL 多在 C 與 A 之間取捨。</div></div>
+  

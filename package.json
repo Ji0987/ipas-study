@@ -3,9 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/validate.mjs && node build.mjs"
   },
   "devDependencies": {
-    "ajv": "^8.20.0"
+    "ajv": "^8.20.0",
+    "esbuild": "^0.28.2"
   }
 }

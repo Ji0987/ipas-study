@@ -40,7 +40,13 @@ function validateCert(certDir) {
       if (topics.has(t.id)) errors.push(`config.json 主題 id 重複：${t.id}`);
       topics.set(t.id, { level: level.id, subject: subject.id });
     }
+    // 內文章節與側欄導覽分組各自必須剛好涵蓋本科目每個主題一次
+    const own = subject.topics.map(t => t.id).sort().join();
+    for (const key of ['chapters', 'navGroups']) {
+      if (subject[key].flatMap(g => g.topics).sort().join() !== own) errors.push(`config.json ${subject.id}.${key} 未剛好涵蓋本科目所有主題`);
+    }
   }
+  for (const id of config.site.defaultOpen) if (!topics.has(id)) errors.push(`config.json site.defaultOpen 的主題不存在：${id}`);
   const ids = new Map();
   const quizItems = [];
   for (const f of listJSON(path.join(certDir, 'quiz'))) {

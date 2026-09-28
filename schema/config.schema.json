@@ -1,50 +1,104 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "config.schema.json",
-  "title": "證照設定：級別 → 科目 → 主題",
+  "title": "證照設定：頁面文字與「級別 → 科目 → 主題」階層",
   "type": "object",
-  "required": ["id", "name", "idPrefix", "levels"],
+  "required": ["id", "name", "idPrefix", "site", "cheatsheet", "levels"],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "text": { "type": "string", "minLength": 1 },
+    "ids": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } },
+    "styled": {
+      "type": "object",
+      "required": ["text", "cls"],
+      "properties": { "text": { "$ref": "#/$defs/text" }, "cls": { "type": "string", "description": "樣式類別" } }
+    }
+  },
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "證照 id，也用於 localStorage key 與輸出路徑" },
-    "name": { "type": "string", "minLength": 1 },
+    "id": { "$ref": "#/$defs/id", "description": "證照 id，也用於 localStorage key 與輸出路徑" },
+    "name": { "$ref": "#/$defs/text" },
     "idPrefix": { "type": "string", "pattern": "^[a-z]+$", "description": "題目 id 的前綴" },
+    "site": {
+      "type": "object",
+      "required": ["title", "mobTitle", "logo", "logoSub", "eyebrow", "heroTitle", "chapnote", "defaultOpen"],
+      "properties": {
+        "title": { "$ref": "#/$defs/text", "description": "<title>" },
+        "mobTitle": { "$ref": "#/$defs/text", "description": "手機版頂列標題" },
+        "logo": { "$ref": "#/$defs/text" },
+        "logoSub": { "$ref": "#/$defs/text" },
+        "eyebrow": { "$ref": "#/$defs/text" },
+        "heroTitle": { "$ref": "#/$defs/text" },
+        "chapnote": { "$ref": "#/$defs/text", "description": "每個科目區塊開頭的說明（HTML）" },
+        "defaultOpen": { "type": "array", "items": { "$ref": "#/$defs/id" }, "description": "首次載入時預設展開的主題" }
+      }
+    },
+    "cheatsheet": {
+      "type": "object",
+      "required": ["title", "sub"],
+      "properties": { "title": { "$ref": "#/$defs/text" }, "sub": { "$ref": "#/$defs/text" } }
+    },
     "levels": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "name", "subjects"],
+        "required": ["id", "name", "badge", "heroTitleEm", "heroSub", "tagClass", "accent", "subjects"],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-          "name": { "type": "string", "minLength": 1 },
+          "id": { "$ref": "#/$defs/id", "description": "也作為 CSS 類別（level-<id>、lt <id>、lb-<id>）" },
+          "name": { "$ref": "#/$defs/text" },
+          "badge": { "$ref": "#/$defs/text", "description": "首頁級別切換標籤" },
+          "heroTitleEm": { "$ref": "#/$defs/text" },
+          "heroSub": { "$ref": "#/$defs/text" },
+          "tagClass": { "type": "string", "description": "彈窗標題的級別標籤類別" },
+          "accent": {
+            "type": "object",
+            "required": ["fg", "bg", "border"],
+            "properties": { "fg": { "type": "string" }, "bg": { "type": "string" }, "border": { "type": "string" } }
+          },
           "subjects": {
             "type": "array",
             "minItems": 1,
             "items": {
               "type": "object",
-              "required": ["id", "label", "name", "topics"],
+              "required": ["id", "label", "name", "cardClass", "cardTitle", "tags", "topics", "chapters", "navGroups"],
               "properties": {
-                "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-                "label": { "type": "string", "minLength": 1, "description": "如「科目一」" },
-                "name": { "type": "string", "minLength": 1 },
+                "id": { "$ref": "#/$defs/id" },
+                "label": { "$ref": "#/$defs/text", "description": "如「科目一」，用於進度環與搜尋結果" },
+                "name": { "$ref": "#/$defs/text" },
+                "cardClass": { "type": "string" },
+                "cardTitle": { "$ref": "#/$defs/text" },
+                "tags": { "type": "array", "items": { "$ref": "#/$defs/text" } },
+                "secLabel": { "$ref": "#/$defs/styled" },
                 "topics": {
                   "type": "array",
                   "minItems": 1,
                   "items": {
                     "type": "object",
-                    "required": ["id", "title"],
+                    "required": ["id", "title", "nav"],
                     "properties": {
-                      "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-                      "title": { "type": "string", "minLength": 1 },
-                      "badge": {
-                        "type": "object",
-                        "required": ["text", "cls"],
-                        "properties": {
-                          "text": { "type": "string", "minLength": 1 },
-                          "cls": { "type": "string", "description": "徽章樣式類別，如 bbt / bbp / bbc" }
-                        }
-                      }
+                      "id": { "$ref": "#/$defs/id" },
+                      "title": { "$ref": "#/$defs/text" },
+                      "badge": { "$ref": "#/$defs/styled" },
+                      "nav": { "$ref": "#/$defs/text", "description": "側欄導覽用的短標題" }
                     }
+                  }
+                },
+                "chapters": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["num", "cls", "title", "topics"],
+                    "properties": { "num": { "$ref": "#/$defs/text" }, "cls": { "type": "string" }, "title": { "$ref": "#/$defs/text" }, "topics": { "$ref": "#/$defs/ids" } }
+                  }
+                },
+                "navGroups": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["title", "topics"],
+                    "properties": { "title": { "$ref": "#/$defs/text" }, "topics": { "$ref": "#/$defs/ids" } }
                   }
                 }
               }
