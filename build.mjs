@@ -2,6 +2,7 @@
 //   dist/assets/app-<hash>.js、styles-<hash>.css  所有證照共用的引擎（檔名帶內容雜湊，更新後不會吃到舊快取）
 //   dist/<證照>/index.html                        頁面標記（含筆記），證照設定內嵌
 //   dist/<證照>/quiz/<科目>.json                   題庫，執行時載入
+//   dist/index.html                               網站首頁（證照列表）
 // 用法：node build.mjs；npm run build 會先執行驗證。需透過網址（GitHub Pages 或本機伺服器）開啟。
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,10 +35,16 @@ const scriptPath = write(hashed('app', 'js', bundle.text), bundle.text);
 const stylesPath = write(hashed('styles', 'css', styles), styles);
 
 // ── 各證照 ─────────────────────────────────────────────────
+const fill = (tpl, slots) => tpl.replace(/\{\{(\w+)\}\}/g, (m, k) => {
+  if (!(k in slots)) throw new Error(`模板插槽沒有對應內容：${k}`);
+  return slots[k];
+});
 const template = read('engine/template.html');
+const configs = [];
 for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
   const dir = `certs/${id}`;
   const config = readJSON(`${dir}/config.json`);
+  configs.push(config);
   const notes = {};
   for (const s of config.levels.flatMap(l => l.subjects)) for (const t of s.topics) notes[t.id] = read(`${dir}/notes/${s.id}/${t.id}.html`);
 
@@ -82,11 +89,12 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
     data: JSON.stringify({ config, quizFiles }).replace(/</g, '\\u003c'),
     scriptSrc: `../${scriptPath}`,
   };
-  const html = template.replace(/\{\{(\w+)\}\}/g, (m, k) => {
-    if (!(k in slots)) throw new Error(`模板插槽沒有對應內容：${k}`);
-    return slots[k];
-  });
+  const html = fill(template, slots);
   write(`${id}/index.html`, html);
   console.log(`${id} → dist/${id}/（頁面 ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB、題庫 ${questions} 題）`);
 }
+
+// ── 網站首頁：證照列表 ─────────────────────────────────────
+write('index.html', fill(read('engine/landing.html'), { stylesHref: stylesPath, cards: render.certCards(configs) }));
+console.log(`首頁 → dist/index.html（${configs.length} 張證照）`);
 console.log(`共用引擎 → dist/${scriptPath}、dist/${stylesPath}`);

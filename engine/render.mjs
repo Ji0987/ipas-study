@@ -68,6 +68,15 @@ export function bankTabs(config) {
     `        <button class="bk-tab${i === 0 ? ' on' : ''}" id="bk-lv-${l.id}" onclick="bankSetLevel('${l.id}')">${esc(l.name)}</button>`).join('\n');
 }
 
+/** 網站首頁的證照卡片 */
+export function certCards(configs) {
+  const CARD_CLASSES = ['c1', 'c2', 'c3'];
+  return configs.map((c, i) => {
+    const tags = c.levels.map(l => `<span class="stag">${esc(l.name)} ${l.subjects.length} 科</span>`).join('');
+    return `    <a class="sc ${CARD_CLASSES[i % CARD_CLASSES.length]}" href="${c.id}/"><div class="sc-n">${esc(c.levels.map(l => l.name).join('・'))}</div><div class="sc-t">${esc(c.name)}</div><div class="sc-tags">${tags}</div></a>`;
+  }).join('\n');
+}
+
 export function subjectKeys(config) {
   return Array.from({ length: maxSubjects(config) }, (_, k) => k + 1).join(' ');
 }
