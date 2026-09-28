@@ -1,2 +1,59 @@
 
-    <p>（撰寫中）</p>
+    <p>感測器輸出的訊號，要經過調理、轉換與傳輸才能被系統使用。這一節整理訊號的種類、通訊方式、編碼與調變，以及通訊架構與拓樸。微控制器上的 UART／I²C／SPI 實作細節見考科二 <a class="xref" href="#hw-design" onclick="event.preventDefault();gotoNote('hw-design')">物聯網硬體設計基礎</a>。</p>
+    <h4>訊號種類</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--teal)">類比訊號</h5><ul><li>振幅隨時間<strong>連續</strong>變化，可為任意值</li><li>振動、溫度、聲音（麥克風輸出）</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--blue)">數位訊號</h5><ul><li>一連串高低電壓脈波，代表 1 與 0（位元）</li><li>電腦與周邊設備</li></ul></div>
+    </div>
+    <p>正弦波三要素：<strong>振幅</strong>（大小）、<strong>頻率</strong>（每秒重複次數，Hz，為週期的倒數）、<strong>相位</strong>（波形在週期中的位置）。<strong>正弦波與餘弦波相位差 90 度</strong>。週期訊號會在固定時間間隔後重複（正弦波、方波）。</p>
+    <h4>感測訊號處理流程</h4>
+    <div class="tl">
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">1</div><div class="tlh">檢測對象 → 感測器</div><div class="tls">物理量轉成微弱的電訊號</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">2</div><div class="tlh">訊號調理</div><div class="tls">增幅（放大）、濾波（去除高頻雜訊）、轉換成電壓／電流</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">3</div><div class="tlh">類比數位轉換（ADC）</div><div class="tls"><strong>取樣</strong>（每隔固定時間取值）→ <strong>量化</strong>（對應到有限等級）→ <strong>編碼</strong>（二進位表示）</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">4</div><div class="tlh">轉換成數值、傳輸</div><div class="tls">由微控制器讀取、處理並送出</div></div></div>
+    </div>
+    <p>內建 ADC 的感測元件直接輸出數位訊號，可接數位 I/O 或 I²C；沒有 ADC 的輸出類比電壓，要接類比輸入腳。ADC 的位元數決定解析度（n 位元 → 2ⁿ 個等級）。</p>
+    <h4>通訊的三種分類</h4>
+    <div class="tw"><table><thead><tr><th>分類依據</th><th>類別</th><th>說明</th></tr></thead><tbody>
+      <tr><td>傳輸線數目</td><td><strong>串列</strong></td><td>一次一個位元；線路少、成本低、易維護、適合長距離；速度較慢。RS-232、I²C、SPI、USB、網路</td></tr>
+      <tr><td></td><td><strong>並列</strong></td><td>多條資料線同時傳送；<strong>速度快</strong>，但<strong>線路成本高、維修不易、易受干擾</strong>，適合短距離。IEEE 488、印表機埠 LPT</td></tr>
+      <tr><td>資料流向</td><td><strong>單工</strong></td><td>只能單向（收音機、電視）</td></tr>
+      <tr><td></td><td><strong>半雙工</strong></td><td>可雙向但同一時間只能一個方向（對講機、I²C）</td></tr>
+      <tr><td></td><td><strong>全雙工</strong></td><td>雙向同時（電話、SPI、UART）</td></tr>
+      <tr><td>時序同步</td><td><strong>非同步</strong></td><td>一次傳一個字元，加起始位元、同位元、停止位元（起止式傳輸）；UART</td></tr>
+      <tr><td></td><td><strong>同步</strong></td><td>以區塊為單位、共用時脈，控制位元少、<strong>效率較高</strong>；I²C、SPI</td></tr>
+    </tbody></table></div>
+    <h4>傳輸參數與編碼</h4>
+    <ul>
+      <li><strong>頻寬</strong>：訊號最高與最低頻率之差（如 5000 − 100 = 4900 Hz），或傳輸媒體可提供的速率（Mbps）。電磁波的頻率與波長成反比。</li>
+      <li><strong>位元速率</strong>：每秒傳送的位元數（bps）。<strong>鮑率（Baud Rate）</strong>：每秒傳送的訊號單元數，一個訊號單元可含多個位元。</li>
+      <li><strong>Baudot 碼</strong>：5 位元（32 種，以移位字元擴充到 58 種），無檢查功能。<strong>ASCII 碼</strong>：7 位元 128 種，擴充為 8 位元。</li>
+    </ul>
+    <h4>調變</h4>
+    <div class="tw"><table><thead><tr><th>類型</th><th>技術</th><th>說明</th></tr></thead><tbody>
+      <tr><td>類比調變</td><td>AM、FM、PM</td><td>改變載波的振幅、頻率或相位；FM 振幅固定，抗雜訊比 AM 好。沒有「波長調變」</td></tr>
+      <tr><td>數位轉類比</td><td>ASK、FSK、PSK</td><td>振幅、頻率、相位移鍵；藍牙使用 GFSK</td></tr>
+    </tbody></table></div>
+    <h4>通訊架構與網路拓樸</h4>
+    <ul>
+      <li><strong>一對一</strong>：兩台設備直接通訊。</li>
+      <li><strong>主從架構</strong>：同一時間只有主站能下命令，常以匯流排實作（RS-485、SPI）。</li>
+      <li><strong>Server-Client</strong>：資料集中在伺服器，伺服器被動等待多個 Client 連線，便於集中管理。</li>
+    </ul>
+    <div class="tw"><table><thead><tr><th>拓樸</th><th>優點</th><th>缺點</th></tr></thead><tbody>
+      <tr><td>線性</td><td>簡單易實作</td><td>彈性小</td></tr>
+      <tr><td>星狀</td><td>以中心設備集中管理</td><td>中心故障則整個網路失效</td></tr>
+      <tr><td>樹狀</td><td><strong>易於推廣擴充</strong>，可延伸許多分支與子分支</td><td><strong>對根節點依賴大</strong>；階層多則傳遞時間變長</td></tr>
+      <tr><td>網狀</td><td>多條路徑、可靠度高、避免單點故障，支援大量節點</td><td>連線多、成本較高，需路由處理</td></tr>
+    </tbody></table></div>
+    <h4>OSI 模型重點</h4>
+    <p>OSI 共 <strong>7 層</strong>：實體、資料鏈結、網路、傳輸、會議、<strong>表達（加解密、壓縮、格式轉換）</strong>、應用；完整對照見 <a class="xref" href="#iot-arch" onclick="event.preventDefault();gotoNote('iot-arch')">物聯網架構與功能</a>。主動式 RFID 標籤的耗電主要來自無線電發射，屬於<strong>實體層</strong>。</p>
+    <h4>傳輸介質與干擾</h4>
+    <div class="tw"><table><thead><tr><th>介質</th><th>抗干擾</th></tr></thead><tbody>
+      <tr><td><strong>光纖</strong></td><td>以光傳輸，<strong>不受電磁干擾</strong>，最佳</td></tr>
+      <tr><td>同軸電纜</td><td>有屏蔽層</td></tr>
+      <tr><td>雙絞線</td><td>以絞合抵消干擾</td></tr>
+      <tr><td>杜邦線</td><td>無屏蔽，只適合麵包板實驗</td></tr>
+    </tbody></table></div>
+    <p>無線干擾來自周遭同頻或鄰近頻段的電磁波；對策是<strong>屏蔽</strong>（金屬外殼、屏蔽線）、與其他設備<strong>保持距離</strong>、<strong>跳頻</strong>。</p>

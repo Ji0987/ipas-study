@@ -1,2 +1,37 @@
 
-    <p>（撰寫中）</p>
+    <p>AIoT 的核心價值：把 AI 導入感測與聯網產生的資料，讓系統從「收集與監控」進化到「<strong>判斷、預測、輔助決策</strong>」。</p>
+    <h4>三種代表性的智慧化應用</h4>
+    <div class="tw"><table><thead><tr><th>模式</th><th>重點</th></tr></thead><tbody>
+      <tr><td><strong>預測性維護（PdM）</strong></td><td>依設備實際運轉狀態（Condition-based）的主動維護，取代故障後維修與定期保養。從工具機控制器或外掛感測器（振動、電流、溫度）取得資料。<br><strong>故障診斷（Diagnosis）＝分類</strong>：現在正常還是異常、哪種故障。<br><strong>健康預測（Prognosis）＝迴歸</strong>：推估剩餘有效壽命（RUL），提前排維修。</td></tr>
+      <tr><td><strong>感測融合（Sensor Fusion）</strong></td><td>整合多種感測器（如振動＋溫度、影像＋光達），互補單一感測器的盲點，提升判斷的準確度與<strong>強健性（Robustness）</strong>；可在邊緣端即時執行。常用 Kalman Filter 或 AI 模型處理資料衝突。</td></tr>
+      <tr><td><strong>AIoT 四位一體循環</strong></td><td>分析任何 AIoT 案例的通用架構，見下方四個構面。</td></tr>
+    </tbody></table></div>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--teal)">感知端（Input）</h5><ul><li>擷取物理訊號：感測項目、取樣頻率、解析度</li><li>通常沒有能力做模型訓練</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--blue)">通訊端（Transport）</h5><ul><li>依距離、功耗、即時性選技術</li><li>長距離低功耗→LoRa；短距離或即時→藍牙、Wi-Fi</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--purple)">智慧端（AI／Process）</h5><ul><li>即時判斷（Judgment）目前狀態</li><li>趨勢預測（Prediction）支援決策</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--coral)">安全端（Security）</h5><ul><li>終端實體安全、通訊攔截、敏感資料外洩</li><li>指的是資訊安全，不是實體保全</li></ul></div>
+    </div>
+    <h4>領域案例（學習指引四大場域）</h4>
+    <div class="tw"><table><thead><tr><th>場域</th><th>感測</th><th>通訊</th><th>AI 應用</th></tr></thead><tbody>
+      <tr><td>智慧工廠／智慧機械</td><td>振動（主軸）、電流（負載、能耗）</td><td>閘道器把異質設備資料轉成 <strong>OPC UA</strong>，AI 不直接讀 PLC 原始訊號</td><td>刀具振動異常→換刀預警</td></tr>
+      <tr><td>智慧農業／環境監測</td><td>溫濕度、土壤水分</td><td><strong>LPWAN（LoRa）</strong>：數公里、電池供電</td><td>依歷史資料自動調整噴灌、通風</td></tr>
+      <tr><td>智慧交通／物流</td><td><strong>GPS</strong> 定位、<strong>RFID</strong> 識別貨物</td><td><strong>4G/5G</strong>：移動中即時回傳</td><td>配送路徑最佳化、共享運具需求預測</td></tr>
+      <tr><td>智慧居家／生活</td><td>環境光、<strong>PIR</strong> 人體紅外線</td><td><strong>NFC</strong> 近距離解鎖、短距離低功耗無線</td><td>學習作息，自動調整燈光、空調</td></tr>
+    </tbody></table></div>
+    <h4>常見應用領域與歸屬</h4>
+    <p>考題常問「下列何者<strong>不屬於</strong>某領域」，重點是分清楚應用場景：</p>
+    <div class="tw"><table><thead><tr><th>領域</th><th>典型應用</th></tr></thead><tbody>
+      <tr><td><strong>智慧家庭</strong></td><td>照明、空調、安防、門鎖、智慧音箱；「場景化」自動控制（回家模式）</td></tr>
+      <tr><td><strong>智慧交通</strong></td><td>動態號誌、車流分析、緊急車輛優先號誌、智慧停車（地磁、影像）、V2X 車聯網、<strong>區間測速</strong></td></tr>
+      <tr><td><strong>智慧城市</strong></td><td>智慧路燈、空氣品質與噪音監測、智慧垃圾桶路線規劃、智慧水務漏水偵測、防災、人流監控</td></tr>
+      <tr><td><strong>科技執法</strong></td><td>AI 攝影機自動偵測闖紅燈、超速、未禮讓行人；聲音照相抓改裝噪音車</td></tr>
+      <tr><td><strong>智慧工廠</strong></td><td>IT 與 OT 融合、預測性維護、<strong>數位孿生（Digital Twin）</strong>、AI 視覺瑕疵檢測、關燈工廠</td></tr>
+      <tr><td><strong>智慧農業</strong></td><td>精密農業：溫濕度、土壤酸鹼、光照、CO₂ 感測；自動滴灌、溫室環控、無人機多光譜影像</td></tr>
+      <tr><td><strong>智慧醫療</strong></td><td>穿戴裝置遠距照護、連續血糖監測、醫材 RFID／藍牙定位、智慧藥櫃、AI 影像輔助診斷</td></tr>
+      <tr><td><strong>智慧電網</strong></td><td>智慧電錶自動讀表、<strong>雙向</strong>電力與資訊交換、整合再生能源、負載管理</td></tr>
+      <tr><td><strong>智慧物流</strong></td><td>GPS 車隊追蹤、冷鏈溫度監控、RFID 倉儲盤點</td></tr>
+    </tbody></table></div>
+    <div class="cal cwrn"><span>⚠️</span><div class="calbody">易混淆：<strong>遠距醫療</strong>是智慧醫療（不是智慧城市）；<strong>智慧路燈</strong>是智慧城市（不是智慧家庭）；<strong>冷凍車隊管理</strong>是智慧物流（不是智慧家居）。沒有連網、沒有自動感測的傳統做法（紅外線遙控器轉台、人工目檢）<strong>不算物聯網應用</strong>。</div></div>
+    <h4>物聯網資料的價值</h4>
+    <p>訊息價值隨<strong>正確性</strong>、<strong>使用次數</strong>、<strong>可組合的來源數</strong>增加；時效性越低（產生後間隔越久）價值越低。行動支付、共享經濟等新商業模式也建立在這些資料上，但要同時處理<strong>隱私</strong>與交易安全。</p>

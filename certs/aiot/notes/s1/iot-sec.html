@@ -1,2 +1,54 @@
 
-    <p>（撰寫中）</p>
+    <p>AIoT 設備數量多、分布廣、常無人看管又不易更新，攻擊面比一般資訊系統大。資安知識可分為密碼學基礎、裝置與通訊安全、平台安全、資料安全、軟體安全與隱私保護。</p>
+    <h4>密碼學工具</h4>
+    <div class="tw"><table><thead><tr><th>工具</th><th>做什麼</th><th>演算法／例子</th></tr></thead><tbody>
+      <tr><td><strong>對稱式加密</strong></td><td>雙方用同一把金鑰加解密，速度快，用來加密傳輸資料</td><td>AES、DES、Twofish；WPA-PSK 也是共用金鑰</td></tr>
+      <tr><td><strong>金鑰交換</strong></td><td>安全地交換、更新對稱金鑰</td><td>Diffie-Hellman（DHE）、ECDH</td></tr>
+      <tr><td><strong>非對稱式加密</strong></td><td>公鑰與私鑰成對，一把加密只有另一把能解</td><td>RSA、ECC；運算量大，感測器通常不用</td></tr>
+      <tr><td><strong>雜湊（Hash）</strong></td><td>單向不可逆，驗證<strong>完整性</strong>、儲存密碼與 API 金鑰；計算量小</td><td>SHA-256、SHA-512、SHA-3（比特幣用 SHA-256）</td></tr>
+      <tr><td><strong>數位簽章</strong></td><td>用發送者<strong>私鑰</strong>簽署、公鑰驗證，提供<strong>不可否認性</strong>與完整性</td><td>RSA、ECDSA</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">公私鑰怎麼用：要<strong>保密</strong>給 B → 用 <strong>B 的公鑰</strong>加密，B 用私鑰解；要證明是 A 發的 → A 用<strong>自己的私鑰</strong>簽，大家用 <strong>A 的公鑰</strong>驗證。單獨使用雜湊只能保護完整性，不能保護機密性。</div></div>
+    <p>依設備能力選擇機制：感測器節點算力低，可用明文或 <strong>預先共用金鑰（PSK）</strong>加密；閘道器與電腦算力較高，可用 TLS、X.509 憑證、mTLS 等更安全的方式。</p>
+    <h4>資安三要素與 AAA</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">CIA</h5><ul>
+        <li><strong>機密性</strong>：只有授權者能取得（加密、驗證、遮罩、存取控制）</li>
+        <li><strong>完整性</strong>：資料未被竄改（雜湊、訊息鑑別碼 MAC）</li>
+        <li><strong>可用性</strong>：服務持續可用（SLA、負載平衡）；會被 DDoS、SYN Flood 破壞</li>
+      </ul></div>
+      <div class="cmpc"><h5 style="color:var(--teal)">AAA</h5><ul>
+        <li><strong>認證（Authentication）</strong>：確認你是誰</li>
+        <li><strong>授權（Authorization）</strong>：你可以做什麼</li>
+        <li><strong>稽核（Auditing／Accounting）</strong>：事後追查誰在何時做了什麼</li>
+      </ul></div>
+    </div>
+    <p>SLA 99% 約等於每月停機 7.2 小時，99.99% 約 4.3 分鐘。</p>
+    <h4>常見攻擊</h4>
+    <div class="tw"><table><thead><tr><th>攻擊</th><th>手法</th></tr></thead><tbody>
+      <tr><td><strong>DoS／DDoS</strong></td><td>大量請求耗盡資源使服務中斷；DDoS 由殭屍網路多台同時發動（如 <strong>Mirai</strong> 控制大量攝影機、路由器）。手法有 SYN Flood、UDP Flood、DNS 放大攻擊</td></tr>
+      <tr><td><strong>中間人攻擊（MITM）</strong></td><td>介入通訊雙方，攔截、竄改後再轉送</td></tr>
+      <tr><td><strong>重送攻擊（Replay）</strong></td><td>把攔截到的合法封包重複或延遲送出（如重送開門指令）</td></tr>
+      <tr><td>暴力破解、預設密碼</td><td>設備沿用預設帳密或弱密碼，被自動化工具入侵</td></tr>
+      <tr><td>竊聽、竄改</td><td>無線訊號在空中可被任何人接收</td></tr>
+      <tr><td>實體入侵</td><td>從電路板的 <strong>JTAG／UART／Console</strong> 取得管理權限；量產前應關閉這些介面</td></tr>
+      <tr><td>韌體漏洞</td><td>設備難更新，已知漏洞可存在數年（N-day 攻擊）</td></tr>
+    </tbody></table></div>
+    <h4>防護措施</h4>
+    <ul>
+      <li><strong>裝置</strong>：更換預設密碼、使用強密碼、最小權限、定期更新韌體（<strong>OTA</strong> 搭配<strong>韌體簽章 Secure Boot</strong> 與加密）。</li>
+      <li><strong>通訊</strong>：依設備能力選 PSK、API Key、Token、mTLS、X.509 認證；傳輸用 TLS/SSL 加密，並可加 MAC 或簽章。IPv6 內建 IPSec（AH 驗證、ESP 加密）。</li>
+      <li><strong>網路隔離</strong>：以 VLAN、防火牆、不同 SSID 把 IoT 裝置與一般網路切開，遭入侵時阻斷橫向攻擊（中繼器沒有隔離作用）。</li>
+      <li><strong>平台</strong>：防火牆白名單（Layer 2／3，限定來源 IP 與埠號）；進階用 <strong>WAF</strong>（網頁應用程式防火牆，擋 SQL Injection、XSS、Bot）。</li>
+      <li><strong>資料</strong>：存取控制、加密、遮罩、完整性保護、備份與<strong>災難復原（DR）</strong>。<strong>RPO</strong>＝可能遺失多少時間的資料（一天備份一次 RPO 就是 24 小時）；<strong>RTO</strong>＝多久能恢復服務。</li>
+      <li><strong>軟體（SDLC）</strong>：源碼掃描（靜態分析）、函式庫掃描、黑箱掃描、<strong>滲透測試</strong>（上線前與定期）。</li>
+      <li><strong>認證方式</strong>：生物特徵（指紋、靜脈、虹膜）難偽造；<strong>密碼</strong>是較弱的一種。</li>
+    </ul>
+    <h4>隱私保護</h4>
+    <div class="tw"><table><thead><tr><th>原則</th><th>做法</th></tr></thead><tbody>
+      <tr><td>去識別化／匿名化</td><td>遮罩或轉成匿名編號，無法追溯到個人（邊緣端先去識別化再上傳）</td></tr>
+      <tr><td>資料極小化</td><td>只收集必要的資料，例如門禁只記進出時間、不存整段影像</td></tr>
+      <tr><td>使用者同意</td><td>告知並取得同意才收集；提供資料<strong>可攜</strong>與<strong>刪除</strong>的權利</td></tr>
+      <tr><td>目的限制與動態同意</td><td>告知用途；挪作他用（如送進 AI 分析）要再次取得同意</td></tr>
+    </tbody></table></div>
+    <p>個人身分識別資料依個資法不能任意自動蒐集。蒐集歐盟使用者資料須遵守 <strong>GDPR</strong>。設計時採用「<strong>由設計起始的隱私（Privacy by Design）</strong>」。</p>

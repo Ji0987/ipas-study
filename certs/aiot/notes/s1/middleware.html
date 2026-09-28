@@ -1,2 +1,55 @@
 
-    <p>（撰寫中）</p>
+    <p>「中介軟體與平台」指感測資料從<strong>閘道器</strong>送出後，到成為 AIoT 應用服務之間的所有軟體元件與通訊協定，橫跨網路層與應用層。中介軟體位於作業系統與應用程式之間，<strong>遮蔽異質硬體、網路與系統的差異</strong>，讓子系統能共享資訊；它是執行期的軟體元件，不是開發工具。</p>
+    <h4>閘道器對後端的連線</h4>
+    <ul>
+      <li><strong>實體層協定</strong>：定義電壓、接腳、連線方式，如 RS-232／485／422 序列通訊、IEEE 802.3 乙太網路（雙絞線、光纖）、Wi-Fi、藍牙、ZigBee。</li>
+      <li><strong>網路層以上</strong>：IPv4／IPv6 定址路由；TCP／UDP 端對端傳輸；HTTP、Modbus TCP、DNS 等應用協定。</li>
+      <li>常見組合：智慧城市用 Ethernet＋TCP/IP；工廠用 RS-232／485＋Modbus RTU，或 Ethernet＋Modbus TCP。</li>
+    </ul>
+    <h4>訊息中介軟體（Message Broker）</h4>
+    <p>感測器眾多時，以訊息中介軟體<strong>解耦</strong>資料接收與應用處理，並在<strong>高併發時暫存、逐一分派</strong>，保護後端的電腦與資料庫不被壓垮。常見協定與軟體：MQTT（Mosquitto、HiveMQ）、AMQP（RabbitMQ、ActiveMQ）、Kafka。重要訊息需選擇有<strong>永久儲存（Persistent Storage）</strong>能力的產品（如 Kafka），當機斷電也不遺失。</p>
+    <div class="tw"><table><thead><tr><th>角色</th><th>功能</th></tr></thead><tbody>
+      <tr><td>發布者（Publisher）</td><td>把資料發布到某個<strong>主題（Topic）</strong></td></tr>
+      <tr><td>訂閱者（Subscriber）</td><td>向 Broker 訂閱感興趣的主題，有新訊息時由 Broker 推送</td></tr>
+      <tr><td>代理者（Broker）</td><td>接收訊息、依主題過濾並分發給所有訂閱者，管理連線與 QoS</td></tr>
+    </tbody></table></div>
+    <p>發布者與訂閱者<strong>只和 Broker 連線、彼此不知道對方位址</strong>，一方離線不影響另一方；一則訊息可送給多個訂閱者（一對多），訂閱者也可收多個發布者的訊息。</p>
+    <h4>MQTT 的可靠性機制</h4>
+    <div class="tw"><table><thead><tr><th>QoS</th><th>保證</th><th>說明</th></tr></thead><tbody>
+      <tr><td><strong>0</strong></td><td>最多一次（At most once）</td><td>送出不確認、不重傳，<strong>可能遺失</strong></td></tr>
+      <tr><td><strong>1</strong></td><td>至少一次（At least once）</td><td>等待確認，逾時重送，<strong>可能重複</strong></td></tr>
+      <tr><td><strong>2</strong></td><td>恰好一次（Exactly once）</td><td>四步驟交握，不遺失也不重複，最耗資源</td></tr>
+    </tbody></table></div>
+    <ul>
+      <li>QoS 只有 0、1、2 三級，<strong>沒有 Level 3</strong>。QoS 用於應對訊息遺失、重複的情況。</li>
+      <li><strong>Keep Alive</strong>：客戶端定期與 Broker 通訊維持長連線，逾時沒有封包 Broker 就斷線。</li>
+      <li><strong>遺囑（Last Will and Testament, LWT）</strong>：裝置非正常斷線時，Broker 代發預設的離線訊息。</li>
+      <li><strong>保留訊息（Retained Message）</strong>：Broker 保留最新一則訊息給新加入的訂閱者。</li>
+      <li><strong>安全</strong>：MQTT 本身不強制身分驗證；埠號 1883 為明文，<strong>8883 為 TLS 加密</strong>。</li>
+    </ul>
+    <h4>地端、雲端與混合雲</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--gold)">地端（On-Premise）</h5><ul><li>營運管理屬企業內部，可為實體機或虛擬化（VMware、Proxmox）</li><li>自行負擔建置與維運</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--blue)">純雲／混合雲</h5><ul><li>純雲：儲存 S3、資料庫 RDS、運算 EC2、訊息 IoT Core／Pub/Sub 全在雲上</li><li>混合雲：機敏資料留地端、尖峰運算借用公有雲</li></ul></div>
+    </div>
+    <div class="tw"><table><thead><tr><th>服務模式</th><th>提供什麼</th><th>例子</th></tr></thead><tbody>
+      <tr><td><strong>IaaS</strong>（基礎設施）</td><td>虛擬機、儲存、網路；OS 以上自己管</td><td>AWS EC2、GCP Compute Engine、Azure VM、Hicloud</td></tr>
+      <tr><td><strong>PaaS</strong>（平台）</td><td>OS、執行環境、資料庫、網頁伺服器，平台負責修補與備份；限制可用的語言與框架</td><td>Google App Engine、Heroku、AWS Elastic Beanstalk、RDS、Cloud SQL</td></tr>
+      <tr><td><strong>SaaS</strong>（軟體）</td><td>直接透過網路使用的軟體</td><td>Gmail、Google Docs、Google Meet、雲端硬碟</td></tr>
+    </tbody></table></div>
+    <p>三層由下而上是 <strong>IaaS → PaaS → SaaS</strong>。雲端的特色是隨需自助（隨租即用）、資源池共享（多租戶）、快速彈性、依用量計費（<strong>不是免費</strong>）。<strong>無伺服器（Serverless）</strong>在事件觸發時才執行、依次數計費，適合使用量低的即時處理。雲端的挑戰是資料往返的<strong>網路延遲</strong>，因此即時需求要結合邊緣運算。</p>
+    <h4>應用系統的設計決策</h4>
+    <div class="tw"><table><thead><tr><th>面向</th><th>重點</th></tr></thead><tbody>
+      <tr><td>資料儲存</td><td>結構化→關聯式資料庫（<strong>ACID</strong>：原子性、一致性、隔離性、持久性）；圖片、檔案→物件儲存（S3）；半結構（JSON、XML）→<strong>NoSQL</strong>（橫向擴充）；高時效→<strong>記憶體快取</strong>（Redis、Memcached，&lt;5 ms）</td></tr>
+      <tr><td>元件通訊</td><td>請求／回應（HTTP、REST、gRPC、GraphQL）、非同步訊息（AMQP、MQTT、Kafka）、遠端程序呼叫（gRPC、Thrift）</td></tr>
+      <tr><td>身分驗證</td><td><strong>X.509 憑證</strong>（最安全但較重，閘道器、車聯網）、<strong>Token</strong>（JWT、Bearer，輕量）、<strong>預先共用金鑰 PSK</strong>（算力極低的設備）、<strong>硬體安全模組</strong>（TPM、HSM，金鑰不外洩）、帳號密碼</td></tr>
+      <tr><td>資料分析</td><td>描述統計＋儀表板與警報 → 資料探勘、關聯分析、分群（需 <strong>ETL</strong>，導入 Hadoop、Spark、BigQuery）→ AI／機器學習</td></tr>
+      <tr><td>服務提供</td><td>App（原生 Java／Swift 或 Flutter 跨平台）與 Web（HTML＋CSS＋JavaScript）</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">大數據工具的價值在於<strong>資料處理與分析能力</strong>。Spark 把中間資料留在記憶體，比每一步都寫硬碟的 Hadoop MapReduce 快得多。<strong>分散式運算</strong>以網路連結多台電腦協同運算，容易擴充，檔案系統也可分散（HDFS）。</div></div>
+    <h4>雲端資安與容錯</h4>
+    <ul>
+      <li>雲端平台的資安考量：身分驗證與存取管理、傳輸加密（TLS/SSL）、災害復原、<strong>最小權限原則</strong>。</li>
+      <li>虛擬化讓一台實體主機跑多個作業系統；容器（Docker）共用主機核心、更輕量。平台設計也要考量可容納的連線數、大量儲存、快速訊息交換、反向代理負載平衡、容錯（RAID 屬硬碟層級）。</li>
+      <li>常見物聯網雲平台：AWS IoT Core、Azure IoT Hub、GCP（IoT Core 已於 2023 年停止服務），皆提供 MQTT Broker；雲平台本身不負責開發裝置。</li>
+    </ul>

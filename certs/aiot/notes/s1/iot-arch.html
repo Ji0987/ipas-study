@@ -1,2 +1,60 @@
 
-    <p>（撰寫中）</p>
+    <p>物聯網把實體世界的數據數位化，再經網路傳到平台做智慧處理。三大特徵是「<strong>全面感知、可靠傳遞、智慧處理</strong>」，ITU 與 ETSI 等組織都把架構分成三層。</p>
+    <div class="tw"><table><thead><tr><th>層級</th><th>比喻</th><th>任務</th><th>技術與設備</th></tr></thead><tbody>
+      <tr><td><strong>感知層</strong></td><td>五官</td><td>識別物體、擷取資訊（類比→數位）</td><td>各種感測器、<strong>RFID、NFC、條碼／QR Code</strong>、GPS 接收器、智慧電錶、攝影機</td></tr>
+      <tr><td><strong>網路層</strong></td><td>神經</td><td>把資料可靠、透明地傳到應用層；處理異質網路（協定轉換）</td><td>藍牙、ZigBee、Wi-Fi、LoRa、NB-IoT、4G/5G、閘道器；存取網路＋核心網路</td></tr>
+      <tr><td><strong>應用層</strong></td><td>大腦</td><td>把數據轉成資訊與決策，提供服務</td><td>雲端運算、大數據、AI、資料探勘、設備管理、API；智慧家庭、交通、醫療等服務</td></tr>
+    </tbody></table></div>
+    <div class="cal cwrn"><span>⚠️</span><div class="calbody">分層常考：<strong>藍牙、網路整合、異質通訊</strong>→網路層；<strong>雲端運算、資料探勘、定位以外的終端服務</strong>→應用層；<strong>RFID 辨識物品、擷取感測訊號</strong>→感知層。物聯網只有三層，「資料分析層」「資料鏈結層」「連結層」都不是（資料鏈結層是 OSI 的第二層）。</div></div>
+    <h4>感知層</h4>
+    <ul>
+      <li><strong>數據採集</strong>：感測器把環境的類比訊號轉成數位訊號。感測器節點通常由<strong>感測模組、處理（微控制器）、通訊模組、電源模組</strong>組成。</li>
+      <li><strong>識別技術</strong>：RFID、NFC、條碼／QR Code 給每個物體一個「數位身分證」。</li>
+      <li><strong>邊緣運算</strong>：感知層設備常有微型運算能力，可先過濾雜訊、簡單判斷，減少無效傳輸。</li>
+      <li>感測器之間也常需要<strong>溝通與交換資料</strong>（例如門鈴觸發攝影機錄影）。</li>
+    </ul>
+    <p>常見感測模組（PIR、DHT11、HC-SR04、ADXL345、MPU6050、MQ-2、光敏電阻）的原理整理在 <a class="xref" href="#sensor-basic" onclick="event.preventDefault();gotoNote('sensor-basic')">感測技術基礎</a>。</p>
+    <h4>RFID 無線射頻識別</h4>
+    <p>以無線電波<strong>非接觸</strong>識別與讀寫資料，不需像條碼那樣對準光線。系統由<strong>電子標籤（晶片＋天線）、讀寫器、天線、後端應用系統</strong>組成。</p>
+    <div class="tw"><table><thead><tr><th>頻段</th><th>頻率</th><th>距離</th><th>耦合方式</th><th>特性與應用</th></tr></thead><tbody>
+      <tr><td><strong>低頻 LF</strong></td><td>125～134 kHz</td><td>&lt;10 cm</td><td>感應式（磁場）</td><td>穿透力強、<strong>受金屬與水影響小</strong>、速率最慢；動物晶片、門禁、主動標籤喚醒</td></tr>
+      <tr><td><strong>高頻 HF</strong></td><td>13.56 MHz</td><td>&lt;1 m</td><td>感應式（磁場）</td><td>ISO 14443（悠遊卡、NFC）、ISO 15693；圖書館、電子護照、智慧卡、感應式信用卡</td></tr>
+      <tr><td><strong>超高頻 UHF</strong></td><td>860～960 MHz（台灣 <strong>922～928 MHz</strong>）</td><td>3～10 m 以上</td><td>反向散射（電磁波）</td><td>距離遠、可一次讀數百個標籤（防碰撞）；物流倉儲、<strong>ETC（eTag）</strong>、零售盤點；易受水與金屬影響</td></tr>
+      <tr><td><strong>微波</strong></td><td>2.45／5.8 GHz</td><td>&gt;10 m</td><td>反向散射</td><td>傳輸量大、指向性強、易受干擾（與 Wi-Fi、藍牙、微波爐同頻段）</td></tr>
+    </tbody></table></div>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--teal)">被動式</h5><ul><li>無電池，靠讀取器電磁波取得能量，以反射回傳</li><li>便宜、體積小、壽命長；距離最短</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--gold)">半被動式</h5><ul><li>電池只供晶片（可接感測器）</li><li>通訊仍靠反射；距離居中</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--coral)">主動式</h5><ul><li>電池供電並主動發射訊號（如 433 MHz、2.45 GHz）</li><li>距離最遠、記憶體大，但貴、電池壽命有限</li></ul></div>
+    </div>
+    <p>讀取距離：<strong>主動式 ＞ 半被動式 ＞ 被動式</strong>。</p>
+    <div class="tw"><table><thead><tr><th>觀念</th><th>說明</th></tr></thead><tbody>
+      <tr><td>防碰撞機制</td><td>多個標籤同時回應會互相碰撞，以防碰撞演算法讓標籤依序回應、逐一讀取</td></tr>
+      <tr><td>讀取器碰撞</td><td>同頻率的多台讀取器互相干擾；UHF 讀取器以<strong>跳頻</strong>讓多台共存。功率過大會干擾其他讀取器</td></tr>
+      <tr><td>影響讀取距離</td><td>頻率、讀取器功率、<strong>天線增益</strong>、標籤天線大小；晶片記憶體容量<strong>不影響</strong></td></tr>
+      <tr><td>天線設計</td><td>依應用頻段設計；天線長度與波長成正比（頻率越高天線越短）；選天線看頻率、極化、波束寬度、增益</td></tr>
+      <tr><td>遮蔽</td><td>金屬反射、液體吸收；紙張擋不住。RFID 防盜皮夾是法拉第籠，對 HF、UHF 都有效</td></tr>
+      <tr><td>TID 與 EPC</td><td>TID 是晶片出廠寫死的唯一碼，<strong>不能改</strong>；EPC 區存產品電子碼，可寫入</td></tr>
+      <tr><td>RFID vs. 條碼</td><td>RFID 可隔著包裝批次讀取、可讀寫、<strong>較難偽造</strong>，但成本較高；條碼印好就不能改，須直視掃描</td></tr>
+    </tbody></table></div>
+    <h4>NFC 近場通訊</h4>
+    <p>由 HF RFID（ISO 14443）演變而來，工作頻率 <strong>13.56 MHz</strong>，實際距離約 <strong>4 公分以內</strong>（理論 20 公分），速率 106／212／424 kbps，標準 ISO/IEC 18092。<strong>不需配對</strong>，靠近即可通訊，距離極短本身就是安全優勢。</p>
+    <div class="tw"><table><thead><tr><th>模式</th><th>功能</th><th>應用</th></tr></thead><tbody>
+      <tr><td><strong>卡片模擬</strong></td><td>手機模擬成感應卡</td><td>行動支付、手機悠遊卡、門禁與<strong>智慧門鎖</strong></td></tr>
+      <tr><td><strong>讀卡機</strong></td><td>讀寫外部標籤</td><td>智慧海報、防偽標籤、展覽導覽</td></tr>
+      <tr><td><strong>點對點（P2P）</strong></td><td>兩台裝置雙向交換</td><td>交換名片、Android Beam、<strong>藍牙／Wi-Fi 快速配對（Handover）</strong></td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">RFID（UHF）讓「物」被系統看見：遠距、大量、單向為主、標籤便宜。NFC 讓「人」與「物」互動：極短距、單一、雙向、支付與配對。手機 NFC（13.56 MHz）讀不到 UHF 的 eTag。</div></div>
+    <h4>網路模型：OSI 七層與 TCP/IP 四層</h4>
+    <div class="tw"><table><thead><tr><th>OSI</th><th>功能</th><th>代表協定</th><th>TCP/IP</th></tr></thead><tbody>
+      <tr><td>7 應用層</td><td>提供應用程式網路服務</td><td>HTTP、FTP、SMTP、DNS、MQTT</td><td rowspan="3">應用層</td></tr>
+      <tr><td>6 表達（展示）層</td><td>資料格式轉換、<strong>加解密、壓縮</strong></td><td>ASCII／EBCDIC 轉換</td></tr>
+      <tr><td>5 會議層</td><td>建立、維持、結束會談</td><td>—</td></tr>
+      <tr><td>4 傳輸層</td><td>端對端可靠傳輸、流量與錯誤控制</td><td>TCP、UDP</td><td>傳輸層</td></tr>
+      <tr><td>3 網路層</td><td>定址與路由</td><td>IP、ICMP</td><td>網際網路層</td></tr>
+      <tr><td>2 資料鏈結層</td><td>組成訊框、錯誤偵測</td><td>乙太網路</td><td rowspan="2">網路介面層</td></tr>
+      <tr><td>1 實體層</td><td>以電、光、無線電傳送位元</td><td>電纜、無線電</td></tr>
+    </tbody></table></div>
+    <p>TCP、UDP、IP 位址與各種無線技術的比較見 <a class="xref" href="#iot-protocol" onclick="event.preventDefault();gotoNote('iot-protocol')">常見通訊協定與網路層技術</a>。</p>
+    <h4>應用層與裝置供電</h4>
+    <p>應用層結合雲端、大數據與 AI 提供服務，各領域案例見 <a class="xref" href="#aiot-cases" onclick="event.preventDefault();gotoNote('aiot-cases')">AIoT 應用案例</a>。供電方式依設備型態選擇：穿戴裝置用電池、太陽能或無線充電；固定設備（網路攝影機、AP）可用 <strong>PoE（乙太網路供電）</strong>。環境背向散射（Ambient Backscatter）可擷取周遭無線電波能量，達到近乎零耗電的通訊。</p>

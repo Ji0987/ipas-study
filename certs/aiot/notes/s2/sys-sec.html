@@ -1,2 +1,62 @@
 
-    <p>（撰寫中）</p>
+    <p>物聯網資安的核心難題：通訊可能時斷時續、設備能力差異大、設備無人看守易遺失，而且數量多、不易更新。密碼學基礎與 CIA、AAA 見考科一 <a class="xref" href="#iot-sec" onclick="event.preventDefault();gotoNote('iot-sec')">資安與隱私基本概念</a>，這裡整理考科二常考的攻擊、防護與法規。</p>
+    <h4>常見攻擊</h4>
+    <div class="tw"><table><thead><tr><th>攻擊</th><th>說明</th></tr></thead><tbody>
+      <tr><td><strong>DoS／DDoS</strong></td><td>大量請求癱瘓主機；DDoS 由多台殭屍電腦發動。IP Camera 數量多、常用預設密碼，最容易被植入惡意程式（Mirai 攻擊 DNS 服務商）</td></tr>
+      <tr><td><strong>中間人攻擊</strong></td><td>攔截、竄改後再轉送給另一方</td></tr>
+      <tr><td><strong>重送攻擊</strong></td><td>重複或延遲送出攔截到的有效資料，欺騙接收端</td></tr>
+      <tr><td><strong>邪惡雙胞胎（Evil Twin）</strong></td><td>架設高功率非法基地台（Rogue AP）冒用相同 SSID，誘騙使用者連線並竊取帳密</td></tr>
+      <tr><td><strong>天坑攻擊（Sinkhole）</strong></td><td>惡意節點宣稱有最佳路由，吸引鄰近節點把資料交給它，再竄改或破壞負載平衡</td></tr>
+      <tr><td>女巫攻擊（Sybil）</td><td>一個節點假冒多個身分</td></tr>
+      <tr><td>干擾攻擊（Jamming）</td><td>以雜訊癱瘓無線通訊</td></tr>
+      <tr><td><strong>Bluebug</strong></td><td>透過藍牙取得手機 AT 命令集：撥打、轉接電話、監聽</td></tr>
+      <tr><td>後門憑證</td><td>監視器等設備內建預設帳密，從 <strong>UART</strong> 除錯介面即可取得最高權限</td></tr>
+    </tbody></table></div>
+    <h4>防護措施</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--teal)">積極有效</h5><ul>
+        <li>定期<strong>更新韌體與軟體</strong>（修補軟體瑕疵的唯一方法）</li>
+        <li>修改預設密碼、使用複雜密碼</li>
+        <li>存取控制、防火牆、MAC 位址 ACL</li>
+        <li>WPA2（AES）或 <strong>WPA3</strong> 加密</li>
+        <li>移除不用的舊裝置</li>
+        <li>SSID 不透露用途</li>
+      </ul></div>
+      <div class="cmpc"><h5 style="color:var(--coral)">無效或有害</h5><ul>
+        <li>保留原廠預設值、預設密碼</li>
+        <li>停用防火牆、防毒軟體</li>
+        <li>使用公共 Wi-Fi</li>
+        <li>只換 IP 或 SSID、不處理密碼外流</li>
+        <li>不使用 Cookie（不是有效的後端防禦）</li>
+        <li>感測器裝在公開、易接觸的位置</li>
+      </ul></div>
+    </div>
+    <div class="tw"><table><thead><tr><th>技術</th><th>重點</th></tr></thead><tbody>
+      <tr><td>Wi-Fi 加密強度</td><td>WEP（已被破解）＜ WPA（TKIP）＜ WPA2（AES／CCMP）＜ <strong>WPA3</strong>（SAE）</td></tr>
+      <tr><td>TLS／SSL</td><td>IoT 設備與雲端安全通訊最常用；建立加密通道。MQTT 埠 1883 明文、8883 加密</td></tr>
+      <tr><td>憑證綁定（Certificate Pinning）</td><td>裝置預存平台的憑證或公鑰，防止偽造憑證的中間人攻擊</td></tr>
+      <tr><td>VPN</td><td>以 <strong>IPSec</strong> 建立較安全（PPP、L2TP 本身不加密）</td></tr>
+      <tr><td>存取控制清單（ACL）</td><td>依 IP、埠號決定是否允許存取網路資源</td></tr>
+      <tr><td>LoRaWAN</td><td>以 AES-128 加密</td></tr>
+      <tr><td>比特幣</td><td>SHA-256（SHA-2）雜湊＋ECDSA 簽章</td></tr>
+      <tr><td>RFID 隱私</td><td>雜湊函數法：計算量小、耗能低、單向不可逆</td></tr>
+      <tr><td>感測器加密</td><td>算力有限，用對稱式加密；非對稱式只用於金鑰交換與驗證</td></tr>
+      <tr><td>資料遮罩</td><td>保護資料庫中的個人可識別資訊（PII）</td></tr>
+      <tr><td>多層防禦</td><td>防火牆、ACL、IPS／IDS、VPN、防毒並用</td></tr>
+    </tbody></table></div>
+    <h4>檢測與標準</h4>
+    <ul>
+      <li><strong>網頁安全檢測</strong>：以滲透測試、自動化工具檢測身分驗證、注入攻擊、存取控制失效（OWASP）。其他還有韌體、通訊、作業系統安全檢測；安全檢測應涵蓋硬體設定、行動 App、雲端 API。</li>
+      <li><strong>OWASP IoT Top 10</strong>：第三項「不安全的生態系統介面」指網頁、後端 API、雲端與行動介面不安全。</li>
+      <li><strong>ISO/IEC 27001</strong>：資訊安全管理系統（ISMS）。ISO 9000 品質、ISO 20000 IT 服務、ISO 31000 風險管理。</li>
+      <li><strong>臺灣物聯網資安標章</strong>：經濟部與 NCC 推動，由 <strong>TAICS</strong> 制定標準；分 1～3 級，依資安風險、防護複雜度、適用情境區分。</li>
+      <li>IoT 安全評等（IoT SR）評估軟體更新、加密與隱私、安全通訊等安全面向。</li>
+    </ul>
+    <h4>隱私與法規</h4>
+    <ul>
+      <li>RFID 若與會員、信用卡資料連結，可能洩漏<strong>身分、購物喜好、家庭狀況</strong>；標籤遺失可能被冒用身分。商品製造商不是隱私。</li>
+      <li>依<strong>個資法</strong>，直接向當事人蒐集個資（如填會員申請書）須先告知；公務機關依法執行職務、當事人自行公開的資料可免告知。</li>
+      <li>在歐盟銷售須遵守 <strong>GDPR</strong>。雲平台以<strong>去識別化</strong>避免個資洩漏。</li>
+      <li>物聯網收集與追蹤消費者行為，最常見的爭議是<strong>隱私</strong>。</li>
+      <li>生物辨識：<strong>虹膜</strong>最不易被複製；人臉辨識率與攝影機解析度有關；語音辨識受噪音影響。</li>
+    </ul>

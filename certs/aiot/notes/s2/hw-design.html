@@ -1,2 +1,47 @@
 
-    <p>（撰寫中）</p>
+    <p>硬體設計基礎涵蓋<strong>開發板的選擇、I/O 與通訊介面、基本電路計算、開源硬體授權</strong>。感測器原理見考科一 <a class="xref" href="#sensor-basic" onclick="event.preventDefault();gotoNote('sensor-basic')">感測技術基礎</a>，訊號與通訊分類見 <a class="xref" href="#sensor-signal" onclick="event.preventDefault();gotoNote('sensor-signal')">感測訊號與通訊基礎</a>。</p>
+    <h4>開發平台</h4>
+    <div class="tw"><table><thead><tr><th>平台</th><th>類型</th><th>重點</th></tr></thead><tbody>
+      <tr><td><strong>Arduino UNO</strong></td><td>微控制器開發板（ATmega328P，Atmel AVR）</td><td>開源、便宜、易學；無作業系統；C/C++（Arduino IDE，跨平台）；預設 <strong>setup()</strong>（執行一次）與 <strong>loop()</strong>（重複執行）；A0～A5 共 6 個 10 位元類比輸入；只有一組硬體 UART（D0 RX、D1 TX）；<strong>無內建藍牙、RTC、溫度感測</strong>；SRAM 2 KB</td></tr>
+      <tr><td><strong>Raspberry Pi</strong></td><td><strong>單板電腦</strong>（ARM 架構 SoC）</td><td>跑 Linux（Python 常用），可多工、影像處理，適合邊緣運算；<strong>沒有類比輸入（無 ADC）</strong>；GPIO 為 <strong>3.3V</strong>，接 5V 會燒毀；Pi 3 有藍牙 4.1、Pi 4 有 Gigabit 乙太網路與藍牙 5.0；GPIO 上的 UART 不是 RS-232 電位</td></tr>
+      <tr><td><strong>ESP8266／ESP32</strong></td><td>Wi-Fi 微控制器</td><td>內建 802.11 b/g/n，可用 Arduino IDE，支援 MQTT</td></tr>
+      <tr><td><strong>micro:bit</strong></td><td>教育用開發板</td><td>內建按鈕、LED 矩陣、藍牙；3V；金手指需擴充板才能接杜邦線</td></tr>
+      <tr><td><strong>BeagleBone</strong></td><td>單板電腦</td><td>效能高、I/O 豐富，適合較複雜的應用；有類比輸入</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">微控制器（MCU）＝處理器＋記憶體＋周邊（ADC、I/O、計時器）在同一顆晶片，適合簡單控制；單板電腦有作業系統、適合運算。PLC 即時穩定，適合工業控制。x86 也常用於閘道器與工業電腦。</div></div>
+    <h4>通訊介面比較</h4>
+    <div class="tw"><table><thead><tr><th>介面</th><th>線數（不含 GND）</th><th>同步</th><th>雙工</th><th>多裝置</th><th>重點</th></tr></thead><tbody>
+      <tr><td><strong>UART</strong></td><td>2（TX、RX 交叉連接）</td><td>非同步（無時脈線）</td><td>全雙工</td><td>點對點</td><td>雙方約定鮑率；電氣介面有 RS-232、RS-422、RS-485、TTL</td></tr>
+      <tr><td><strong>I²C</strong></td><td>2（SDA 資料、SCL 時脈）</td><td><strong>同步</strong></td><td><strong>半雙工</strong></td><td>以<strong>位址</strong>區分，加裝置不加線</td><td>開汲極，需<strong>上拉電阻接 VCC</strong>；有 ACK；可多主控；UNO 的 A4、A5</td></tr>
+      <tr><td><strong>SPI</strong></td><td>4（SCLK、MOSI、MISO、CS）</td><td>同步（主端提供時脈）</td><td><strong>全雙工</strong></td><td>每個從屬裝置多一條片選線</td><td>速度最快、無 ACK；SD 卡、Flash；菊花鏈共用 CS</td></tr>
+      <tr><td><strong>RS-232</strong></td><td>—</td><td>非同步</td><td>全雙工</td><td>點對點</td><td>單端（不平衡）傳輸，約 15～20 m</td></tr>
+      <tr><td><strong>RS-485</strong></td><td>一對雙絞線</td><td>非同步</td><td>半／全雙工</td><td>多點</td><td><strong>差動（平衡）</strong>傳輸，抗干擾，可達 1200 m；工業（Modbus RTU）</td></tr>
+    </tbody></table></div>
+    <ul>
+      <li><strong>RS-232 字元格式</strong>：閒置為高電位，<strong>起始位元由 High 轉 Low</strong>；資料 5～8 位元；同位可選奇、偶、無；停止位元 1、1.5 或 2 位元。「<strong>8/N/1</strong>」＝8 資料位元、無同位、1 停止位元。</li>
+      <li><strong>傳輸時間</strong>：9600 bps、8N1 一個字元 10 個位元，約 10 × 0.104 ms ≈ 1.04 ms。</li>
+      <li><strong>流量控制</strong>：雙方都只能暫存一筆時用 Stop-and-Wait。</li>
+      <li>各介面速度：HDMI 2.1（48 Gbps）＞ USB 3.1（10 Gbps）＞ IEEE 1394 ＞ RS-232；Wi-Fi 7 約 46 Gbps。USB 工作電壓 <strong>5V</strong>。LPT 是並列埠。</li>
+      <li>USB OTG 以 <strong>HNP</strong> 協商主機與周邊角色。微控制器與感測器之間一般不用 USB。</li>
+    </ul>
+    <h4>基本電路與元件</h4>
+    <div class="tw"><table><thead><tr><th>主題</th><th>重點</th></tr></thead><tbody>
+      <tr><td>LED 限流電阻</td><td>R ＝（電源電壓 − LED 壓降）÷ 電流。例：(5 − 1.8)V ÷ 30 mA ≈ 107 Ω，取 110 Ω。電阻調小→電流變大→更亮</td></tr>
+      <tr><td>主動與被動元件</td><td>電阻（R）、電感（L）、電容（C）是被動元件；<strong>電晶體</strong>是主動元件</td></tr>
+      <tr><td>驅動繼電器</td><td>GPIO 電流不足，加<strong>電晶體</strong>放大；負載接 <strong>COM 與 NO（或 NC）</strong>；可接交流或直流負載；過電流可能使接點卡死</td></tr>
+      <tr><td>上拉／下拉電阻</td><td>按鈕接 VCC＋下拉電阻→按下 HIGH（正向邏輯）；接 GND＋上拉電阻→按下 LOW；沒有上下拉會浮接</td></tr>
+      <tr><td>共地</td><td>UART、SPI 雙方 GND 沒接，沒有共同參考電位，資料會出錯</td></tr>
+      <tr><td>PWM</td><td>由<strong>計時器（Timer）</strong>產生；週期 ＝ 1 ÷ 頻率（200 Hz → 5 ms，50% 工作週期高電位 2.5 ms）；調亮度、馬達轉速、蜂鳴器音調</td></tr>
+      <tr><td>中斷</td><td>周邊發出 <strong>IRQ</strong>、CPU 回應 IACK；比輪詢有效率；中斷服務程式不接受參數</td></tr>
+      <tr><td>電源與 ADC</td><td>沒有穩壓器，ADC 參考電壓會波動，讀值不準；3.3V 腳位不可直接接 5V IC</td></tr>
+      <tr><td>步進馬達</td><td>依脈衝驅動，每個脈衝轉固定角度，轉速由脈衝頻率決定；需驅動器（如 ULN2003A）</td></tr>
+      <tr><td>其他</td><td>七段顯示器含小數點 8 顆 LED；Flash 以區塊抹寫、次數有限；32 條位址線可定址 4 GB；照度單位 lux</td></tr>
+    </tbody></table></div>
+    <h4>藍牙模組接線</h4>
+    <p>HC-05／HC-06：VCC 接 5V、GND 接 GND，<strong>模組 TXD 接 Arduino RX、RXD 接 TX（交叉）</strong>；可接硬體 UART（D0、D1）或以 SoftwareSerial 使用 D10、D11。電腦加藍牙則用 USB 藍牙接收器。</p>
+    <h4>開源硬體</h4>
+    <ul>
+      <li>公開<strong>電路圖、佈線圖、零件表（BOM）</strong>等設計檔與軟體、文件，允許研究、修改、製造與<strong>銷售</strong>；無法公開的部分要說明。商標仍須另外授權。</li>
+      <li>授權不限 GPL，可用 CERN OHL、TAPR OHL 或創用 CC。Arduino：硬體設計 <strong>CC BY-SA</strong>、IDE（Java）<strong>GPL</strong>、微控制器函式庫 <strong>LGPL</strong>。</li>
+      <li>創用 CC 四元素：<strong>BY 姓名標示（必然包含）</strong>、NC 非商業、ND 禁止改作、SA 相同方式分享，組成六種授權。BY-SA 允許商業使用。</li>
+    </ul>

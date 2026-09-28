@@ -1,2 +1,91 @@
 
-    <p>（撰寫中）</p>
+    <p>通訊技術決定系統的<strong>涵蓋範圍、功耗、頻寬與成本</strong>。依距離分為短距離無線、低功耗廣域網路（LPWAN）、行動通訊三類，再搭配應用層協定交換資料。</p>
+    <h4>無線技術總覽</h4>
+    <div class="tw"><table><thead><tr><th>技術</th><th>標準／頻段</th><th>距離</th><th>速率</th><th>重點</th></tr></thead><tbody>
+      <tr><td><strong>NFC</strong></td><td>13.56 MHz</td><td>約 4 cm</td><td>≤424 kbps</td><td>最短、最省電，支付與配對（細節見 <a class="xref" href="#iot-arch" onclick="event.preventDefault();gotoNote('iot-arch')">物聯網架構與功能</a>）</td></tr>
+      <tr><td><strong>BLE</strong></td><td>IEEE 802.15.1，2.4 GHz</td><td>數十 m（5.0 長距離模式可達數百 m）</td><td>1～2 Mbps</td><td>間歇小量資料，鈕扣電池可用數年</td></tr>
+      <tr><td><strong>ZigBee</strong></td><td>IEEE 802.15.4，2.4 GHz</td><td>數十～百 m（可多跳延伸）</td><td>≤250 kbps</td><td>低速、低功耗、<strong>網狀網路</strong>、大量節點</td></tr>
+      <tr><td><strong>UWB</strong></td><td>超寬頻脈衝</td><td>數十 m 以內</td><td>高</td><td>公分級定位、低干擾、低耗電（數位車鑰匙）</td></tr>
+      <tr><td><strong>Wi-Fi</strong></td><td>IEEE 802.11，2.4／5／6 GHz</td><td>數十 m</td><td>數百 Mbps～Gbps</td><td>原生 IP、影音；耗電高（100～300 mA）</td></tr>
+      <tr><td><strong>LoRa</strong></td><td>Sub-GHz <strong>免授權</strong>（台灣 920～925 MHz）</td><td>數 km～10 km+</td><td>數 kbps</td><td>自建閘道器、無月費</td></tr>
+      <tr><td><strong>Sigfox</strong></td><td>Sub-GHz 超窄頻（UNB，約 100 Hz）</td><td>數十 km</td><td>極低</td><td>每天只能傳極少訊息</td></tr>
+      <tr><td><strong>NB-IoT</strong></td><td>電信<strong>授權</strong> LTE 頻段（3GPP）</td><td>數 km～十幾 km</td><td>數十 kbps</td><td>用現有基地台、SIM 卡加密、穿透力強；<strong>不支援移動</strong></td></tr>
+      <tr><td><strong>4G／5G</strong></td><td>電信授權頻段</td><td>廣域</td><td>高</td><td>影像、移動、低延遲；耗電與成本較高</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">選技術的口訣：<strong>極低資料量＋電池</strong>→NB-IoT／LoRa；<strong>中等資料＋移動</strong>→LTE Cat.1；<strong>影像＋即時</strong>→4G Cat.4／5G eMBB；<strong>不容許延遲</strong>→5G URLLC。耗電由低到高大致為 NFC＜BLE＜ZigBee＜Wi-Fi＜4G。</div></div>
+    <h4>Wi-Fi 世代</h4>
+    <div class="tw"><table><thead><tr><th>名稱</th><th>標準</th><th>頻段</th><th>重點</th></tr></thead><tbody>
+      <tr><td>Wi-Fi 4</td><td>802.11n</td><td>2.4／5 GHz</td><td>最主流 IoT 標準，ESP32／ESP8266 採用（ESP8266 為 b/g/n）</td></tr>
+      <tr><td>Wi-Fi 5</td><td>802.11ac</td><td>5 GHz</td><td>高頻寬、穿牆弱，適合 AI 攝影機</td></tr>
+      <tr><td>Wi-Fi 6／6E</td><td><strong>802.11ax</strong></td><td>2.4／5／6 GHz</td><td><strong>OFDMA</strong>（子載波分給多用戶同時傳）、<strong>MU-MIMO</strong>、<strong>TWT</strong>（目標喚醒時間省電）</td></tr>
+      <tr><td>Wi-Fi 7</td><td>802.11be</td><td>2.4／5／6 GHz</td><td>約 46 Gbps、多重連結（MLO）、極低延遲</td></tr>
+      <tr><td>Wi-Fi HaLow</td><td>802.11ah</td><td>Sub-1 GHz</td><td>物聯網專用，穿透力強、可達 1 km</td></tr>
+    </tbody></table></div>
+    <p>2.4 GHz 繞射好、易穿牆，但與藍牙、ZigBee、<strong>微波爐</strong>同頻，干擾最嚴重；5／6 GHz 快、干擾少，但衰減快。分享器宜放在屋內中央、較高處，遠離金屬、鏡子與微波爐。<strong>SSID</strong> 是網路名稱（由 AP 的 Beacon 訊框廣播）；無線網路以 <strong>CSMA/CA</strong> 避免碰撞（有線乙太網路是 CSMA/CD）。</p>
+    <h4>藍牙</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">經典藍牙</h5><ul><li>持續大量傳輸（耳機、檔案）</li><li>常時連線、功耗較高</li><li>79 個 1 MHz 通道</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--teal)">低功耗藍牙 BLE（4.0 起）</h5><ul><li>間歇小量資料（手環、門鎖、胎壓計）</li><li>平常休眠，毫秒級喚醒傳送</li><li>40 個 2 MHz 通道（37 資料＋3 廣播）</li></ul></div>
+    </div>
+    <ul>
+      <li>共通：2.4～2.485 GHz、<strong>GFSK</strong> 調變、<strong>跳頻展頻（FHSS）</strong>抗干擾。藍牙 4.0 規格包含經典、高速（HS）、低功耗三種模式。</li>
+      <li><strong>GAP</strong>：廣播與連線（周邊設備廣播、中央設備掃描）。<strong>GATT</strong>：連線後以服務（Service）與特徵值（Characteristic）交換資料，Client／Server 架構，<strong>不一定要配對</strong>。</li>
+      <li><strong>藍牙 5.0</strong>：2 Mbps、長距離模式（Coded PHY）；<strong>5.1</strong>：AoA／AoD 公分級定位；<strong>Mesh</strong>：多對多網狀網路。</li>
+      <li><strong>Beacon</strong>：以 BLE 廣播識別碼，手機依 RSSI 判斷距離並推播。<strong>iBeacon</strong>（Apple）、<strong>Eddystone</strong>（Google，封包有 UID、URL、TLM、EID）。</li>
+    </ul>
+    <h4>ZigBee</h4>
+    <p>以 IEEE 802.15.4 為底（實體層 PHY、媒體存取層 MAC），上加網路層 NWK 與應用層 APL（<strong>由下而上：PHY → MAC → NWK → APL</strong>）。三個頻段共 27 通道：868 MHz 1 通道 20 kbps、915 MHz 10 通道 40 kbps、2.4 GHz 16 通道 250 kbps。</p>
+    <div class="tw"><table><thead><tr><th>角色</th><th>功能</th><th>典型設備</th></tr></thead><tbody>
+      <tr><td>協調器（Coordinator）</td><td>建立網路、選頻道、配位址、管金鑰；每個網路<strong>只有一個</strong></td><td>閘道器（Hub），長期供電</td></tr>
+      <tr><td>路由器（Router）</td><td>轉發封包、延伸範圍</td><td>插電的燈泡、插座</td></tr>
+      <tr><td>終端裝置（End Device）</td><td>只收發自己的資料，大多時間睡眠</td><td>電池供電的門窗、溫濕度感測器</td></tr>
+    </tbody></table></div>
+    <p>支援星狀、樹狀、<strong>網狀</strong>拓樸，可<strong>多跳（Multi-hop）</strong>、<strong>自癒</strong>（節點故障自動改走別條路），理論上可達 65,000 個節點；路由常用 AODV（先廣播 RREQ 找路徑，再以單播 RREP 回應）。手機沒有 ZigBee 晶片，要透過閘道器轉成 Wi-Fi。ZigBee 3.0 統一應用層；CSA 聯盟推動的 <strong>Matter</strong> 支援 Ethernet、Wi-Fi、Thread、BLE，<strong>不支援 LoRa</strong>。</p>
+    <h4>LPWAN：NB-IoT vs. LoRa</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">NB-IoT</h5><ul><li>3GPP 制定，電信業者營運、<strong>授權頻段</strong></li><li>用現有 LTE 基地台，軟體升級即可佈建</li><li>穿透力比 GSM 強 20 dB，可達地下室</li><li>以低速率換低功耗（搭配 PSM 省電模式）</li><li>應用：水電錶、路燈、人孔蓋、停車格</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--teal)">LoRa／LoRaWAN</h5><ul><li>LoRa Alliance 制定，<strong>免授權</strong> ISM 頻段</li><li>自建閘道器（終端→閘道器→網路伺服器→應用伺服器），<strong>星狀</strong>架構</li><li>空曠處 10 km 以上；頻寬極低、易受干擾</li><li>終端分 Class A、B、C 三種；以 AES-128 加密</li><li>應用：農場、廠區、山區土石流</li></ul></div>
+    </div>
+    <h4>4G／5G 行動通訊</h4>
+    <ul>
+      <li>LTE Cat.4／Cat.6：150 Mbps 以上，行動監控、數位看板。LTE Cat.1：10 Mbps，成本低，公車動態、共享機車、POS 機。</li>
+      <li><strong>5G 三大情境</strong>：<strong>eMBB</strong>（增強行動寬頻，約 10 Gbps，4K／8K、AR／VR）、<strong>mMTC</strong>（海量連結，每平方公里 100 萬裝置）、<strong>URLLC</strong>（超可靠低延遲，&lt;1 ms、99.999%，車聯網、遠端手術）。</li>
+      <li>頻段：<strong>毫米波</strong>速度快，但波長短、<strong>穿透力與繞射能力弱</strong>、易被遮蔽，需更密集的基地台；<strong>Sub-6 GHz</strong> 涵蓋較廣。4G 頻率較低，涵蓋廣、基地台較少。</li>
+      <li>關鍵技術：<strong>Massive MU-MIMO</strong>（大量天線同時服務多用戶）、<strong>波束賦形</strong>（電磁波對準用戶）、載波聚合、<strong>D2D</strong> 直連；頻率高、天線更小。5G 手機通常比 4G 更耗電。</li>
+      <li>車聯網：V2V（車對車）、V2I（車對設施）、V2P（車對人）、V2N（車對網路，監控平台、影像傳輸需 5G 的頻寬與低延遲）。</li>
+      <li>SIM 卡型態：工業級 SIM、<strong>eSIM</strong>（焊在板上、可 OTA 切換電信商）、iSIM（整合進 SoC）。</li>
+    </ul>
+    <h4>應用層協定</h4>
+    <div class="tw"><table><thead><tr><th>項目</th><th>MQTT</th><th>HTTP／HTTPS</th><th>CoAP</th></tr></thead><tbody>
+      <tr><td>底層</td><td><strong>TCP</strong>（MQTT-SN 走 UDP）</td><td>TCP</td><td><strong>UDP</strong></td></tr>
+      <tr><td>模式</td><td><strong>發布／訂閱</strong>（透過 Broker）</td><td>請求／回應</td><td>請求／回應（REST：GET、POST、PUT、DELETE）</td></tr>
+      <tr><td>標頭</td><td>最小 2 Bytes</td><td>數百 Bytes</td><td>4 Bytes</td></tr>
+      <tr><td>即時性</td><td>高（主動推播）</td><td>低（要輪詢）</td><td>中</td></tr>
+      <tr><td>可靠性</td><td><strong>QoS 0／1／2</strong></td><td>依賴 TCP 重傳</td><td>確認型訊息（CON）＋重傳</td></tr>
+      <tr><td>適用</td><td>大量感測器、即時控制</td><td>韌體更新、影像、Web</td><td>極低功耗感測器、NB-IoT</td></tr>
+    </tbody></table></div>
+    <ul>
+      <li><strong>MQTT</strong>：IBM 於 1999 年為監控輸油管線開發。控制封包有 CONNECT、PUBLISH、SUBSCRIBE、PINGREQ 等（沒有 QUEUE）；發布者可要求 Broker 保留最新訊息（Retained Message）給新訂閱者；發布者不知道有多少訂閱者。QoS 與 Broker 細節見 <a class="xref" href="#middleware" onclick="event.preventDefault();gotoNote('middleware')">中介軟體與平台</a>。</li>
+      <li>其他發布／訂閱協定：<strong>AMQP</strong>、<strong>XMPP</strong>、<strong>DDS</strong>。請求／回應型：HTTP、CoAP。</li>
+      <li><strong>WebSocket</strong>：建立後持續的<strong>雙向即時</strong>連線，適合視訊通話、即時儀表板。HTTP（1.0）回應後即斷線。</li>
+      <li>不適合物聯網的協定：FTP（檔案傳輸、負擔大）、SMTP（郵件）、ICMP（網路診斷，如 ping）、RTSP（影音串流控制）。</li>
+    </ul>
+    <h4>TCP／IP 網路基礎</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">TCP（Transmission Control Protocol）</h5><ul><li>連接導向，三次握手</li><li>確認、重傳、排序：可靠</li><li>檔案、郵件、網頁、MQTT</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--gold)">UDP（User Datagram Protocol）</h5><ul><li>無連接、不保證送達與順序</li><li>負擔小、延遲低</li><li>影音串流、CoAP、DNS 查詢</li></ul></div>
+    </div>
+    <div class="tw"><table><thead><tr><th>觀念</th><th>重點</th></tr></thead><tbody>
+      <tr><td>IPv4</td><td>32 位元，4 組十進位以「.」分隔（如 192.168.0.1），約 43 億個位址已不足；標頭 20 位元組</td></tr>
+      <tr><td>IPv6</td><td>128 位元，32 個十六進位數字分 8 組以「:」分隔；「::」省略連續 0，<strong>一個位址只能出現一次</strong>；標頭 40 位元組；內建 IPSec（AH、ESP）；與 IPv4 不能直接互通</td></tr>
+      <tr><td>私有 IP</td><td>10.0.0.0/8、172.16.0.0/12、<strong>192.168.0.0/16</strong>，不能直接上網際網路</td></tr>
+      <tr><td>本機位址</td><td>localhost、127.0.0.1、::1；0.0.0.0 是「未指定」（監聽所有介面）</td></tr>
+      <tr><td>子網路</td><td>網路識別碼＝IP AND 子網路遮罩（192.168.5.2／255.255.255.0 → 192.168.5.0）</td></tr>
+      <tr><td>NAT</td><td>多台設備共用公有 IP，緩解 IPv4 不足並隱藏內部 IP</td></tr>
+      <tr><td>DHCP／DNS</td><td>DHCP 自動分配 IP、遮罩、閘道、DNS；DNS 把網域名稱轉成 IP</td></tr>
+      <tr><td>路由器</td><td>以路由表記錄目的網路，決定封包轉送路徑</td></tr>
+      <tr><td>LAN</td><td>區域網路：一棟或一組建築物內的小範圍網路</td></tr>
+      <tr><td>電路交換 vs. 分封交換</td><td>電路交換為通訊雙方建立專用路徑、資料依序到達，但頻寬浪費；分封交換共用線路、利用率高</td></tr>
+    </tbody></table></div>
+    <h4>無線干擾與法規</h4>
+    <p>ISM 頻段（如 2.4 GHz、915 MHz）<strong>免執照</strong>，但必須符合功率等規範；大量裝置擠在同一頻段會造成<strong>碰撞與干擾</strong>，可用跳頻、錯開傳送時間、換頻道、設備保持距離、金屬屏蔽等方式改善。隧道、捷運等封閉空間可用<strong>洩波同軸電纜</strong>延伸涵蓋。</p>

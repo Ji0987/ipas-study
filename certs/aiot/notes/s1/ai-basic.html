@@ -1,2 +1,57 @@
 
-    <p>（撰寫中）</p>
+    <p>AIoT 裡的分工：<strong>感測器</strong>讓設備「感覺」，<strong>通訊與平台</strong>負責「傳遞與管理」，<strong>AI</strong> 負責「分析與判斷」。AIoT 資料多是連續量測的感測訊號，常見<strong>高頻、時間序列、高雜訊、資料缺失、類別不平衡</strong>等問題，模型設計必須顧及工程可行性。</p>
+    <h4>機器學習三種範式</h4>
+    <div class="tw"><table><thead><tr><th>範式</th><th>訓練資料</th><th>AIoT 典型用途</th></tr></thead><tbody>
+      <tr><td><strong>監督式</strong></td><td>特徵＋<strong>標籤</strong></td><td><strong>分類</strong>（離散：正常／異常、故障類型）、<strong>迴歸</strong>（連續：剩餘壽命 RUL、能耗、溫度趨勢）</td></tr>
+      <tr><td><strong>非監督式</strong></td><td>無標籤</td><td><strong>分群</strong>（運作狀態、負載模式）、<strong>異常偵測</strong>（以正常資料建立邊界，故障樣本少時特別好用）</td></tr>
+      <tr><td><strong>強化學習</strong></td><td>與環境互動得到<strong>獎勵／懲罰</strong></td><td>動態控制與參數最佳化，如 HVAC 空調節能；需先界定安全邊界</td></tr>
+    </tbody></table></div>
+    <div class="cal cwrn"><span>⚠️</span><div class="calbody">常考陷阱：<strong>迴歸屬於監督式</strong>（輸出連續值）；<strong>影像瑕疵檢測（AOI）用 CNN</strong>（監督式），不是強化學習。</div></div>
+    <h4>深度學習模型</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">CNN 卷積神經網路</h5><ul>
+        <li>濾波器滑動擷取<strong>局部、空間</strong>特徵</li>
+        <li>工業影像檢測（AOI）、光達點雲物件偵測</li>
+      </ul></div>
+      <div class="cmpc"><h5 style="color:var(--purple)">RNN／LSTM</h5><ul>
+        <li>有「記憶」，輸出受過去狀態影響；LSTM 以門控改善長序列遺忘</li>
+        <li><strong>時間序列</strong>：振動、電流、溫度趨勢、負載預測</li>
+      </ul></div>
+    </div>
+    <p>GAN 用於<strong>生成</strong>新資料；隨機森林是傳統機器學習，不屬於深度學習。</p>
+    <h4>模型從訓練到部署</h4>
+    <div class="tl">
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">1</div><div class="tlh">資料預處理與信號調節</div><div class="tls">濾波、去雜訊、異常值處理、正規化、取樣率對齊</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">2</div><div class="tlh">模型訓練</div><div class="tls">在雲端或 GPU 工作站；切分訓練／驗證／測試集，處理類別不平衡</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">3</div><div class="tlh">模型壓縮</div><div class="tls"><strong>量化</strong>（FP32 → INT8，模型變小、省記憶體，精度略降）、<strong>剪枝</strong></div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">4</div><div class="tlh">推論與系統整合</div><div class="tls">部署到邊緣裝置或閘道器，結果回饋 HMI、MES、SCADA</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">5</div><div class="tlh">上線監測與版本管理</div><div class="tls">監測資料分布漂移與效能，保留模型版本與推論紀錄</div></div></div>
+    </div>
+    <p>部署還要注意<strong>模型格式</strong>（ONNX、TensorFlow、PyTorch，影響跨平台轉換與可攜性）與<strong>推論引擎</strong>（把模型運算對應到底層處理器或加速器）。</p>
+    <h4>邊緣 AI（Edge AI）</h4>
+    <p>在資料產生端就近推論，只把特徵、事件或結果回傳雲端。導入理由：</p>
+    <div class="pills">
+      <span class="pill pbl">低延遲：毫秒級反應、即時控制</span>
+      <span class="pill ptl">省頻寬：不傳原始影像或高頻訊號</span>
+      <span class="pill pgl">隱私：敏感資料留在本地</span>
+    </div>
+    <div class="tw"><table><thead><tr><th>加速器</th><th>特點</th><th>適用</th></tr></thead><tbody>
+      <tr><td><strong>GPU</strong></td><td>大量平行核心、生態成熟，但<strong>功耗高</strong></td><td>多路影像分析，放在工業電腦（IPC）</td></tr>
+      <tr><td><strong>NPU</strong></td><td>ASIC，<strong>推論專用</strong>（不做反向傳播訓練），低功耗高效能</td><td>執行 INT8 量化模型、小型語言模型；邊緣裝置主流配置</td></tr>
+      <tr><td><strong>FPGA</strong></td><td>可重新配置硬體邏輯，<strong>低延遲、高度客製</strong>，開發門檻高</td><td>即時性要求極高的工控、安全監測</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">NPU 是<strong>協同處理器</strong>，負責 AI 加速；作業系統、I/O 等通用運算仍由 CPU 負責。雲端訓練用 GPU／TPU。</div></div>
+    <h4>端雲協作與分散式 AI</h4>
+    <ul>
+      <li><strong>端雲協作</strong>：「<strong>訓練在雲端、推論在邊緣</strong>」是主流設計，網路不穩時邊緣仍能運作。</li>
+      <li><strong>聯合學習（Federated Learning）</strong>：各節點用本地資料訓練，只上傳<strong>模型參數（權重、梯度）</strong>聚合，<strong>原始資料不離開本地</strong>，適合醫療、跨組織等敏感場域。</li>
+    </ul>
+    <h4>新趨勢：邊緣生成式 AI 與小型語言模型（SLM）</h4>
+    <p>SLM 是可在邊緣執行的輕量語言模型，用來把推論結果轉成<strong>設備狀態摘要、告警說明、操作建議</strong>；它是人機互動與決策支援的補充，<strong>不取代</strong>既有的感測與預測模型，也<strong>不直接介入設備控制</strong>。</p>
+    <h4>AI 倫理、治理與法規</h4>
+    <div class="tw"><table><thead><tr><th>議題</th><th>重點</th></tr></thead><tbody>
+      <tr><td>演算法偏差</td><td>資料不完整會造成系統性誤判；AI 定位為「<strong>輔助判斷</strong>」而非最終決策者</td></tr>
+      <tr><td>隱私與資料治理</td><td><strong>Privacy by Design</strong>：設計階段就納入保護，例如在邊緣端去識別化（只傳特徵值、骨架資訊）</td></tr>
+      <tr><td>可信任 AI</td><td>可預期、可解釋（<strong>XAI</strong>）、穩定，避免黑盒決策</td></tr>
+      <tr><td>治理與責任</td><td>模型版本管理、推論紀錄、人工介入機制；參考 <strong>ISO/IEC 42001</strong>、<strong>歐盟 AI Act</strong> 風險分級</td></tr>
+    </tbody></table></div>

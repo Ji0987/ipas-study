@@ -1,2 +1,59 @@
 
-    <p>（撰寫中）</p>
+    <p>感測器把溫度、壓力、振動、光線、化學成分等<strong>物理量或化學量的變化，轉換成電氣量（電壓、電流、電阻）的變化</strong>，又稱換能器（Transducer）。發展趨勢：智慧化（自我診斷、自我校正）、多參數量測、隨插即用、融合演算法、無線化，並從單機智慧化走向整線、整廠智慧化。</p>
+    <h4>感測器分類</h4>
+    <div class="tw"><table><thead><tr><th>分類依據</th><th>類別</th><th>例子</th></tr></thead><tbody>
+      <tr><td>是否自己產生電能</td><td><strong>主動式</strong>：不需外加電源（如熱電偶）<br><strong>被動式</strong>：需外加激發電源（加速規、應變規、麥克風）</td><td>熱電偶靠溫差自己產生電壓</td></tr>
+      <tr><td>是否接觸待測物</td><td>接觸式／非接觸式</td><td>微動開關（接觸）；光電、磁簧、霍爾開關、渦電流、紅外線測溫（非接觸）</td></tr>
+      <tr><td>輸出訊號</td><td>機械式；電子式分<strong>數位</strong>（0／1）、<strong>類比</strong>（連續）、<strong>脈衝</strong>（一連串 ON/OFF）</td><td>—</td></tr>
+      <tr><td>待測對象</td><td>物理感測器、化學感測器、生物感測器</td><td>酒精、煙霧偵測器是<strong>化學</strong>感測器；酵素、免疫、DNA 感測器是<strong>生物</strong>感測器</td></tr>
+    </tbody></table></div>
+    <h4>規格參數</h4>
+    <div class="tw"><table><thead><tr><th>參數</th><th>意義</th></tr></thead><tbody>
+      <tr><td><strong>誤差</strong></td><td>量測值 − 真實值；分靜態、動態誤差，或系統、隨機、人為誤差</td></tr>
+      <tr><td><strong>準度（Accuracy）</strong></td><td>量測結果與真值的接近程度；精確度 ＝（量測值 − 實際值）÷ 實際值 × 100%</td></tr>
+      <tr><td><strong>精度／重複性</strong></td><td>相同條件下多次量測的一致程度，變化越小越可靠</td></tr>
+      <tr><td><strong>靈敏度</strong></td><td>輸出訊號 ÷ 輸入物理量；量測微小振動要選<strong>靈敏度高</strong>的加速規</td></tr>
+      <tr><td><strong>解析度</strong></td><td>能量到的最小變化量；ADC 為 n 位元時可分成 2ⁿ 個等級，位元越少解析度越低</td></tr>
+      <tr><td>量測範圍</td><td>可正常量測的上下限</td></tr>
+      <tr><td>線性度</td><td>校準曲線與擬合直線的最大偏差占滿刻度的百分比，越小越好</td></tr>
+      <tr><td><strong>遲滯（Hysteresis）</strong></td><td>量測值上升與下降時，對同一值的輸出不同（兩條曲線不重合）；<strong>不是時間延遲</strong></td></tr>
+    </tbody></table></div>
+    <h4>感測原理</h4>
+    <div class="tw"><table><thead><tr><th>類型</th><th>原理</th><th>重點</th></tr></thead><tbody>
+      <tr><td><strong>壓電式</strong>（力量、振動）</td><td>壓電效應：受力產生<strong>電荷</strong>，與應力成正比</td><td>需電荷放大器；壓電式加速規輸出電荷</td></tr>
+      <tr><td><strong>應變規</strong></td><td><strong>壓阻效應</strong>：受力變形使電阻改變（受壓變長變細→電阻增加）</td><td>搭配<strong>惠斯登電橋</strong>量測微小電阻變化</td></tr>
+      <tr><td><strong>加速規</strong></td><td>牛頓第二定律 F = m×a，量質量塊的慣性力</td><td>壓阻式、壓電式、電容式（MEMS）；加速規質量需遠小於待測物（約 1/10）</td></tr>
+      <tr><td><strong>陀螺儀</strong></td><td>量<strong>角速度</strong>；機械式靠<strong>角動量守恆</strong>，MEMS 靠<strong>科氏力</strong></td><td>單位 dps；長時間會漂移，常與加速規以互補或卡爾曼濾波融合</td></tr>
+      <tr><td><strong>霍爾元件</strong></td><td>霍爾效應：磁場使電荷偏移產生電壓</td><td>量磁通密度、磁極、電流（間接）、位移、轉速、近接；<strong>不能量溫度</strong></td></tr>
+      <tr><td><strong>磁電式</strong></td><td><strong>法拉第</strong>電磁感應：線圈與磁鐵相對運動產生電壓</td><td>速度、振動量測</td></tr>
+      <tr><td><strong>光感測器</strong></td><td>光電效應：光傳導（光敏電阻、光二極體）、光發射、光伏特</td><td>環境光感測器多用<strong>光電二極體</strong></td></tr>
+      <tr><td>渦電流位移計</td><td>高頻磁場在金屬感應渦電流，改變線圈阻抗</td><td><strong>非接觸式</strong>；LVDT、刻度盤是接觸式</td></tr>
+    </tbody></table></div>
+    <h4>溫度感測器</h4>
+    <div class="tw"><table><thead><tr><th>種類</th><th>原理</th><th>重點</th></tr></thead><tbody>
+      <tr><td><strong>熱敏電阻</strong></td><td>半導體電阻隨溫度變化</td><td><strong>NTC</strong>：溫度升高電阻下降（最常見）；<strong>PTC</strong>：到居禮溫度電阻急升，用於電路保護；CTR：臨界溫度時電阻驟降</td></tr>
+      <tr><td><strong>RTD</strong>（如 Pt100）</td><td>金屬電阻隨溫度升高而增加</td><td>Pt100 在 0°C 為 100 Ω；R = R₀(1 + αT)，α≈0.00385（100°C 約 138.5 Ω）；靈敏度較低</td></tr>
+      <tr><td><strong>熱電偶</strong></td><td><strong>席貝克效應</strong>：兩種不同金屬一端焊接，溫差產生電位差</td><td>不需電源；查表以冷端 0°C 為準，須<strong>冷點補償</strong>；線徑越粗量測上限越高</td></tr>
+      <tr><td><strong>紅外線（非接觸）</strong></td><td>量物體的熱輻射</td><td>適合移動物、高溫；受放射率影響，額溫槍即此類</td></tr>
+    </tbody></table></div>
+    <p>電容式感測器多用於濕度、觸控與接近偵測，<strong>不是</strong>溫度感測器的類型。</p>
+    <h4>物聯網常見感測模組</h4>
+    <div class="tw"><table><thead><tr><th>模組</th><th>量測</th><th>原理與重點</th></tr></thead><tbody>
+      <tr><td><strong>HC-SR501（PIR）</strong></td><td>人體移動</td><td><strong>被動</strong>接收人體紅外線，白色半球是菲涅耳透鏡；不發射紅外線、偵測不到靜止的人；可調靈敏度與延遲；兼顧隱私</td></tr>
+      <tr><td><strong>DHT11</strong></td><td>溫濕度</td><td>電阻式濕度元件＋NTC，<strong>單線數位</strong>輸出；範圍 20～90% RH、0～50°C，約每 2 秒讀一次</td></tr>
+      <tr><td><strong>HC-SR04（超音波）</strong></td><td>距離</td><td>40 kHz 聲波，距離 ＝ 聲速(340 m/s) × 時間 ÷ 2；範圍約 2～400 cm；不受光線、顏色影響；倒車雷達、液位、避障</td></tr>
+      <tr><td><strong>ADXL345</strong></td><td>三軸加速度</td><td>MEMS 差動電容，I²C／SPI；計步、傾斜、自由落體與跌倒偵測；靜止時量到重力</td></tr>
+      <tr><td><strong>MPU6050（IMU）</strong></td><td>加速度＋角速度</td><td>六軸慣性測量單元；算出 roll、pitch、yaw；無人機、平衡車、隧道內慣性導航</td></tr>
+      <tr><td><strong>MQ-2</strong></td><td>可燃氣體、煙霧</td><td>SnO₂ 半導體加熱後，遇氣體電阻下降；需預熱；瓦斯外洩偵測</td></tr>
+      <tr><td><strong>光敏電阻（LDR）</strong></td><td>亮度</td><td>CdS，照度越強電阻越低；需分壓電路接 ADC；自動路燈</td></tr>
+    </tbody></table></div>
+    <h4>其他常考感測技術</h4>
+    <ul>
+      <li><strong>光學雷達（LiDAR）</strong>：發射脈衝雷射、量飛行時間，建立 3D 點雲；自駕車防碰撞、送餐機器人 SLAM。</li>
+      <li><strong>毫米波雷達</strong>：24／77／79 GHz，偵測距離遠、<strong>不受天候影響</strong>；盲點偵測、自動跟車。</li>
+      <li><strong>攝影機</strong>：辨識號誌、車道；夜間、雨霧中性能下降（與人眼相同）。</li>
+      <li><strong>PPG 光學心率</strong>：綠光 LED 照射皮膚，量測血流造成的吸光變化；刺青會使其失準。心電圖（ECG）量心臟電訊號。</li>
+      <li><strong>PM2.5 感測器</strong>：雷射照射微粒、量散射光推算濃度。<strong>pH 感測器</strong>：量氫離子（H⁺）濃度。</li>
+      <li>五感對照：攝影機＝視覺、麥克風＝聽覺、壓力感測器＝觸覺、<strong>氣體感測器＝嗅覺</strong>（氣壓感測器量大氣壓力）。</li>
+      <li>地磁感應器偵測停車格有無車輛；胎壓感測器（TPMS）量氣壓與溫度；光學指紋感測器由光源、稜鏡、CCD 組成。</li>
+    </ul>

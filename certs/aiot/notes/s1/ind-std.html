@@ -1,2 +1,53 @@
 
-    <p>（撰寫中）</p>
+    <p>工業 4.0 要求產線設備聯網、資料數位化。早期產線多用簡單可靠的 <strong>Modbus</strong>，但它<strong>沒有加密與身分驗證</strong>；現代工廠轉向內建資安機制、可跨廠牌互通的 <strong>OPC UA</strong>。</p>
+    <h4>封裝與解封裝</h4>
+    <p>工業網路常以五層模型（應用、傳輸、網際網路、資料連結、實體）說明。傳送端每往下一層就加上該層標頭（<strong>封裝</strong>），接收端逐層移除（<strong>解封裝</strong>）。以 Modbus 為例：指令先變成 PDU（功能碼＋資料），Modbus TCP 再加 MBAP 標頭交給 TCP/IP；Modbus RTU／ASCII 則加上裝置位址與 CRC／LRC 校驗碼，經 RS-232／RS-485 傳送。</p>
+    <h4>OPC UA（開放平台通訊統一架構）</h4>
+    <p>由 <strong>OPC 基金會</strong>制定的跨平台、開放、統一的工業通訊標準，是工業 4.0 的關鍵標準之一，對應 OSI 的<strong>第 7 層（應用層）</strong>。</p>
+    <div class="pills">
+      <span class="pill pbl">獨立性：不綁作業系統與硬體（跨平台）</span>
+      <span class="pill pcl">安全性：認證、授權、完整性、加密</span>
+      <span class="pill ptl">擴展性：可自訂服務與資訊模型</span>
+      <span class="pill">多語言實作：C++、C#、Java、Python</span>
+    </div>
+    <ul>
+      <li><strong>Client／Server 架構</strong>：Server 在設備端，收集控制器與感測器資料並轉成標準格式；Client 向 Server 要資料。</li>
+      <li><strong>設備聯網閘道器</strong>：把各廠牌的存取函式庫封裝在 OPC UA Server 中，對外提供統一存取方式；AI 系統透過閘道器讀取轉換後的 OPC UA 資料，不直接讀 PLC 原始訊號。</li>
+      <li><strong>資訊模型</strong>：以節點描述設備資料，<strong>NodeID 在資訊模型中不可重複</strong>。</li>
+      <li>讓設備、MES、ERP 之間的資料<strong>水平與垂直整合</strong>，支援預測性維護與製程優化。</li>
+    </ul>
+    <div class="tw"><table><thead><tr><th>資料存取方式</th><th>運作</th><th>例子</th></tr></thead><tbody>
+      <tr><td><strong>讀／寫（Read/Write）</strong></td><td>Client 主動讀取或寫入變數</td><td>讀產品重量、寫入新的轉速與進給率</td></tr>
+      <tr><td><strong>資料變更通知（Data Change Notification）</strong></td><td>訂閱變數，<strong>值改變時</strong>伺服器通知</td><td>刀具壽命低於門檻、溫度超過閾值</td></tr>
+      <tr><td><strong>方法（Method）</strong></td><td>遠端呼叫伺服器提供的方法</td><td>遠端啟動自動換刀程序</td></tr>
+      <tr><td><strong>事件通知（Event Notification）</strong></td><td>訂閱<strong>事件</strong>，發生時被動接收通知</td><td>緊急停機、機器手臂故障、系統日誌</td></tr>
+    </tbody></table></div>
+    <h4>MTConnect（機械工具連接協定）</h4>
+    <p>專為<strong>工具機</strong>資料交換制定的開放標準（免權利金），定義標準的設備參數名稱。特點：<strong>唯讀（只讀取設備資料，不寫入指令）</strong>、資料以 <strong>XML</strong> 表示、以 <strong>HTTP</strong> 傳輸，具可擴展性、互操作性、可讀性，可讀取機台參數。</p>
+    <div class="tl">
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">Device</div><div class="tlh">設備</div><div class="tls">數控工具機、機器人等，產生主軸轉速、進給速度、狀態等參數</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">Adapter</div><div class="tlh">適配器</div><div class="tls">用各廠牌函式庫（如 FANUC 的 FOCAS）取出資料並轉成 XML</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">Agent</div><div class="tlh">代理器（核心）</div><div class="tls">整合多個 Adapter 的資料，快取、格式化，以 HTTP RESTful API 提供</div></div></div>
+      <div class="tli"><div class="tld"></div><div class="tlc"><div class="tle">Application</div><div class="tlh">應用程式</div><div class="tls">生產監控、預測性維護、數據分析</div></div></div>
+    </div>
+    <h4>Modbus</h4>
+    <p>工業領域最常見的簡單協定，用於 PLC、溫控器、伺服驅動器。<strong>主從（Master/Slave、Client/Server）架構</strong>，<strong>不支援加密與身分驗證</strong>，在不受信任的網路中容易被監聽、竄改。</p>
+    <div class="tw"><table><thead><tr><th>模式</th><th>編碼</th><th>實體介面</th><th>錯誤檢查</th></tr></thead><tbody>
+      <tr><td><strong>Modbus RTU</strong></td><td>二進位（效率高）</td><td>RS-232／RS-485 串列</td><td><strong>CRC</strong></td></tr>
+      <tr><td><strong>Modbus ASCII</strong></td><td>ASCII（可讀性好）</td><td>RS-232／RS-485 串列</td><td><strong>LRC</strong></td></tr>
+      <tr><td><strong>Modbus TCP</strong></td><td>TCP/IP 封裝（MBAP 標頭）</td><td>乙太網路，<strong>埠號 502</strong></td><td>由 TCP 負責</td></tr>
+    </tbody></table></div>
+    <div class="tw"><table><thead><tr><th>資料區塊</th><th>讀寫</th><th>單位</th><th>位址</th><th>用途</th></tr></thead><tbody>
+      <tr><td>Coil（線圈）</td><td>可讀寫</td><td>1 位元</td><td>00001～</td><td>繼電器、開關的開／關</td></tr>
+      <tr><td>Discrete Input（離散輸入）</td><td>唯讀</td><td>1 位元</td><td>10001～</td><td>設備開關狀態</td></tr>
+      <tr><td>Input Register（輸入暫存器）</td><td>唯讀</td><td>16 位元</td><td>30001～</td><td>溫度、壓力等類比量測值</td></tr>
+      <tr><td>Holding Register（保持暫存器）</td><td>可讀寫</td><td>16 位元</td><td>40001～</td><td>設定值、配置參數</td></tr>
+    </tbody></table></div>
+    <div class="cal cwrn"><span>⚠️</span><div class="calbody">交換資料時雙方必須約定暫存器型態、位址、長度，以及<strong>資料型態與位元組次序（Endian）</strong>，否則讀到的數值會錯亂。</div></div>
+    <h4>其他工業介面與設備</h4>
+    <ul>
+      <li><strong>IO-Link</strong>（IEC 61131-9）：點對點串列通訊，連接感測器、致動器與控制器，最長 20 公尺，支援參數設定與診斷；速率低，只傳製程資料，不傳大型檔案。</li>
+      <li><strong>PLC（可程式邏輯控制器）</strong>：高即時性、抗干擾、長期穩定，負責控制製程設備；單晶片微控制器較便宜、彈性高。</li>
+      <li><strong>RESTful API</strong>：以 URI 識別資源，用 HTTP 方法做 CRUD（GET 讀、POST 建、PUT 改、DELETE 刪），客戶端與伺服器端分離，常用於系統串接。</li>
+      <li><strong>MQTT</strong>：發布者、訂閱者、Broker 三角色，發布與訂閱完全解耦；Keep Alive、遺囑（LWT）、TLS 與 QoS 見 <a class="xref" href="#middleware" onclick="event.preventDefault();gotoNote('middleware')">中介軟體與平台</a>。</li>
+    </ul>

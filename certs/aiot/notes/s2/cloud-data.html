@@ -1,2 +1,68 @@
 
-    <p>（撰寫中）</p>
+    <p>評鑑內容「雲端環境數據收集與平台設計」與能力指標中的「<strong>雲端資料交換格式、資料庫設計基礎、開源軟體規劃與授權規範</strong>」。雲端服務模式與中介軟體的基礎見考科一 <a class="xref" href="#middleware" onclick="event.preventDefault();gotoNote('middleware')">中介軟體與平台</a>。</p>
+    <h4>資料交換格式</h4>
+    <div class="tw"><table><thead><tr><th>格式</th><th>特性</th></tr></thead><tbody>
+      <tr><td><strong>JSON</strong></td><td>鍵值對（<code>{"temp": 25.3}</code>），{ } 物件、[ ] 陣列、字串用雙引號；簡潔、體積小、多語言支援、任何文字編輯器可改；<strong>可表達層級（巢狀）結構</strong>；Web API 主流</td></tr>
+      <tr><td><strong>XML</strong></td><td>以標籤表示，可表達層級但較冗長；MTConnect、SOAP 使用</td></tr>
+      <tr><td><strong>CSV</strong></td><td>逗號分隔的平面表格，無法表達層級</td></tr>
+      <tr><td>Protobuf、MessagePack</td><td>二進位格式，資料量小、<strong>省頻寬</strong></td></tr>
+    </tbody></table></div>
+    <div class="cal cwrn"><span>⚠️</span><div class="calbody">圖片、影片等<strong>二進位資料不適合放進 JSON</strong>（需 Base64，體積增加約 1/3），應存成檔案，JSON 只放路徑。<strong>MQTT 是協定不是格式</strong>；EDI 是企業間商業文件標準；HTML、DOC 不是開放資料的格式。</div></div>
+    <h4>Web 服務與即時呈現</h4>
+    <ul>
+      <li><strong>RESTful API</strong>：URI 表示資源，GET 查詢、POST 新增、PUT 更新、DELETE 刪除（沒有 QUERY）；優點是簡單、可擴展、跨平台，<strong>安全性要另外處理</strong>。GET 參數在網址上，不可傳機敏資料。</li>
+      <li><strong>WoT（Web of Things）</strong>：以 URL 表示裝置，用網頁技術開發。</li>
+      <li>網頁即時更新數據：<strong>WebSocket</strong>（持續雙向連線，伺服器負擔最小）＞ Long Polling ＞ <strong>AJAX</strong>（只更新局部資料）＞ 整頁重新載入（延遲最大、體驗最差）。WebSocket 本身不加密，要用 wss://。</li>
+      <li>傳感資料最常用 <strong>MQTT</strong>（發布／訂閱、非同步、低頻寬、QoS、斷線重連，適合網路品質差時）；也常用 HTTP、AMQP。MQTT 與 CoAP 的標頭都是二進位格式；HTTP 沒有 QoS 等級。</li>
+    </ul>
+    <h4>資料庫</h4>
+    <div class="cmpg">
+      <div class="cmpc"><h5 style="color:var(--blue)">關聯式（SQL）</h5><ul><li>結構化資料、預先定義資料表</li><li><strong>ACID</strong> 交易</li><li>SQL Server、Oracle、MySQL、MariaDB、PostgreSQL、SQLite</li></ul></div>
+      <div class="cmpc"><h5 style="color:var(--teal)">NoSQL（Not Only SQL）</h5><ul><li>非結構、半結構資料，鬆散樹狀結構（概念源自 Lotus Notes）</li><li><strong>水平擴充</strong>，多採 BASE（最終一致性）；部分也支援交易</li><li>鍵值（Redis）、文件（<strong>MongoDB</strong>，存 JSON，可建索引）、欄族（HBase、Cassandra）、圖形（Neo4j）</li></ul></div>
+    </div>
+    <ul>
+      <li><strong>觸發程序（TRIGGER）</strong>：資料變動時依條件自動執行動作。</li>
+      <li><strong>複寫（Replication）</strong>：多份複本放不同主機，故障時可還原，恢復最快；<strong>分片（Sharding）</strong>：資料切分到多台主機，水平擴展。</li>
+      <li><strong>記憶體快取</strong>：加速存取、需叢集擴展與一致性雜湊，不負責永續儲存。</li>
+      <li><strong>NAS</strong>：資料不必依附在某台伺服器，多台裝置共用。</li>
+      <li>大量資料流程：<strong>Device → Access Server → Message Queue → NoSQL</strong>，以訊息佇列緩衝尖峰。</li>
+    </ul>
+    <h4>雲端服務與平台</h4>
+    <div class="tw"><table><thead><tr><th>模式</th><th>例子</th></tr></thead><tbody>
+      <tr><td><strong>IaaS</strong>：虛擬機、儲存、網路</td><td>EC2、GCP Compute Engine、Azure VM、Hicloud 租用主機</td></tr>
+      <tr><td><strong>PaaS</strong>：開發與執行平台</td><td>Google App Engine、Heroku（GCP 以 IaaS＋PaaS 為主）</td></tr>
+      <tr><td><strong>SaaS</strong>：直接用的軟體</td><td>Gmail、Google Docs、Google Meet、雲端儲存；自己開發給使用者用的服務</td></tr>
+    </tbody></table></div>
+    <ul>
+      <li>金字塔由上而下：<strong>SaaS → PaaS → IaaS</strong>。雲端特性：隨時存取、可量測、資源池共享、以<strong>虛擬化</strong>為基礎。</li>
+      <li><strong>公有雲</strong>：多家公司共用平台、業者維運、受法規限制（感測器不能直接上雲，需閘道器）；<strong>私有雲</strong>：自行維運，外部以 VPN 連入，仍有資安風險；<strong>混合雲</strong>：機敏資料自管、尖峰借用公有雲。</li>
+      <li><strong>Docker</strong>：作業系統等級虛擬化、容器共用主機核心（不必各裝 OS）、輕量、可安裝在 Linux／Windows／macOS；元件有 client、daemon、libcontainer、image。</li>
+      <li>虛擬化效能受硬碟速度、記憶體、CPU 影響，儲存空間大小影響不大；網路虛擬化可讓同一台主機的虛擬機分別接內外網。</li>
+      <li>雲平台功能：收集、儲存、查詢、分析、<strong>數據變更通知</strong>、裝置認證與身分識別、OTA 更新；裝置<strong>主動上傳</strong>、平台接收；不負責開發裝置與近端通訊。</li>
+      <li>物聯網雲平台：AWS IoT Core、Azure IoT Hub、GCP；IBM Cloud 是整體平台名稱；MediaTek LinkIt 是開發板。</li>
+      <li>設計考量：自動延展、線性擴展的儲存、快取、資料<strong>分散</strong>備份（不是集中）、即時部署；最重要的是<strong>數據傳輸速度</strong>。開放原始碼是為了降低成本，不是提高門檻。</li>
+    </ul>
+    <h4>資料分析與視覺化</h4>
+    <ul>
+      <li><strong>資料視覺化</strong>的目的是提高理解與決策能力：<strong>折線圖</strong>看隨時間的變化（鍋爐溫度）、柱狀圖比較類別、圓餅圖看比例、散點圖看關係、樹狀圖看階層；心智圖不是數據視覺化。</li>
+      <li>時間序列分析、傅立葉轉換、神經網路（LSTM）處理時序資料。</li>
+      <li>NoSQL 分散式分析以 &lt;Key, Value&gt; 分類與建立關聯（MapReduce）；Spark 用記憶體運算，比 Hadoop MapReduce 快。</li>
+      <li>資料分析可發掘商機、偵測異常、找出客戶需求；<strong>開放資料（Open Data）</strong>可補充自建感測資料，格式為 CSV、JSON、XML；須考慮隱私（個人報稅資料不會開放）。</li>
+      <li>嵌入式 Linux 空間不足時，<strong>Shell Script</strong> 不需額外安裝執行環境。</li>
+    </ul>
+    <h4>開源軟體與授權</h4>
+    <div class="tw"><table><thead><tr><th>類別</th><th>原始碼</th><th>特性</th></tr></thead><tbody>
+      <tr><td><strong>自由軟體</strong>（Free Software）</td><td>公開</td><td>使用、研究、散布、改良（含散布改良版）四大自由；以 GPL 授權，仍有著作權</td></tr>
+      <tr><td><strong>開源軟體</strong></td><td>公開</td><td>可商用、<strong>不一定免費</strong>；不能要求一起散佈的其他軟體也開源</td></tr>
+      <tr><td>公共領域軟體</td><td>—</td><td>放棄著作權</td></tr>
+      <tr><td>免費軟體（Freeware）</td><td>通常不公開</td><td>免費使用、作者保留著作權</td></tr>
+      <tr><td>共享軟體（Shareware）</td><td>不公開</td><td>試用期或功能限制；版權屬原作者，不可破解、改作販售</td></tr>
+    </tbody></table></div>
+    <div class="tw"><table><thead><tr><th>授權</th><th>要求</th></tr></thead><tbody>
+      <tr><td><strong>GPL</strong></td><td><strong>Copyleft</strong>（標誌是反寫的 C），衍生作品必須以 GPL 開源，不能改成閉源；要求最嚴格</td></tr>
+      <tr><td><strong>LGPL</strong></td><td>以<strong>動態連結</strong>呼叫函式庫不視為衍生作品，私有軟體可使用</td></tr>
+      <tr><td><strong>BSD、MIT</strong></td><td>寬鬆：保留版權聲明即可，可閉源商用</td></tr>
+      <tr><td><strong>Apache</strong></td><td>寬鬆，可再發佈為開源或商業軟體；<strong>商標</strong>（羽毛、Tomcat 貓）另需書面授權</td></tr>
+      <tr><td>雙重授權（MySQL）</td><td>選 GPL 免費但受 GPL 規範；選商業授權要付費、不受 GPL 規範</td></tr>
+    </tbody></table></div>
+    <p>基於開源軟體開發<strong>不需徵得原作者同意</strong>，但要保留著作權聲明；開源軟體也必須遵守授權。常見開源軟體：Linux、Apache、MySQL、vim、Eclipse、FileZilla；Microsoft Office、IIS 不是。</p>

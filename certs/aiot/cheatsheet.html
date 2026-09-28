@@ -1,2 +1,51 @@
 
-    <p>（撰寫中）</p>
+    <h4>情境 → 通訊技術</h4>
+    <div class="tw"><table><thead><tr><th>情境</th><th>選擇</th></tr></thead><tbody>
+      <tr><td>行動支付、門禁、快速配對</td><td><strong>NFC</strong>（13.56 MHz、約 4 cm）</td></tr>
+      <tr><td>穿戴裝置、Beacon 推播</td><td><strong>BLE</strong></td></tr>
+      <tr><td>室內大量節點、自癒網狀</td><td><strong>ZigBee</strong>（802.15.4、250 kbps）</td></tr>
+      <tr><td>公分級室內定位、數位車鑰匙</td><td><strong>UWB</strong></td></tr>
+      <tr><td>影像、插電設備、原生 IP</td><td><strong>Wi-Fi</strong></td></tr>
+      <tr><td>電池＋遠距＋少量資料（自建）</td><td><strong>LoRa</strong>（免授權）</td></tr>
+      <tr><td>電池＋遠距＋少量資料（電信）</td><td><strong>NB-IoT</strong>（授權、不支援移動）</td></tr>
+      <tr><td>移動中＋中等資料</td><td><strong>LTE Cat.1</strong></td></tr>
+      <tr><td>影像＋即時／不容延遲</td><td><strong>4G Cat.4／5G eMBB</strong>／<strong>5G URLLC</strong></td></tr>
+      <tr><td>零售盤點、物流、ETC</td><td><strong>UHF RFID</strong>（台灣 922～928 MHz）</td></tr>
+      <tr><td>動物晶片、潮濕與金屬環境</td><td><strong>LF RFID</strong>（125～134 kHz）</td></tr>
+    </tbody></table></div>
+    <h4>應用層協定</h4>
+    <div class="tw"><table><thead><tr><th>協定</th><th>底層</th><th>模式</th><th>記住</th></tr></thead><tbody>
+      <tr><td><strong>MQTT</strong></td><td>TCP</td><td>發布／訂閱＋Broker</td><td>標頭 2 B；QoS 0 最多一次、1 至少一次、2 恰好一次；1883 明文、8883 TLS</td></tr>
+      <tr><td><strong>CoAP</strong></td><td>UDP</td><td>請求／回應（REST）</td><td>標頭 4 B；CON 訊息可重傳</td></tr>
+      <tr><td><strong>HTTP</strong></td><td>TCP</td><td>請求／回應</td><td>標頭大、無 QoS；GET 不傳機敏資料</td></tr>
+      <tr><td><strong>WebSocket</strong></td><td>TCP</td><td>持續雙向</td><td>即時儀表板、視訊通話</td></tr>
+    </tbody></table></div>
+    <h4>硬體介面</h4>
+    <div class="tw"><table><thead><tr><th>介面</th><th>線</th><th>同步</th><th>雙工</th></tr></thead><tbody>
+      <tr><td><strong>UART</strong></td><td>TX、RX（交叉）</td><td>非同步</td><td>全雙工</td></tr>
+      <tr><td><strong>I²C</strong></td><td>SDA、SCL（上拉到 VCC、以位址區分）</td><td>同步</td><td>半雙工</td></tr>
+      <tr><td><strong>SPI</strong></td><td>SCLK、MOSI、MISO、CS</td><td>同步</td><td>全雙工</td></tr>
+      <tr><td><strong>RS-485</strong></td><td>一對雙絞線（差動）</td><td>非同步</td><td>多點、1200 m</td></tr>
+    </tbody></table></div>
+    <h4>容易混淆區分</h4>
+    <div class="tw"><table><thead><tr><th>容易混淆</th><th>區分關鍵</th></tr></thead><tbody>
+      <tr><td>分類 vs. 迴歸</td><td>故障診斷＝分類（離散）；剩餘壽命 RUL＝迴歸（連續）</td></tr>
+      <tr><td>CNN vs. RNN／LSTM</td><td>影像、AOI → CNN；時間序列 → RNN／LSTM</td></tr>
+      <tr><td>NPU vs. GPU vs. FPGA</td><td>NPU 推論專用低功耗；GPU 平行但耗電；FPGA 可重配置低延遲</td></tr>
+      <tr><td>加速度計 vs. 陀螺儀</td><td>加速度（含重力、傾斜）vs. 角速度（轉動）；方位角要靠電子羅盤</td></tr>
+      <tr><td>主動 vs. 被動 RFID</td><td>電池、主動發射、遠 vs. 無電池、反射、近、便宜</td></tr>
+      <tr><td>RFID vs. NFC</td><td>讓物被看見（遠、批次）vs. 人與物互動（近、雙向）</td></tr>
+      <tr><td>OPC UA vs. MTConnect</td><td>跨平台、有資安、Client/Server、可讀寫 vs. 工具機專用、XML＋HTTP、唯讀</td></tr>
+      <tr><td>Modbus RTU vs. ASCII vs. TCP</td><td>二進位＋CRC vs. ASCII＋LRC vs. 乙太網路埠 502</td></tr>
+      <tr><td>IaaS vs. PaaS vs. SaaS</td><td>虛擬機 EC2 vs. 開發平台 App Engine vs. 直接用的軟體 Gmail；由下而上 I→P→S</td></tr>
+      <tr><td>SQL vs. NoSQL</td><td>結構化、ACID vs. 半／非結構、水平擴充</td></tr>
+      <tr><td>Replication vs. Sharding</td><td>多份複本（容錯）vs. 資料切分（擴展）</td></tr>
+      <tr><td>雜湊 vs. 加密 vs. 簽章</td><td>完整性（不可逆）vs. 機密性 vs. 不可否認性（私鑰簽、公鑰驗）</td></tr>
+      <tr><td>RPO vs. RTO</td><td>會遺失多少資料 vs. 多久恢復服務</td></tr>
+      <tr><td>GPL vs. LGPL vs. MIT／BSD</td><td>衍生作品須開源 vs. 動態連結可閉源 vs. 保留聲明即可</td></tr>
+      <tr><td>Freeware vs. Free Software</td><td>免費使用 vs. 自由（開放原始碼、可修改散布）</td></tr>
+      <tr><td>準度 vs. 精度 vs. 遲滯</td><td>接近真值 vs. 重複一致 vs. 上升下降曲線不重合（非延遲）</td></tr>
+      <tr><td>NTC vs. PTC</td><td>溫度升電阻降 vs. 到居禮溫度電阻急升</td></tr>
+      <tr><td>有源 vs. 無源蜂鳴器</td><td>通電就固定音調 vs. 需輸入方波、可播旋律</td></tr>
+    </tbody></table></div>
+    <div class="fm"><div class="fml">常用數字與公式</div>超音波距離 = 340 m/s × 時間 ÷ 2<br>LED 限流電阻 R = (Vcc − V_LED) ÷ I<br>Pt100：R = 100 × (1 + αT)，α ≈ 0.00385<br>dBm = 10 log₁₀(P / 1 mW)　→ 1 W = 30 dBm<br>週期 T = 1 / f；PWM 高電位 = T × 工作週期<br>UART 8N1 一字元 = 10 bit；9600 bps ≈ 1.04 ms／字元<br>n 位元 ADC = 2ⁿ 個等級；32 條位址線 = 4 GB<br>網路位址 = IP AND 子網路遮罩<button class="cpbtn" onclick="copyFm(this,'超音波距離 = 340 × 時間 ÷ 2\nLED 限流電阻 R = (Vcc − V_LED) ÷ I\nPt100：R = 100 × (1 + αT)\ndBm = 10 log10(P / 1 mW)，1 W = 30 dBm\n週期 T = 1 / f\nUART 8N1 一字元 10 bit\nn 位元 ADC = 2^n 個等級\n網路位址 = IP AND 子網路遮罩')">全複製</button></div>

@@ -1,2 +1,34 @@
 
-    <p>（撰寫中）</p>
+    <p>智慧製造不只是自動化，而是結合<strong>自動化設備、物聯網、大數據、雲端運算與 AI</strong>，讓設備能收集數據、分析並自主應變，進而優化流程、降低成本。只做到生產自動化、沒有數據分析，不能稱為智慧製造。</p>
+    <div class="cal cinf"><span>📖</span><div class="calbody">工業通訊協定細節見 <a class="xref" href="#ind-std" onclick="event.preventDefault();gotoNote('ind-std')">工業通訊標準與資訊模型</a>；預測性維護與智慧工廠案例見 <a class="xref" href="#aiot-cases" onclick="event.preventDefault();gotoNote('aiot-cases')">AIoT 應用案例</a>。</div></div>
+    <h4>智慧工廠的物聯網技術</h4>
+    <ul>
+      <li><strong>自動感測</strong>：感測器偵測環境、設備、機台、產線狀態並上傳平台；在製品追蹤以 RFID、條碼與機台感測器自動記錄，而不是人工輸入。</li>
+      <li><strong>AI 視覺辨識</strong>：攝影機＋AI 模型做產品瑕疵檢測，取代人工目檢、降低成本。</li>
+      <li><strong>預測性維護</strong>：分析振動、電流、溫度，在故障前安排維修。</li>
+      <li><strong>邊緣運算</strong>：產線旁的主機就地判斷，立即剔除瑕疵品；中央主機彙整分析與報表。</li>
+      <li><strong>關燈工廠（Lights-out Factory）</strong>：以 AI、自動化、機械手臂讓產線無人運作，不需要現場作業員。</li>
+      <li><strong>數位化品質紀錄</strong>：例如改用具網路功能的數位扭力扳手，每次鎖緊都上傳扭力值自動查核、可追溯，而不是只靠人工互相檢查或修改手冊。</li>
+    </ul>
+    <h4>控制與通訊</h4>
+    <div class="tw"><table><thead><tr><th>項目</th><th>重點</th></tr></thead><tbody>
+      <tr><td><strong>PLC</strong></td><td>工廠自動化中負責<strong>控制製程設備</strong>；即時性與穩定性高。選用 PLC 是為了控制與監測產線、提升效率品質、與其他設備交換資料；良率預測、數據分析、雲端通訊、流程排程由上層系統（MES、SCADA、雲端）負責</td></tr>
+      <tr><td><strong>OPC UA</strong></td><td>為工業自動化而發展的通訊協定，讓不同廠牌設備與 MES、SCADA 互通</td></tr>
+      <tr><td><strong>Modbus</strong></td><td>雙方要約定資料型態與位元組次序；RTU 走序列、TCP 走乙太網路</td></tr>
+      <tr><td><strong>ISO 13849</strong></td><td>機械安全標準：機器控制系統中安全相關部分的設計（性能等級 PL），是基本的功能安全標準</td></tr>
+    </tbody></table></div>
+    <h4>流程優化與成本控制</h4>
+    <div class="tw"><table><thead><tr><th>手段</th><th>效益</th></tr></thead><tbody>
+      <tr><td>設備聯網與即時監控（儀表板）</td><td>掌握設備狀態與生產進度，及早發現異常、延長設備壽命</td></tr>
+      <tr><td>預測性維護</td><td>避免非預期停機與過度保養，降低維修成本</td></tr>
+      <tr><td>AI 瑕疵檢測</td><td>降低人工成本與漏檢率，提高一致性</td></tr>
+      <tr><td>在製品與物料追蹤</td><td>透明化工時與進度，整合人、機、料、單</td></tr>
+      <tr><td>能耗監測</td><td>以電流感測掌握負載與耗電，節能減碳</td></tr>
+      <tr><td>數位孿生</td><td>在虛擬環境模擬調整參數，驗證後再套用實體產線</td></tr>
+    </tbody></table></div>
+    <h4>導入效益與風險評估</h4>
+    <ul>
+      <li>以<strong>經濟、品質、效率</strong>評估是否達成目標效益，並檢證服務與成效之間的關係。</li>
+      <li>同時評估資安風險（設備被入侵、資料外洩），並考慮對規劃設計人員的負荷。</li>
+      <li>系統架構採 IT 與 OT 融合；資料經閘道器轉為標準格式（如 OPC UA）再供分析。</li>
+    </ul>

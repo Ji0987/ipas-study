@@ -1,2 +1,52 @@
 
-    <p>（撰寫中）</p>
+    <p>考科二從<strong>系統整合</strong>的角度看物聯網：依應用需求挑選感測元件、通訊技術、運算平台與雲端服務，組成完整的系統。三層架構與通訊技術的原理在考科一，這裡著重「<strong>怎麼選、怎麼組</strong>」。</p>
+    <div class="cal cinf"><span>📖</span><div class="calbody">相關基礎：<a class="xref" href="#iot-arch" onclick="event.preventDefault();gotoNote('iot-arch')">物聯網架構與功能</a>（三層架構、RFID、NFC）、<a class="xref" href="#iot-protocol" onclick="event.preventDefault();gotoNote('iot-protocol')">常見通訊協定與網路層技術</a>（無線技術比較）、<a class="xref" href="#aiot-cases" onclick="event.preventDefault();gotoNote('aiot-cases')">AIoT 應用案例</a>（各領域應用）。</div></div>
+    <h4>系統組成</h4>
+    <div class="tw"><table><thead><tr><th>元件</th><th>角色</th><th>例子</th></tr></thead><tbody>
+      <tr><td>感測器／致動器</td><td>資料來源（終端）；致動器執行控制</td><td>溫濕度、PIR、地磁感測器；繼電器、馬達</td></tr>
+      <tr><td>控制器</td><td>讀取感測器、控制周邊</td><td>Arduino、ESP32、PLC</td></tr>
+      <tr><td>閘道器（Gateway）</td><td>協定轉換（如 ZigBee → TCP/IP）、彙整、邊緣運算</td><td>樹莓派、工業電腦、智慧家庭 Hub</td></tr>
+      <tr><td>網路</td><td>把資料送到平台</td><td>Wi-Fi、4G/5G、LoRa、NB-IoT、乙太網路</td></tr>
+      <tr><td>雲端平台</td><td>收集、儲存、分析、通知、裝置管理</td><td>AWS IoT Core、Azure IoT Hub</td></tr>
+      <tr><td>應用介面</td><td>呈現與操作</td><td>手機 App、網頁儀表板</td></tr>
+    </tbody></table></div>
+    <p><strong>M2M（Machine to Machine）</strong>：機器之間透過網路直接交換資訊、協同運作；<strong>技術標準化與共通性</strong>是 M2M 與跨平台物聯網發展最基本的條件。</p>
+    <h4>依情境選通訊技術</h4>
+    <div class="tw"><table><thead><tr><th>情境</th><th>適合</th><th>不適合的原因</th></tr></thead><tbody>
+      <tr><td>手機遙控家電、智慧插座</td><td>Wi-Fi、藍牙</td><td>NFC 距離只有幾公分</td></tr>
+      <tr><td>城市路燈、停車格、水電錶（分散、少量、電池）</td><td>LoRa、NB-IoT</td><td>藍牙、ZigBee、Wi-Fi 距離太短</td></tr>
+      <tr><td>計程車、公車、冷鏈貨車（移動中、需即時）</td><td>4G LTE（＋GPS）</td><td>NB-IoT 不支援移動、速率低；Wi-Fi 無法在路上使用</td></tr>
+      <tr><td>即時影像、視訊通話</td><td>Wi-Fi、4G/5G；網頁端用 WebSocket</td><td>NB-IoT、LoRa 頻寬太低</td></tr>
+      <tr><td>室內大量感測節點、需要自癒</td><td>ZigBee（網狀）</td><td>手機需透過閘道器</td></tr>
+      <tr><td>室內高精度定位</td><td>UWB（公分級）＞藍牙、Wi-Fi（公尺級）</td><td>GPS 室內收不到</td></tr>
+      <tr><td>零售盤點、物流</td><td>UHF RFID（＋二維條碼）</td><td>超音波、紅外線無法識別物品</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">耗電由低到高：NFC ＜ BLE ＜ Wi-Fi ＜ 4G／5G。傳輸距離：NB-IoT、LoRa（數公里）＞ Wi-Fi、ZigBee、藍牙（數十公尺）＞ NFC（公分）。LoRa 使用<strong>免授權頻段</strong>，NB-IoT 使用<strong>授權頻段</strong>。</div></div>
+    <h4>系統設計考量</h4>
+    <ul>
+      <li><strong>以使用者需求為出發點</strong>，重視使用體驗；只追求功能炫酷不是好設計。</li>
+      <li><strong>感測器節點</strong>：低功耗優先、低成本、支援大量節點；單一節點故障不應讓整體失效；功耗大不代表資料更完整。</li>
+      <li><strong>電源</strong>：偏遠地區用太陽能；穿戴裝置用電池或無線充電；固定設備可用 PoE。讓感測器把<strong>電量</strong>連同資料回傳，後端可自動監控電力。</li>
+      <li><strong>資料量</strong>：大量感測器同時上傳時，先在邊緣把原始資料轉成<strong>事件</strong>再上傳，可大幅節省頻寬。</li>
+      <li><strong>隱私與資安</strong>：收集消費者行為要遵守隱私法規；無線訊號比有線更容易被竊聽。</li>
+      <li><strong>擴充性</strong>：支援多種裝置、據點與感測器增加時的導入步驟、感測間隔可調整。<strong>運作維護</strong>：通訊成本控制、遠端閘道器維運、故障排除方法。</li>
+      <li><strong>邊緣運算</strong>：在感測端附近即時處理（自駕車、路口號誌、產線瑕疵剔除），降低延遲、避免中心伺服器過載；邊緣主機通常比雲端設備便宜。</li>
+      <li><strong>軟體定義網路（SDN）</strong>：集中化、自動化管理網路，動態配置頻寬，便於快速增加 IoT 設備。</li>
+    </ul>
+    <h4>常見應用中的元件</h4>
+    <div class="tw"><table><thead><tr><th>應用</th><th>感知層</th><th>網路層</th></tr></thead><tbody>
+      <tr><td>智慧停車</td><td>地磁感測器、超音波車位偵測器</td><td>NB-IoT</td></tr>
+      <tr><td>冷鏈物流</td><td>溫度感測器＋GPS</td><td>4G 行動網路</td></tr>
+      <tr><td>智慧路燈</td><td>光感應器＋紅外線人體感測器</td><td>LoRa</td></tr>
+      <tr><td>穿戴健康</td><td>PPG（脈搏、血氧）、加速度計（步數、跌倒）、陀螺儀</td><td>BLE 連手機</td></tr>
+      <tr><td>智慧電網</td><td>智慧電錶（雙向資訊）</td><td>—</td></tr>
+      <tr><td>車聯網</td><td>OBD 車載診斷（車況、駕駛行為；位置要靠 GPS）</td><td>V2X、4G/5G</td></tr>
+      <tr><td>人流分析</td><td>監視攝影機＋AI</td><td>—</td></tr>
+    </tbody></table></div>
+    <h4>藍牙與無線補充</h4>
+    <ul>
+      <li>BLE 支援點對點、廣播、Mesh（多對多），不採用環狀架構；藍牙 4.0 含經典、高速、低功耗三種模式（Mesh 是之後的規格）；藍牙 5.0 速率 2 Mbps、長距離約 300 m。</li>
+      <li>BLE <strong>GATT</strong> 為 Client／Server 架構，連線即可讀寫，不一定要配對。</li>
+      <li>IEEE 802.11 速度：11ac ＞ 11a、11g（54 Mbps）＞ 11b（11 Mbps）。</li>
+      <li>路由器以路由表記錄目的網路資訊。</li>
+    </ul>

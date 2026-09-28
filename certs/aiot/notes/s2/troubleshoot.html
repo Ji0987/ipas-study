@@ -1,2 +1,58 @@
 
-    <p>（撰寫中）</p>
+    <p>故障排除的原則：<strong>先觀察範圍、再由簡而繁</strong>。先判斷是單一設備還是整個系統出問題、是持續還是偶發，再從最基本的電源與實體連線檢查起，最後才更換設備或回復韌體。</p>
+    <h4>判斷問題範圍</h4>
+    <div class="tw"><table><thead><tr><th>現象</th><th>最可能的方向</th></tr></thead><tbody>
+      <tr><td><strong>所有</strong>設備都讀不到</td><td>系統共同的問題：軟硬體、電源、網路（不會是個別標籤遺失）</td></tr>
+      <tr><td><strong>只有一個</strong>感測器沒資料</td><td>集中處理該設備：先重新啟動它，再檢查</td></tr>
+      <tr><td>各自正常、但<strong>彼此收不到</strong></td><td>中間的通訊環節：天線、網路</td></tr>
+      <tr><td><strong>偶爾</strong>異常、大部分時間正常</td><td>時有時無的干擾源（Wi-Fi、微波爐）</td></tr>
+      <tr><td>只在<strong>特定時段</strong>出問題（夏天中午、運作兩三小時後）</td><td>過熱（CPU 降頻、當機），檢查散熱</td></tr>
+      <tr><td>數值合理但變了（冷藏溫度升高）</td><td>感測與傳輸正常，是被測環境本身改變（如出風口被擋住）</td></tr>
+      <tr><td>數值偶爾不準</td><td>更換、校準感測器，過濾極端值；提高頻寬沒有用</td></tr>
+    </tbody></table></div>
+    <div class="cal ctip"><span>💡</span><div class="calbody">第一步通常是：<strong>檢查電源與實體線路</strong>、<strong>檢查感測器原始讀值</strong>或<strong>重新啟動</strong>（成本最低）。直接換設備、重灌軟體、全部拆掉重新部署都不是優先做法。確認「沒電」的方法是：換電池後恢復訊號。</div></div>
+    <h4>量測工具</h4>
+    <div class="tw"><table><thead><tr><th>工具</th><th>用途</th></tr></thead><tbody>
+      <tr><td><strong>三用電表</strong></td><td>量電壓（確認供電）、電流、電阻；<strong>歐姆檔</strong>判斷短路或開路（需斷電）；不能量振盪器頻率</td></tr>
+      <tr><td><strong>示波器</strong></td><td>看電壓隨時間的波形；主動式探棒輸入電容小、負載效應小，適合高速低電壓邏輯訊號</td></tr>
+      <tr><td><strong>邏輯分析儀</strong></td><td>擷取多路數位訊號，解析 I²C／SPI／UART；同步模式做狀態分析、非同步模式做時序分析；可觸發、儲存，不能消除雜訊</td></tr>
+      <tr><td><strong>頻譜分析儀</strong></td><td>看各頻率的能量分布，找出無線干擾源（如 UHF RFID 頻段的干擾）；Wi-Fi 掃描器只看得到 Wi-Fi</td></tr>
+    </tbody></table></div>
+    <h4>無線與網路問題</h4>
+    <ul>
+      <li><strong>訊號弱</strong>：檢查天線安裝、周遭干擾源、改善位置避開障礙物、使用品質較好的天線、加訊號增強器。<strong>SNR 越高訊號品質越好</strong>。</li>
+      <li><strong>碰撞</strong>：錯開傳送時間、換頻率或頻道、防碰撞技術；加大功率、加天線、增加重送次數都無法避免碰撞。</li>
+      <li><strong>訊號強度正常但傳輸慢</strong>：頻寬不足（使用者增加、推播排隊）。</li>
+      <li><strong>燈號顯示已連線但傳不出資料</strong>：IP 衝突、網段不同、閘道設定錯誤。</li>
+      <li><strong>金屬容器</strong>（冷藏車廂）會屏蔽無線訊號，天線或傳輸模組要裝在外面；<strong>紅外線</strong>系統失效多半是被東西擋住。</li>
+      <li>網路指令判讀：IP 可連但網域名稱不行 → DNS 問題；ping 逾時 → 設備關機或 ICMP 被擋，不一定是斷線；ssh 出現登入提示 → 網路與 sshd 都正常。</li>
+      <li><strong>HTTP 狀態碼</strong>：404 找不到資源、202 處理中、429 請求過多、300 多個資源可選。</li>
+      <li>公開資料與實況不符 → 資料提供端沒有更新；App 沒推播但其他 App 能定位 → 使用者關閉了該 App 的位置權限。</li>
+    </ul>
+    <h4>RFID 問題</h4>
+    <ul>
+      <li><strong>讀取率不佳</strong>：避開干擾源、減慢輸送帶速度（延長停留時間）；冷凍食品、含水物品不易讀取；金屬物品用抗金屬標籤或墊高、降頻，只加大功率無效。</li>
+      <li><strong>找出壞掉的標籤</strong>：用手持讀取器、<strong>低功率</strong>逐一感應。</li>
+      <li><strong>功率</strong>：依場域選擇合適功率；太小範圍不足、太大干擾其他讀取器；加大功率會擴大涵蓋範圍，但讀取死角的位置也會改變。</li>
+      <li><strong>換標籤</strong>：先移除故障標籤再貼新的，避免重疊干擾或重複的 EPC。</li>
+      <li>天線饋線凹折要<strong>換新線</strong>；新讀寫器無法寫入多半是<strong>設定錯誤</strong>；錯誤燈號亮代表有電，先重開機。</li>
+      <li>EPC Gen2 記憶體：Bank 00 保留（密碼）、<strong>Bank 01 EPC</strong>、Bank 10 TID（不可改）、Bank 11 使用者區。</li>
+      <li>同晶片的悠遊卡讀不到儲值金額：沒有正確的<strong>金鑰與存取控制參數</strong>。</li>
+    </ul>
+    <h4>開發板與韌體問題</h4>
+    <div class="tw"><table><thead><tr><th>現象</th><th>原因與處理</th></tr></thead><tbody>
+      <tr><td>UART 輸出<strong>亂碼</strong></td><td>雙方鮑率（或資料位元、同位檢查）不一致；TX／RX 接反是完全收不到，接頭鬆脫是斷斷續續</td></tr>
+      <tr><td>Arduino 上傳失敗</td><td>開發板類型選錯、序列埠選錯、連線中斷（上傳鮑率由 IDE 自動處理）</td></tr>
+      <tr><td>找不到序列埠</td><td>USB 驅動沒裝、USB 線壞了（或只能充電）、序列埠被占用</td></tr>
+      <tr><td>SRAM 不足</td><td>用 <code>F()</code> 把字串常數留在 Flash</td></tr>
+      <tr><td>LED 不亮（程式）</td><td>要在 setup() 先 pinMode(OUTPUT) 再 digitalWrite()</td></tr>
+      <tr><td>執行感測程式就重開機</td><td>感測器耗電過大、輸出誤接 VCC、主板供電不足</td></tr>
+      <tr><td>樹莓派紅燈熄滅或畫面出現<strong>黃色閃電</strong></td><td><strong>電力不足</strong>，換足夠電流的電源與好的 USB 線</td></tr>
+      <tr><td>樹莓派紅燈亮、綠燈不亮</td><td>SD 卡無法開機：相容性、燒錄失敗或主板損壞</td></tr>
+      <tr><td>超音波讀值異常</td><td>物體超出可量測距離（約 2～400 cm）</td></tr>
+      <tr><td>蜂鳴器只有單一音調</td><td>用的是<strong>有源</strong>蜂鳴器（內建振盪）；要播旋律用無源蜂鳴器</td></tr>
+      <tr><td>RGB LED 無法發白光</td><td>少接一個顏色的腳位</td></tr>
+      <tr><td>無人機亂飛亂轉</td><td>慣性感測器（IMU）故障</td></tr>
+      <tr><td>光學心率錶某人量不到</td><td>刺青使 LED 光被吸收</td></tr>
+      <tr><td>鋰電池記錄器在冷凍環境沒電</td><td>記錄器本體超出工作溫度，低溫使電池容量大減；只把探頭放進去</td></tr>
+    </tbody></table></div>
