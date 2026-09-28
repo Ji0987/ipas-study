@@ -1,14 +1,16 @@
 // 知識測驗：從目前級別的題庫隨機抽 10 題
-import { quizBank } from './data.js';
+import { loadQuiz } from './data.js';
 import { currentLevel } from './layout.js';
-import { escHTML, fireConfetti } from './ui.js';
+import { escHTML, fireConfetti, showToast } from './ui.js';
 
 let QUIZ = [];
 let qzIdx = 0, qzScore = 0, qzAns = false;
 
-export function openQuiz() {
+export async function openQuiz() {
   const level = currentLevel();
-  const pool = quizBank[level.id];
+  let bank;
+  try { bank = await loadQuiz(); } catch (e) { showToast('題庫載入失敗，請透過網址開啟頁面', '⚠️'); return; }
+  const pool = bank[level.id];
   // random sample (Fisher-Yates) up to 10 questions per session
   const arr = [...pool];
   for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }

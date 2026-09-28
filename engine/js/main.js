@@ -1,5 +1,6 @@
 // 進入點：初始化各模組、註冊鍵盤快捷鍵，並把 HTML inline 事件用到的函式掛到 window
 import * as ui from './ui.js';
+import { loadQuiz } from './data.js';
 import * as layout from './layout.js';
 import { buildIDX, initSearch } from './search.js';
 import * as quiz from './quiz.js';
@@ -38,3 +39,5 @@ initSearch();
 initCmd();
 buildIDX();
 layout.initLayout();
+// 題庫在背景先載入，開啟測驗／題庫時不必等待；失敗時留待開啟時提示
+loadQuiz().catch(() => {});

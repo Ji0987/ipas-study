@@ -1,14 +1,17 @@
 // 題庫瀏覽：依級別列出全部題目，可篩選、搜尋、以題目 id 標記待複習
-import { levels, quizBank } from './data.js';
+import { levels, loadQuiz } from './data.js';
 import { state, save } from './store.js';
 import { currentLevel } from './layout.js';
-import { escHTML } from './ui.js';
+import { escHTML, showToast } from './ui.js';
 
+let quizBank = null;
 let bankLevel = levels[0].id, bankFilter = 'all', bankSearch = '';
 const bankMarked = new Set(state.bookmarks);
 
-export function openBank() {
-  bankLevel = currentLevel().id;
+export async function openBank() {
+  const level = currentLevel();
+  try { quizBank = await loadQuiz(); } catch (e) { showToast('題庫載入失敗，請透過網址開啟頁面', '⚠️'); return; }
+  bankLevel = level.id;
   bankFilter = 'all'; bankSearch = '';
   const s = document.getElementById('bk-search'); if (s) s.value = '';
   renderBank();

@@ -1,40 +1,64 @@
-// 建置：每張證照打包成一個自足的 dist/<證照>/index.html
-// 用法：node build.mjs [證照 id ...]（不指定則建置全部）；npm run build 會先執行驗證
+// 建置：產出可部署的多檔網站
+//   dist/assets/app-<hash>.js、styles-<hash>.css  所有證照共用的引擎（檔名帶內容雜湊，更新後不會吃到舊快取）
+//   dist/<證照>/index.html                        頁面標記（含筆記），證照設定內嵌
+//   dist/<證照>/quiz/<科目>.json                   題庫，執行時載入
+// 用法：node build.mjs；npm run build 會先執行驗證。需透過網址（GitHub Pages 或本機伺服器）開啟。
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import * as esbuild from 'esbuild';
 import * as render from './engine/render.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
+const DIST = path.join(ROOT, 'dist');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const readJSON = f => JSON.parse(read(f));
+const write = (rel, content) => {
+  const out = path.join(DIST, rel);
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  fs.writeFileSync(out, content);
+  return rel;
+};
+const hashed = (name, ext, content) => `assets/${name}-${crypto.createHash('sha256').update(content).digest('hex').slice(0, 8)}.${ext}`;
 
-const template = read('engine/template.html');
-const styles = read('engine/styles.css').trimEnd();
+fs.rmSync(DIST, { recursive: true, force: true });
+
+// ── 共用引擎 ───────────────────────────────────────────────
 const { outputFiles: [bundle] } = await esbuild.build({
   entryPoints: [path.join(ROOT, 'engine/js/main.js')],
   bundle: true, format: 'iife', minify: true, target: 'es2020', write: false, charset: 'utf8',
 });
-// 內嵌於 <script> 內的內容不可出現 </script
-const script = bundle.text.trimEnd().replace(/<\/script/gi, '<\\/script');
+const styles = read('engine/styles.css');
+const scriptPath = write(hashed('app', 'js', bundle.text), bundle.text);
+const stylesPath = write(hashed('styles', 'css', styles), styles);
 
-const only = process.argv.slice(2);
-for (const id of fs.readdirSync(path.join(ROOT, 'certs')).filter(d => !only.length || only.includes(d))) {
+// ── 各證照 ─────────────────────────────────────────────────
+const template = read('engine/template.html');
+for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
   const dir = `certs/${id}`;
   const config = readJSON(`${dir}/config.json`);
   const notes = {};
   for (const s of config.levels.flatMap(l => l.subjects)) for (const t of s.topics) notes[t.id] = read(`${dir}/notes/${s.id}/${t.id}.html`);
-  // 各級別題庫＝該級別所有科目檔合併後依 id 排序
-  const quiz = {};
+
+  // 題庫原樣複製（壓縮成一行）；頁面只需知道各級別有哪些科目檔
+  const quizFiles = {};
+  let questions = 0;
   for (const l of config.levels) {
-    quiz[l.id] = l.subjects.flatMap(s => fs.existsSync(path.join(ROOT, `${dir}/quiz/${s.id}.json`)) ? readJSON(`${dir}/quiz/${s.id}.json`) : [])
-      .sort((a, b) => a.id.localeCompare(b.id));
+    quizFiles[l.id] = [];
+    for (const s of l.subjects) {
+      if (!fs.existsSync(path.join(ROOT, `${dir}/quiz/${s.id}.json`))) continue;
+      const items = readJSON(`${dir}/quiz/${s.id}.json`);
+      write(`${id}/quiz/${s.id}.json`, JSON.stringify(items));
+      quizFiles[l.id].push(s.id);
+      questions += items.length;
+    }
   }
+
   const first = config.levels[0];
   const slots = {
     title: render.esc(config.site.title),
-    styles,
+    stylesHref: `../${stylesPath}`,
     mobTitle: render.esc(config.site.mobTitle),
     logo: render.esc(config.site.logo),
     firstLevelName: render.esc(first.name),
@@ -54,15 +78,15 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs')).filter(d => !only.leng
     cheatsheet: read(`${dir}/cheatsheet.html`),
     bankTabs: render.bankTabs(config),
     subjectKeys: render.subjectKeys(config),
-    data: JSON.stringify({ config, quiz }).replace(/</g, '\\u003c'),
-    script,
+    // 內嵌於 <script> 的 JSON 不可出現 </script
+    data: JSON.stringify({ config, quizFiles }).replace(/</g, '\\u003c'),
+    scriptSrc: `../${scriptPath}`,
   };
   const html = template.replace(/\{\{(\w+)\}\}/g, (m, k) => {
     if (!(k in slots)) throw new Error(`模板插槽沒有對應內容：${k}`);
     return slots[k];
   });
-  const out = path.join(ROOT, 'dist', id, 'index.html');
-  fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.writeFileSync(out, html);
-  console.log(`${id} → ${path.relative(ROOT, out)}（${(Buffer.byteLength(html) / 1024).toFixed(0)} KB）`);
+  write(`${id}/index.html`, html);
+  console.log(`${id} → dist/${id}/（頁面 ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB、題庫 ${questions} 題）`);
 }
+console.log(`共用引擎 → dist/${scriptPath}、dist/${stylesPath}`);
