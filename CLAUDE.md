@@ -4,8 +4,9 @@
 
 ## 檔案位置
 
-- `materials/` 是目錄連結，正本在 `C:\Users\a0982\Documents\學習資料\iPAS\`（`aiot\`、`ai-planner\`）。正本放 Documents 是為了靠 Google 雲端硬碟備份，也能在其他裝置整理。新教材直接放進正本，不要另存複本。不要在這個 repo 執行 `git clean -x`。
-- `exports/`：可以從題庫重新產生的成品，例如 `aiot/模擬卷`。不進版控。
+- `materials/` 和 `exports/` 都是目錄連結，都不進版控，實際檔案在 `C:\Users\a0982\Documents\學習資料\iPAS\`。放在 Documents 是為了靠 Google 雲端硬碟備份，也能在其他裝置整理或列印。不要在這個 repo 執行 `git clean -x`。
+  - `materials/<證照>/`：外部教材的正本，例如官方指引、歷屆試題、非官方題庫。新教材直接放這裡，不要另存複本。
+  - `exports/<證照>/`：自己產生、能重新產生的成品。例如 `aiot/模擬卷` 是從題庫產生的；`ai-planner/模擬卷-輔考小老師` 是從 materials 的 900 題 PDF 每 50 題切成一回。
 - `legacy/`：重製前的單檔 HTML 原版，唯讀，僅供參考。
 - 本機預覽：`.claude/launch.json` 的 `ipas-static`（port 8321），開 `/dist/<證照>/index.html`。dist 要透過網址開啟，直接雙擊無法 fetch 題庫。
 
