@@ -49,6 +49,7 @@
           "badge": { "$ref": "#/$defs/text", "description": "首頁級別切換標籤" },
           "heroTitleEm": { "$ref": "#/$defs/text" },
           "heroSub": { "$ref": "#/$defs/text" },
+          "compare": { "$ref": "#/$defs/text", "description": "首頁「選考比較」收合區塊的標題；內容放 compare/<級別 id>.html" },
           "tagClass": { "type": "string", "description": "彈窗標題的級別標籤類別" },
           "accent": {
             "type": "object",

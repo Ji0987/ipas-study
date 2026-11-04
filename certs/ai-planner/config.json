@@ -343,6 +343,7 @@
       "badge": "🔵 中級",
       "heroTitleEm": "中級三科完整筆記",
       "heroSub": "涵蓋中級科目一、二、三全部重點章節。點擊科目卡片切換，按 ✓ 標記已讀追蹤進度。",
+      "compare": "選考比較：科目二 大數據 vs 科目三 機器學習",
       "tagClass": "lv-i",
       "accent": {
         "fg": "var(--blue)",

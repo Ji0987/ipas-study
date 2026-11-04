@@ -85,6 +85,7 @@ for (const id of fs.readdirSync(path.join(ROOT, 'certs'))) {
     firstHeroSub: render.esc(first.heroSub),
     levelBadges: render.levelBadges(config),
     subjectCards: render.subjectCards(config),
+    compares: render.compares(config, Object.fromEntries(config.levels.filter(l => l.compare).map(l => [l.id, read(`${dir}/compare/${l.id}.html`)]))),
     sections: render.sections(config, notes, topicCounts),
     cheatTitle: render.esc(config.cheatsheet.title),
     cheatSub: render.esc(config.cheatsheet.sub),

@@ -13,7 +13,7 @@ import * as exam from './exam.js';
 Object.assign(window, {
   toggleSidebar: ui.toggleSidebar, closeSidebar: ui.closeSidebar, closeModal: ui.closeModal,
   openKeys: ui.openKeys, openCheat: ui.openCheat, copyFm: ui.copyFm,
-  switchLevel: layout.switchLevel, switchSub: layout.switchSub, switchSubIndex: layout.switchSubIndex,
+  switchLevel: layout.switchLevel, switchSub: layout.switchSub, gotoSub: layout.gotoSub,switchSubIndex: layout.switchSubIndex,
   toggleTP: layout.toggleTP, toggleAllTP: layout.toggleAllTP, markDone: layout.markDone,
   openQuiz: quiz.openQuiz, answerQz: quiz.answerQz, qzNext: quiz.qzNext, qzRestart: quiz.qzRestart, qzWrong: quiz.qzWrong,
   practiceTopic: quiz.practiceTopic, gotoNote: quiz.gotoNote,

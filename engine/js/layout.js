@@ -16,6 +16,7 @@ function syncLevelUI(level) {
     document.getElementById('lt-' + l.id)?.classList.toggle('on', on);
     document.getElementById('hero-lb-' + l.id)?.classList.toggle('on', on);
     document.getElementById('sc-' + l.id).style.display = on ? 'grid' : 'none';
+    const cmp = document.getElementById('cmp-' + l.id); if (cmp) cmp.style.display = on ? '' : 'none';
   }
   const lvB = document.getElementById('logo-level');
   if (lvB) { lvB.textContent = level.name; lvB.style.background = level.accent.bg; lvB.style.color = level.accent.fg; lvB.style.borderColor = level.accent.border; }
@@ -53,6 +54,13 @@ export function switchSub(s) {
   updateExpandLabel();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   requestAnimationFrame(initReveal);
+}
+
+/** 切換科目並捲到該科筆記開頭（選考比較的「看筆記」按鈕用） */
+export function gotoSub(s) {
+  switchSub(s);
+  const sec = document.getElementById('sec-' + s);
+  if (sec) window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
 }
 
 /* ═══ TOGGLE TOPIC ═══ */

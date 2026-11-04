@@ -23,6 +23,7 @@
       "badge": "🟢 初級",
       "heroTitleEm": "初級四考科完整筆記",
       "heroSub": "考科一、二為學科（單選題），考科三、四為術科（實作）。點擊考科卡片切換，按 ✓ 標記已讀追蹤進度。",
+      "compare": "分支比較：考科二 物聯網 vs 考科三 機器聯網 vs 考科四 感知系統",
       "tagClass": "lv-b",
       "accent": { "fg": "var(--teal)", "bg": "var(--teald)", "border": "rgba(6,214,160,.3)" },
       "exam": {

@@ -90,6 +90,9 @@ function validateCert(certDir) {
     for (const [id, t] of topics) if (!fs.existsSync(path.join(notesDir, t.subject, `${id}.html`))) errors.push(`缺少筆記片段：notes/${t.subject}/${id}.html`);
   }
 
+  // 選考比較：config 有設標題的級別，要有對應片段
+  for (const l of config.levels) if (l.compare && !fs.existsSync(path.join(certDir, 'compare', `${l.id}.html`))) errors.push(`缺少選考比較片段：compare/${l.id}.html`);
+
   console.log(`${config.id}：題目 ${quizItems.length}、主題 ${topics.size}`);
   return { errors, warnings };
 }

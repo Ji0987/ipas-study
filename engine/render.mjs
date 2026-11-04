@@ -41,6 +41,17 @@ export function subjectCards(config) {
   }).join('\n');
 }
 
+/** 首頁的選考比較（收合區塊），跟著級別切換顯示；compares：級別 id → HTML 片段 */
+export function compares(config, compares) {
+  return config.levels.filter(l => l.compare).map(l =>
+    `  <details class="lvcmp" id="cmp-${l.id}"${l === config.levels[0] ? '' : ' style="display:none"'}>
+    <summary><span class="lc-ico">🧭</span>${esc(l.compare)}<span class="lc-hint"></span></summary>
+    <div class="lc-body">
+${compares[l.id]}
+    </div>
+  </details>`).join('\n');
+}
+
 /** counts：主題 id → 題數，有題目的主題在標頭顯示「練習本主題」按鈕 */
 export function sections(config, notes, counts = {}) {
   return subjectsOf(config).map((s, i) => {
