@@ -41,9 +41,8 @@ npm run build      # 驗證後建置到 dist/
 engine/          共用引擎：頁面模板、標記產生器、樣式、執行期 JS 模組
 certs/<證照>/    證照內容：config.json、notes/<科目>/<主題>.html、cheatsheet.html、quiz/<科目>.json
 schema/          config 與題庫的 JSON Schema
-scripts/         驗證腳本與一次性轉換工具
+scripts/         驗證腳本與試題匯入工具
 build.mjs        建置
-legacy/          舊版單檔筆記（僅供參考）
 ```
 
 新增證照：在 `certs/` 下建立新目錄，照 `schema/` 的格式放入 config、筆記片段與題庫，建置時會自動加入首頁列表。

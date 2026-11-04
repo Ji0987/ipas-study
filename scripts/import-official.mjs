@@ -29,7 +29,7 @@ const PREFIX = JSON.parse(fs.readFileSync(path.join(CERT, 'config.json'), 'utf8'
 const N = 6;
 
 const normText = t => t.normalize('NFKC').replace(/[\s\p{P}\p{S}]/gu, '').toLowerCase();
-// 與 migrate-legacy.mjs 相同的清理：中文字之間的換行／空白刪除，其餘換行改成空白
+// 清理：中文字之間的換行／空白刪除，其餘換行改成空白
 const WIDE = '\\p{Script=Han}\\u3000-\\u303f\\uff00-\\uffef';
 const WIDE_GAP = new RegExp(`(?<=[${WIDE}])\\s+(?=[${WIDE}])`, 'gu');
 // CJK 相容表意文字（外觀相同、碼位不同，如 U+F98E「年」）轉回一般漢字
@@ -80,7 +80,7 @@ const bank = {};
 for (const s of Object.values(C.subject).flatMap(Object.values)) bank[s] = fs.existsSync(quizFile(s)) ? JSON.parse(fs.readFileSync(quizFile(s), 'utf8')) : [];
 const allBank = Object.values(bank).flat();
 
-// 找出現有題庫已收錄的官方題：新匯入的題目帶 ref；舊版題目以文字覆蓋率比對（與 migrate-legacy.mjs 相同）
+// 找出現有題庫已收錄的官方題：新匯入的題目帶 ref；轉換自舊版單檔筆記的題目沒有 ref，以文字覆蓋率比對
 const used = new Set(allBank.filter(q => q.ref).map(q => q.ref));
 const coverage = (t, set) => { let hit = 0, n = 0; for (let i = 0; i + N <= t.length; i++) { n++; if (set.has(t.slice(i, i + N))) hit++; } return n ? hit / n : 0; };
 if (C.legacy) for (const q of allBank.filter(q => !q.ref)) {
