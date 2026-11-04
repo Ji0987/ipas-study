@@ -4,3 +4,4 @@ materials/
 .cache/
 reports/
 exports/
+.claude/
