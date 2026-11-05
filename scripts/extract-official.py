@@ -151,9 +151,22 @@ def extract(path):
 
     def save_image(xref, stem_name):
         img = doc.extract_image(xref)
-        fname = f"{stem_name}.{img['ext']}"
+        data, ext = img["image"], img["ext"]
+        if img.get("smask"):
+            # 帶透明遮罩的圖（公式常見）：底圖可能整張是黑的，字形靠遮罩摳出來。
+            # 只存底圖會變成一塊黑，所以套上遮罩、鋪白底後存成 PNG（原尺寸，1pt = 1px）
+            # Pixmap(doc, xref) 可能帶著全不透明的 alpha 通道，遮罩並沒有套上，所以先拿掉再合併 SMask
+            base = pymupdf.Pixmap(doc, xref)
+            if base.alpha:
+                base = pymupdf.Pixmap(base, 0)
+            rgba = pymupdf.Pixmap(base, pymupdf.Pixmap(doc, img["smask"]))
+            tmp = pymupdf.open()
+            page = tmp.new_page(width=rgba.width, height=rgba.height)
+            page.insert_image(page.rect, pixmap=rgba)
+            data, ext = page.get_pixmap(alpha=False).tobytes("png"), "png"
+        fname = f"{stem_name}.{ext}"
         with open(os.path.join(OUT, "img", fname), "wb") as f:
-            f.write(img["image"])
+            f.write(data)
         return {"file": fname, "w": img["width"], "h": img["height"]}
 
     # 題組：「請根據下方資訊回答第 X～Y 題」之後到下一題之前的文字與圖片，為第 X～Y 題共用的情境。
