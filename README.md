@@ -36,6 +36,21 @@ npm run build      # 驗證後建置到 dist/
 
 推送到 `main` 後，GitHub Actions 會自動建置並部署到 GitHub Pages。
 
+### 列印模擬卷
+
+把題庫排成 A4 雙欄的分回 PDF，每 50 題一回，答案表放在最後一頁底部。需要 Windows 內建的 Microsoft Edge。
+
+```bash
+node scripts/make-exams.mjs aiot   # 每個學科固定洗牌後分回，輸出到 exports/<證照>/模擬卷/
+```
+
+非官方的「輔考小老師」900 題先從 PDF 解析成 JSON（只存在 `.cache/`，不進版控），再依原題序分回：
+
+```bash
+python scripts/extract-tutor900.py
+node scripts/make-exams.mjs --from .cache/exams/ai-planner-tutor900.json
+```
+
 ### 結構
 
 ```
