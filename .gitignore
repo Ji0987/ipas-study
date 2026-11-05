@@ -2,6 +2,5 @@ node_modules/
 dist/
 materials/
 .cache/
-reports/
 exports/
 .claude/
