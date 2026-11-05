@@ -7,7 +7,7 @@
 - `materials/` 和 `exports/` 都是目錄連結，都不進版控，實際檔案在 `C:\Users\a0982\Documents\學習資料\iPAS\`。放在 Documents 是為了靠 Google 雲端硬碟備份，也能在其他裝置整理或列印。不要在這個 repo 執行 `git clean -x`。
   - `materials/<證照>/`：外部教材的正本，例如官方指引、歷屆試題、非官方題庫。新教材直接放這裡，不要另存複本。
   - `exports/<證照>/`：自己產生、能重新產生的成品。`模擬卷` 由 `scripts/make-exams.mjs` 從 repo 題庫產生；`ai-planner/模擬卷-輔考小老師` 由 `extract-tutor900.py` 解析 materials 的 900 題 PDF 後交給同一支腳本，指令見 README。重產會先清掉資料夾裡舊的分回 PDF。
-- 模擬卷排版以列印省紙為準（使用者偏好原 AIoT 版）：答案縮在最後一頁底部，不另起作答頁或答案頁。
+- 模擬卷排版以列印省紙為準（使用者偏好原 AIoT 版）：答案縮在最後一頁底部，不另起作答頁或答案頁。使用者用合併檔雙面、每面兩頁列印，4 頁一張紙：每回必須剛好 4 頁（放不下才 8 頁），5 頁浪費一張紙，3 頁則空間利用不佳。
 - 重製前的單檔 HTML 原版與一次性轉換腳本（`legacy/`、`scripts/migrate-legacy.mjs`、`scripts/extract-pdf-text.py`）已在 2026-11-04 刪除，需要時從 git 歷史取回（commit `fceb117` 還有）。
 - 本機預覽：`.claude/launch.json` 的 `ipas-static`（port 8321），開 `/dist/<證照>/index.html`。dist 要透過網址開啟，直接雙擊無法 fetch 題庫。
 

@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "ajv": "^8.20.0",
-    "esbuild": "^0.28.2"
+    "esbuild": "^0.28.2",
+    "pdf-lib": "^1.17.1"
   }
 }
