@@ -80,7 +80,7 @@ function papersFromRepo(cert) {
       rounds.forEach((qs, i) => papers.push({
         file: `${prefix}_第${pad(i + 1)}回`,
         title: `iPAS ${cfg.name}${level.name}認證　${s.label} 模擬卷 第 ${i + 1} 回`,
-        subtitle: `${s.label} ${s.name}`,
+        subtitle: `${s.label} ${s.name} 第 1–${qs.length} 題`,
         exam: level.exam, questions: qs,
       }));
     }
@@ -175,7 +175,7 @@ tr.n td { font-weight: normal; font-size: .75em; background: #eee; }
 <div class="meta"><span>姓名：＿＿＿＿＿＿</span><span>考試日期：＿＿＿＿＿＿</span><span>${esc(p.subtitle)}</span></div>
 <div class="rule">單選題，每題 ${pts} 分，共 ${qs.length} 題，總分 100 分（作答 ${ex.minutes} 分鐘，${ex.pass} 分及格）</div>
 <div class="cols">${body}</div>
-<div class="key"><div class="hd"><span>▌ 正確答案</span><span>答對 ＿＿ 題 × ${pts} ＝ 得分 ＿＿＿ / 100</span></div><table>${key.join('</table><table>')}</table></div>
+<div class="key"><div class="hd"><span>▌ 正確答案（每題 ${pts} 分，${ex.pass} 分及格）</span><span>答對題數 × ${pts} ＝ 得分：＿＿＿＿ / 100</span></div><table>${key.join('</table><table>')}</table></div>
 </body></html>`;
 }
 
@@ -242,11 +242,8 @@ class Tab {
   }
 }
 
-/**
- * 找出不超過目標頁數（最小字級時頁數進位到 4 的倍數）的最大字級，
- * 再找答案表上方最多能留多少空白而不多出一頁，讓答案表貼齊最後一頁底部
- */
-async function fit(tab) {
+/** 找出不超過目標頁數（最小字級時頁數進位到 4 的倍數）的最大字級 */
+async function fitFont(tab) {
   const cache = new Map();
   const at = async f => cache.get(f) || cache.set(f, await tab.print(f)).get(f);
   const target = Math.ceil((await at(FS_MIN)).pages / SHEET) * SHEET;
@@ -256,19 +253,24 @@ async function fit(tab) {
     const mid = (lo + hi) >> 1;
     if ((await at(mid)).pages <= target) lo = mid; else hi = mid;
   }
-  const best = await at(lo);
-  let gap = 0, gapHi = 270; // A4 高 297mm，扣掉上下邊界
-  let pinned = best;
-  while (gapHi - gap > 1) {
-    const mid = (gap + gapHi) >> 1, r = await tab.print(lo, mid);
-    if (r.pages === best.pages) { gap = mid; pinned = r; } else gapHi = mid;
-  }
-  return { ...pinned, fs: lo / 10, target };
+  return { fsTenths: lo, target };
 }
 
-async function printAll(jobs) {
+/** 固定字級後，找答案表上方最多能留多少空白而不多出一頁，讓答案表貼齊最後一頁底部 */
+async function pinKey(tab, fsTenths) {
+  const base = await tab.print(fsTenths);
+  let gap = 0, gapHi = 270, pinned = base; // A4 高 297mm，扣掉上下邊界
+  while (gapHi - gap > 1) {
+    const mid = (gap + gapHi) >> 1, r = await tab.print(fsTenths, mid);
+    if (r.pages === base.pages) { gap = mid; pinned = r; } else gapHi = mid;
+  }
+  return pinned;
+}
+
+/** 開 WORKERS 個 Edge 分頁平行處理每一回；Edge 偶爾回「Printing is not available」，就重開瀏覽器再試一次 */
+async function eachJob(jobs, work) {
   let next = 0;
-  await Promise.all(Array.from({ length: Math.min(WORKERS, jobs.length) }, async (_, w) => {
+  await Promise.all(Array.from({ length: Math.min(WORKERS, jobs.length) }, async () => {
     let tab = await Tab.open();
     try {
       while (next < jobs.length) {
@@ -276,10 +278,9 @@ async function printAll(jobs) {
         for (let tries = 1; ; tries++) {
           try {
             await tab.load(pathToFileURL(job.html).href);
-            Object.assign(job, await fit(tab));
+            Object.assign(job, await work(tab, job));
             break;
           } catch (e) {
-            // Edge 偶爾回「Printing is not available」，重開瀏覽器再試一次
             if (tries > 1) throw new Error(`${path.basename(job.pdf)}：${e.message}`);
             await tab.close();
             tab = await Tab.open();
@@ -288,6 +289,17 @@ async function printAll(jobs) {
       }
     } finally { await tab.close(); }
   }));
+}
+
+/**
+ * 兩階段：先各回找出自己能用的最大字級，再讓同一批、同頁數的卷統一用其中最小的字級
+ * （字級固定，與舊版一致），最後把答案表推到頁底
+ */
+async function printAll(jobs) {
+  await eachJob(jobs, fitFont);
+  const shared = new Map();
+  for (const j of jobs) shared.set(j.target, Math.min(shared.get(j.target) ?? Infinity, j.fsTenths));
+  await eachJob(jobs, async (tab, job) => ({ ...(await pinKey(tab, shared.get(job.target))), fs: shared.get(job.target) / 10 }));
 }
 
 /** 整批依序合併成一個檔，方便一次送印；頁數不足 4 的倍數時補空白頁，讓每回都從新的一張紙開始 */
