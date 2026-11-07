@@ -169,7 +169,7 @@ li b { font-weight: normal; flex: none; }
 img { display: block; max-width: 100%; max-height: 17em; margin: .2em 0; }
 pre, .mono { font: .85em/1.3 Consolas, "Microsoft JhengHei", monospace; white-space: pre-wrap; }
 pre { border: .4pt solid #bbb; padding: .2em .4em; margin: .2em 0; }
-.key { break-inside: avoid; margin-top: .6em; border-top: 1.2pt solid #000; padding-top: .3em; }
+.key { break-inside: avoid; margin-top: calc(.6em + var(--keygap, 0mm));border-top: 1.2pt solid #000; padding-top: .3em; }
 .key .hd { display: flex; font-weight: bold; margin-bottom: .2em; }
 .key .hd span:last-child { margin-left: auto; font-weight: normal; }
 table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: .3em; }
@@ -231,8 +231,9 @@ class Tab {
     await this.send('Page.navigate', { url });
     await loaded;
   }
-  async print(fsTenths) {
-    await this.send('Runtime.evaluate', { expression: `document.documentElement.style.setProperty('--fs','${fsTenths / 10}pt')` });
+  async print(fsTenths, gapMm = 0) {
+    const set = (k, v) => `document.documentElement.style.setProperty('${k}','${v}');`;
+    await this.send('Runtime.evaluate', { expression: set('--fs', `${fsTenths / 10}pt`) + set('--keygap', `${gapMm}mm`) });
     const { data } = await this.send('Page.printToPDF', { preferCSSPageSize: true, printBackground: true });
     const buf = Buffer.from(data, 'base64');
     return { buf, pages: (await PDFDocument.load(buf)).getPageCount() };
@@ -246,7 +247,10 @@ class Tab {
   }
 }
 
-/** 找出不超過目標頁數（最小字級時頁數進位到 4 的倍數）的最大字級 */
+/**
+ * 找出不超過目標頁數（最小字級時頁數進位到 4 的倍數）的最大字級，
+ * 再找答案表上方最多能留多少空白而不多出一頁，讓答案表貼齊最後一頁底部
+ */
 async function fit(tab) {
   const cache = new Map();
   const at = async f => cache.get(f) || cache.set(f, await tab.print(f)).get(f);
@@ -257,7 +261,14 @@ async function fit(tab) {
     const mid = (lo + hi) >> 1;
     if ((await at(mid)).pages <= target) lo = mid; else hi = mid;
   }
-  return { ...(await at(lo)), fs: lo / 10, target };
+  const best = await at(lo);
+  let gap = 0, gapHi = 270; // A4 高 297mm，扣掉上下邊界
+  let pinned = best;
+  while (gapHi - gap > 1) {
+    const mid = (gap + gapHi) >> 1, r = await tab.print(lo, mid);
+    if (r.pages === best.pages) { gap = mid; pinned = r; } else gapHi = mid;
+  }
+  return { ...pinned, fs: lo / 10, target };
 }
 
 async function printAll(jobs) {
