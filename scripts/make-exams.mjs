@@ -52,21 +52,15 @@ function units(qs) {
   return out;
 }
 
-/** 洗牌後分成 ceil(n/PER) 回；最後一回不足時，從前面的題目補滿 */
+/** 洗牌後只切滿 PER 題的回數，湊不滿一回的零頭捨去（使用者決定：不借前面的題目補滿） */
 function deal(qs, seed) {
   const us = units(qs), rand = rng(seed);
   for (let i = us.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [us[i], us[j]] = [us[j], us[i]];
   }
-  const rounds = Array.from({ length: Math.ceil(qs.length / PER) }, () => []);
-  for (const u of us) (rounds.find(r => r.length + u.length <= PER) || rounds.at(-1)).push(...u);
-  for (const r of rounds) {
-    for (const u of us) {
-      if (r.length >= PER) break;
-      if (!r.includes(u[0]) && r.length + u.length <= PER) r.push(...u);
-    }
-  }
+  const rounds = Array.from({ length: Math.floor(qs.length / PER) }, () => []);
+  for (const u of us) rounds.find(r => r.length + u.length <= PER)?.push(...u);
   return rounds;
 }
 
@@ -79,9 +73,10 @@ function papersFromRepo(cert) {
       const qs = readJSON(path.join(ROOT, 'certs', cert, 'quiz', `${s.id}.json`));
       const prefix = (cfg.levels.length > 1 ? level.name : '') + s.label;
       const rounds = deal(qs, `${cert}:${level.id}:${s.id}`);
-      const seen = new Set(rounds.flat());
-      if (seen.size !== qs.length || rounds.some(r => new Set(r).size !== r.length))
-        throw new Error(`${prefix} 分回有漏題或同回重複`);
+      if (new Set(rounds.flat()).size !== rounds.flat().length || rounds.some(r => r.length !== PER))
+        throw new Error(`${prefix} 分回有重複題，或某回不足 ${PER} 題`);
+      const dropped = qs.length - rounds.length * PER;
+      if (dropped) console.log(`  ${prefix}：${qs.length} 題切成 ${rounds.length} 回，捨去 ${dropped} 題`);
       rounds.forEach((qs, i) => papers.push({
         file: `${prefix}_第${pad(i + 1)}回`,
         title: `iPAS ${cfg.name}${level.name}認證　${s.label} 模擬卷 第 ${i + 1} 回`,
@@ -100,7 +95,7 @@ function papersFromFile(file) {
   const level = cfg.levels.find(l => l.id === src.level);
   const papers = [];
   for (const sec of src.sections) {
-    for (let i = 0; i < sec.questions.length; i += PER) {
+    for (let i = 0; i + PER <= sec.questions.length; i += PER) { // 不滿一回的零頭捨去
       const n = papers.length + 1, qs = sec.questions.slice(i, i + PER);
       papers.push({
         file: `${sec.name}_第${pad(n)}回`,
